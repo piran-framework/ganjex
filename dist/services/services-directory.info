@@ -1,0 +1,3 @@
+this is the service directory. where operator or other services can put
+services jar file into this folder or remove existing services jar files
+from here.

@@ -1,0 +1,2 @@
+this directory should contain every library which should be available for every
+services, changes here does not detect after start up of the ganjex server.
