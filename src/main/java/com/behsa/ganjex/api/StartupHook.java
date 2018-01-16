@@ -24,5 +24,5 @@ public @interface StartupHook {
 	 *
 	 * @return the priority of this hook
 	 */
-	int priority() default 0;
+	int priority() default 100;
 }

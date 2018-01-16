@@ -1,30 +1,20 @@
 package com.behsa.ganjex.bootstrap;
 
-import com.behsa.ganjex.api.ServiceContext;
-import com.behsa.ganjex.api.StartupHook;
 import com.behsa.ganjex.config.Config;
 import com.behsa.ganjex.config.StandardConfigurationLoader;
 import com.behsa.ganjex.deploy.JarWatcher;
 import com.behsa.ganjex.deploy.StandardFileChangeListener;
 import com.behsa.ganjex.lifecycle.LifecycleManagement;
 import com.behsa.ganjex.util.JarFilter;
-import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.behsa.ganjex.config.Config.config;
@@ -45,7 +35,7 @@ public class Bootstrap {
 	private static final Logger log = LoggerFactory.getLogger(Bootstrap.class);
 	private static ClassLoader mainClassLoader;
 	private static ClassLoader libClassLoader;
-	private static LifecycleManagement lifecycleManagement;
+	private static LifecycleManagement lifecycleManagement = new LifecycleManagement();
 
 	/**
 	 * @return the top level classloader
@@ -96,35 +86,6 @@ public class Bootstrap {
 		log.debug("loading library completed");
 	}
 
-	private static void loadHooks() {
-		Thread.currentThread().setContextClassLoader(libClassLoader);
-		lifecycleManagement = new LifecycleManagement();
-		Reflections reflections = new Reflections("com.behsa", new MethodAnnotationsScanner());
-		Set<Method> startupHookMethods = reflections.getMethodsAnnotatedWith(StartupHook.class);
-		Set<Class<?>> classesOfHooks = new HashSet<>();
-		startupHookMethods.forEach((Method m) -> {
-			if (!classesOfHooks.contains(m.getDeclaringClass())) {
-				classesOfHooks.add(m.getDeclaringClass());
-			}
-			try {
-				Constructor<?> constructor = m.getDeclaringClass().getConstructor((Class<?>[]) null);
-				Object hookClassObj = constructor.newInstance((Object[]) null);
-				Consumer<ServiceContext> hook = (ServiceContext s) -> {
-					try {
-						m.invoke(hookClassObj, s);
-					} catch (IllegalAccessException | InvocationTargetException e) {
-						e.printStackTrace();
-					}
-				};
-				lifecycleManagement.registerStartupHook(new com.behsa.ganjex.lifecycle.StartupHook(hook));
-			} catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
-							IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		});
-		//TODO: do the same for shutdown hooks
-		lifecycleManagement.doneRegistering();
-	}
 
 	private static void watchServicesDirectory(String servicePath) {
 		new JarWatcher(new File(servicePath), new StandardFileChangeListener());
@@ -139,7 +100,8 @@ public class Bootstrap {
 		Config.setConfig(new StandardConfigurationLoader(args));
 		mainClassLoader = Bootstrap.class.getClassLoader();
 		loadLibraries(config().get("lib.path"));
-		loadHooks();
+		RegisterHookHelper.loadHooks();
+		lifecycleManagement.doneRegistering();
 		watchServicesDirectory(config().get("service.path"));
 	}
 }
