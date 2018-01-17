@@ -36,6 +36,7 @@ public class Bootstrap {
 	private static ClassLoader mainClassLoader;
 	private static ClassLoader libClassLoader;
 	private static LifecycleManagement lifecycleManagement = new LifecycleManagement();
+	private volatile static boolean bootstrapped = false;
 
 	/**
 	 * @return the top level classloader
@@ -59,6 +60,15 @@ public class Bootstrap {
 	 */
 	public static LifecycleManagement lifecycleManagement() {
 		return lifecycleManagement;
+	}
+
+	/**
+	 * indicate the bootstrap process of the container has done or not
+	 *
+	 * @return return true if and only if container bootstrapped
+	 */
+	public static boolean bootstraped() {
+		return bootstrapped;
 	}
 
 	private static void loadLibraries(String libraryPath) {
@@ -103,5 +113,6 @@ public class Bootstrap {
 		RegisterHookHelper.loadHooks();
 		lifecycleManagement.doneRegistering();
 		watchServicesDirectory(config().get("service.path"));
+		bootstrapped = true;
 	}
 }

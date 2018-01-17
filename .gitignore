@@ -17,3 +17,6 @@ hs_err_pid*
 .idea/
 *.iml
 
+# test file generated
+test-dist/
+tmp/

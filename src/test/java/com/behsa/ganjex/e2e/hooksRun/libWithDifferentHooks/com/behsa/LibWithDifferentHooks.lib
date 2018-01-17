@@ -1,0 +1,34 @@
+package com.behsa;
+
+import com.behsa.ganjex.api.ServiceContext;
+import com.behsa.ganjex.api.ShutdownHook;
+import com.behsa.ganjex.api.StartupHook;
+
+public class LibWithDifferentHooks {
+	private static int runTime = 0;
+
+	public LibWithDifferentHooks() {
+		LibWithDifferentHooks.runTime++;
+	}
+
+	public static int getRunTime() {
+		return runTime;
+	}
+
+	@StartupHook
+	public void startHook(ServiceContext context) {
+		System.out.println("hook ran");
+	}
+
+	@StartupHook(priority = 90)
+	public void startHook2(ServiceContext context) {
+		System.out.println("hook ran2 on " + context
+						.getName());
+	}
+
+	@ShutdownHook
+	public void shutdownHook(ServiceContext context){
+		System.out.println(context.getName() + " destroyed");
+	}
+
+}

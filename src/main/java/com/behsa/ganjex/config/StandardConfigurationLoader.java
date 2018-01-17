@@ -3,6 +3,7 @@ package com.behsa.ganjex.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -25,9 +26,13 @@ public class StandardConfigurationLoader implements Configuration {
 	 */
 	public StandardConfigurationLoader(String[] mainArgs) {
 		try {
-			//TODO should scan pwd directory and check the mainArgs and handle priority of the properties
-			properties.load(StandardConfigurationLoader.class.getClassLoader().getResourceAsStream
-							("config.properties"));
+			if (mainArgs.length > 0) {
+				properties.load(new FileInputStream(mainArgs[0]));
+			} else {
+				//TODO should scan pwd directory and check the mainArgs and handle priority of the properties
+				properties.load(StandardConfigurationLoader.class.getClassLoader().getResourceAsStream
+								("config.properties"));
+			}
 		} catch (IOException e) {
 			log.error("could not find config.properties file");
 			System.exit(1);
