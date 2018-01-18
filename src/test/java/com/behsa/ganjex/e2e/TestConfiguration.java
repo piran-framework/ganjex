@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
+ * test implementation of the {@link Configuration}, which load config-test.properties file
+ *
  * @author Esa Hekmatizadeh
+ * @version 1.0
  */
 public class TestConfiguration implements Configuration {
 	private static final Logger log = LoggerFactory.getLogger(TestConfiguration.class);

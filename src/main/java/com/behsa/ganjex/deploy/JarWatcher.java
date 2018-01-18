@@ -46,7 +46,7 @@ public final class JarWatcher {
 		this.watchDir = watchDir;
 		this.listener = listener;
 		scheduledExecutor().scheduleWithFixedDelay(this::check
-						, 1, 10, TimeUnit.SECONDS);
+						, 1, 1, TimeUnit.SECONDS);
 	}
 
 	/**

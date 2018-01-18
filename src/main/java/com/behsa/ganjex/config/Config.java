@@ -8,8 +8,12 @@ import java.util.Objects;
  * @author Esa Hekmatizadeh
  * @version 1.0
  */
-public class Config {
+public final class Config {
 	private static Configuration config;
+
+	private Config() throws IllegalAccessException {
+		throw new IllegalAccessException("this method should be invoked");
+	}
 
 	public static void setConfig(Configuration configuration) {
 		config = configuration;
@@ -20,9 +24,6 @@ public class Config {
 			throw new IllegalStateException("config is null, setConfig method should call before access" +
 							" to config");
 		return config;
-	}
-
-	private Config() {
 	}
 
 }

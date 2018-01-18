@@ -4,9 +4,7 @@ import com.behsa.ganjex.api.ServiceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * LifecycleManagement class is a heart of the lifecycle management of the services. all of the
@@ -24,8 +22,8 @@ import java.util.List;
  * @version 1.0
  */
 public class LifecycleManagement {
-
 	private static final Logger log = LoggerFactory.getLogger(LifecycleManagement.class);
+	private Map<String, ServiceContext> services = new HashMap<>();
 	private List<StartupHook> startupHooks = new ArrayList<>();
 	private List<ShutdownHook> shutdownHooks = new ArrayList<>();
 	private volatile boolean ready = false;
@@ -66,16 +64,39 @@ public class LifecycleManagement {
 		Collections.sort(startupHooks);
 	}
 
+	/**
+	 * find a service context by its file name
+	 *
+	 * @param fileName file name of the service
+	 * @return service context if found and null if nothing found
+	 */
+	public ServiceContext findContext(String fileName) {
+		return services.get(fileName);
+	}
+
+	/**
+	 * register a new service with the context provided and run all the startup hooks against it
+	 *
+	 * @param context context of the service which want to start
+	 */
 	public void serviceStarted(ServiceContext context) {
+		services.put(context.getFileName(), context);
 		startupHooks.forEach(h ->
 						h.hook().accept(context));
 		log.debug("all startup hooks executed for the service {} version {}", context.getName(),
 						context.getVersion());
 	}
 
+	/**
+	 * run all the shutdown hooks against the service specified by its context, and then remove
+	 * this service from the list of services
+	 *
+	 * @param context context of the service which want to shutdown
+	 */
 	public void serviceDestroyed(ServiceContext context) {
 		shutdownHooks.forEach(h -> h.hook().accept(context));
 		log.debug("all shutdown hooks executed for the service {} version {}", context.getName(),
 						context.getVersion());
+		services.remove(context.getFileName());
 	}
 }

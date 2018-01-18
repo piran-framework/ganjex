@@ -11,7 +11,17 @@ import java.io.File;
  */
 public interface FileChangeListener {
 
-	void fileModified(File f);
+	/**
+	 * listener which executed when a file added into or modified in a specific path
+	 *
+	 * @param file the new file
+	 */
+	void fileModified(File file);
 
-	void fileRemoved(File f);
+	/**
+	 * listener which executed when a file removed in a specific path
+	 *
+	 * @param file file which be removed
+	 */
+	void fileRemoved(File file);
 }

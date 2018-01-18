@@ -6,6 +6,9 @@ import com.behsa.ganjex.api.StartupHook;
 
 public class LibWithDifferentHooks {
 	private static int runTime = 0;
+	private static int startHookRunTime = 0;
+	private static int startHook2RunTime = 0;
+	private static int shutdownHookRunTime = 0;
 
 	public LibWithDifferentHooks() {
 		LibWithDifferentHooks.runTime++;
@@ -15,20 +18,31 @@ public class LibWithDifferentHooks {
 		return runTime;
 	}
 
+	public static int getStartHookRunTime() {
+		return startHookRunTime;
+	}
+
+	public static int getStartHook2RunTime() {
+		return startHook2RunTime;
+	}
+
+	public static int getShutdownHookRunTime() {
+		return shutdownHookRunTime;
+	}
+
 	@StartupHook
 	public void startHook(ServiceContext context) {
-		System.out.println("hook ran");
+		startHookRunTime++;
 	}
 
 	@StartupHook(priority = 90)
 	public void startHook2(ServiceContext context) {
-		System.out.println("hook ran2 on " + context
-						.getName());
+		startHook2RunTime++;
 	}
 
 	@ShutdownHook
-	public void shutdownHook(ServiceContext context){
-		System.out.println(context.getName() + " destroyed");
+	public void shutdownHook(ServiceContext context) {
+		shutdownHookRunTime++;
 	}
 
 }

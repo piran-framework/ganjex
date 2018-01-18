@@ -21,21 +21,46 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
+ * Test utilities for ganjex
+ *
  * @author Esa Hekmatizadeh
+ * @version 1.0
  */
 public class TestUtil {
+	/**
+	 * directory where all the e2e test placed relative to the root of project
+	 */
 	public static final String TEST_PATH = "src/test/java/com/behsa/ganjex/e2e/";
+	/**
+	 * test config file location relative to the root of project
+	 */
 	public static final String TEST_CONFIG_PATH = "src/test/resources/config-test.properties";
 	private static final Logger log = LoggerFactory.getLogger(TestUtil.class);
 
+	/**
+	 * prepare config with {@link TestConfiguration}, delete the tmp location and delete service
+	 * path and library path
+	 *
+	 * @throws IOException
+	 */
 	public static void clean() throws IOException {
-		File testDist = new File("test-dist");
-		FileUtils.deleteDirectory(testDist);
 		Config.setConfig(new TestConfiguration());
+		File servicePath = new File(Config.config().get("service.path"));
+		File libPath = new File(Config.config().get("lib.path"));
+		FileUtils.deleteDirectory(servicePath);
+		FileUtils.deleteDirectory(libPath);
 		File tmp = new File("tmp");
 		FileUtils.deleteDirectory(tmp);
 	}
 
+	/**
+	 * deploy a new service into ganjex service location
+	 *
+	 * @param path path of the source code of the service
+	 * @param name service name
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	public static void deployService(String path, String name) throws IOException, InterruptedException {
 		File tmpSrc = new File("tmp/" + name + "/src");
 		File tmpOut = new File("tmp/" + name + "/out");
@@ -45,7 +70,27 @@ public class TestUtil {
 						new File(Config.config().get("service.path")));
 	}
 
+	/**
+	 * remove a service from the service location of the ganjex
+	 *
+	 * @param name service name
+	 * @throws IOException
+	 */
+	public static void unDeployService(String name) throws IOException {
+		String path = Config.config().get("service.path") + "/" + name + ".jar";
+		File serviceJar = new File(path);
+		if (!serviceJar.delete())
+			throw new IOException("could not delete " + path);
+	}
 
+	/**
+	 * deploy a new library into ganjex library location
+	 *
+	 * @param path source code path of the library
+	 * @param name library name
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	public static void deployLib(String path, String name) throws IOException, InterruptedException {
 		File tmpSrc = new File("tmp/" + name + "/src");
 		File tmpOut = new File("tmp/" + name + "/out");
@@ -55,11 +100,31 @@ public class TestUtil {
 						new File(Config.config().get("lib.path")));
 	}
 
+	/**
+	 * wait until {@link Bootstrap} indicate the ganjex bootstrap process completed
+	 *
+	 * @throws InterruptedException
+	 */
 	public static void waitToBootstrap() throws InterruptedException {
 		while (!Bootstrap.bootstraped())
 			Thread.sleep(500);
 	}
 
+	/**
+	 * invoke a static method of a library
+	 *
+	 * @param className  full class name which static method belongs to
+	 * @param methodName method name
+	 * @param returnType return type of the method
+	 * @param argType    list of classes indicate the type of the arguments of the method
+	 * @param args       method arguments
+	 * @param <T>        return type of the method
+	 * @return the result of the static method
+	 * @throws ClassNotFoundException
+	 * @throws NoSuchMethodException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 */
 	public static <T> T invokeStaticMethod(String className, String methodName, Class<T> returnType,
 																				 Class<?>[] argType, Object... args)
 					throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException,

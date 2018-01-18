@@ -32,7 +32,8 @@ public class StandardFileChangeListener implements FileChangeListener {
 		try {
 			jarUrl = new URL("file://" + jar.getAbsolutePath());
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			log.error("could not load {}", jar.getAbsolutePath(), e);
+			return;
 		}
 		ClassLoader classLoader = new URLClassLoader(new URL[]{jarUrl},
 						Bootstrap.libClassLoader());
@@ -41,9 +42,8 @@ public class StandardFileChangeListener implements FileChangeListener {
 				Thread.currentThread().setContextClassLoader(classLoader);
 				Properties manifest = new Properties();
 				manifest.load(classLoader.getResourceAsStream("manifest.properties"));
-				ServiceContext context = new ServiceContext(jar.getName(),
+				ServiceContext context = new ServiceContext(jar.getName(), manifest.getProperty("name"),
 								Integer.parseInt(manifest.getProperty("version")),
-								Thread.currentThread(),
 								classLoader, manifest);
 				Bootstrap.lifecycleManagement().serviceStarted(context);
 			} catch (IOException e) {
@@ -55,6 +55,7 @@ public class StandardFileChangeListener implements FileChangeListener {
 
 	@Override
 	public void fileRemoved(File f) {
-
+		ServiceContext context = Bootstrap.lifecycleManagement().findContext(f.getName());
+		Bootstrap.lifecycleManagement().serviceDestroyed(context);
 	}
 }

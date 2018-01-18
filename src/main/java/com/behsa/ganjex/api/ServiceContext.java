@@ -15,19 +15,23 @@ import java.util.Properties;
  * @version 1.0
  */
 public class ServiceContext {
+	private final String fileName;
 	private final String name;
 	private final int version;
-	private final Thread mainThread;
 	private final ClassLoader classLoader;
 	private final Properties manifest;
 
-	public ServiceContext(String name, int version, Thread mainThread, ClassLoader classLoader,
+	public ServiceContext(String fileName, String name, int version, ClassLoader classLoader,
 												Properties manifest) {
+		this.fileName = fileName;
 		this.name = name;
 		this.version = version;
-		this.mainThread = mainThread;
 		this.classLoader = classLoader;
 		this.manifest = manifest;
+	}
+
+	public String getFileName() {
+		return fileName;
 	}
 
 	public String getName() {
@@ -36,10 +40,6 @@ public class ServiceContext {
 
 	public int getVersion() {
 		return version;
-	}
-
-	public Thread getMainThread() {
-		return mainThread;
 	}
 
 	public ClassLoader getClassLoader() {

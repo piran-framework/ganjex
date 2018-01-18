@@ -15,7 +15,8 @@ public class Executors {
 					new ThreadPoolExecutor(1, 5, 10, TimeUnit.SECONDS,
 									new LinkedBlockingQueue<>());
 
-	private Executors() {
+	private Executors() throws IllegalAccessException {
+		throw new IllegalAccessException("this method should not be invoked");
 	}
 
 	public static ScheduledExecutorService scheduledExecutor() {
