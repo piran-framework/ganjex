@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -28,7 +29,7 @@ public class StandardFileChangeListener implements FileChangeListener {
 	@Override
 	public void fileModified(File jar) {
 		log.info("new application found {}", jar.getName());
-		URL jarUrl = null;
+		URL jarUrl;
 		try {
 			jarUrl = new URL("file://" + jar.getAbsolutePath());
 		} catch (MalformedURLException e) {
@@ -37,25 +38,23 @@ public class StandardFileChangeListener implements FileChangeListener {
 		}
 		ClassLoader classLoader = new URLClassLoader(new URL[]{jarUrl},
 						Bootstrap.libClassLoader());
-		new Thread(() -> {
-			try {
-				Thread.currentThread().setContextClassLoader(classLoader);
-				Properties manifest = new Properties();
-				manifest.load(classLoader.getResourceAsStream("manifest.properties"));
-				ServiceContext context = new ServiceContext(jar.getName(), manifest.getProperty("name"),
-								Integer.parseInt(manifest.getProperty("version")),
-								classLoader, manifest);
-				Bootstrap.lifecycleManagement().serviceStarted(context);
-			} catch (IOException e) {
-				log.error("could not start service {} cause: ", jar.getName());
-				log.error(e.getMessage(), e);
-			}
-		}).start();
+		try {
+			Properties manifest = new Properties();
+			manifest.load(classLoader.getResourceAsStream("manifest.properties"));
+			ServiceContext context = new ServiceContext(jar.getName(), manifest.getProperty("name"),
+							Integer.parseInt(manifest.getProperty("version")),
+							classLoader, manifest);
+			Bootstrap.lifecycleManagement().serviceStarted(context);
+		} catch (IOException e) {
+			log.error("could not start service {} cause: ", jar.getName());
+			log.error(e.getMessage(), e);
+		}
 	}
 
 	@Override
 	public void fileRemoved(File f) {
 		ServiceContext context = Bootstrap.lifecycleManagement().findContext(f.getName());
-		Bootstrap.lifecycleManagement().serviceDestroyed(context);
+		if (Objects.nonNull(context))
+			Bootstrap.lifecycleManagement().serviceDestroyed(context);
 	}
 }

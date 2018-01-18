@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import static com.behsa.ganjex.e2e.TestUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * @author Esa Hekmatizadeh
@@ -28,6 +29,8 @@ class HooksRun {
 		deployLib(TEST_PATH + "hooksRun/libWithDifferentHooks/", "simple-lib");
 		Bootstrap.main(new String[]{TEST_CONFIG_PATH});
 		waitToBootstrap();
+		invokeStaticMethod("com.behsa.LibWithDifferentHooks", "clean", Void.class,
+						new Class[0]);
 		deployService(TEST_PATH + "hooksRun/simpleService/", "simple-service");
 		Thread.sleep(2000);
 		int runTime = invokeStaticMethod("com.behsa.LibWithDifferentHooks",
@@ -36,13 +39,18 @@ class HooksRun {
 	}
 
 	@Test
-	void testEveryStartHooksRunOnce() throws IOException, InterruptedException,
+	void testEveryHooksRunOnce() throws IOException, InterruptedException,
 					ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		deployLib(TEST_PATH + "hooksRun/libWithDifferentHooks/", "simple-lib");
 		Bootstrap.main(new String[]{TEST_CONFIG_PATH});
 		waitToBootstrap();
+		invokeStaticMethod("com.behsa.LibWithDifferentHooks", "clean", Void.class,
+						new Class[0]);
+		int shutdownHookRunTime = invokeStaticMethod("com.behsa.LibWithDifferentHooks",
+						"getShutdownHookRunTime", Integer.class, new Class<?>[0]);
+		assertEquals(0, shutdownHookRunTime);
 		deployService(TEST_PATH + "hooksRun/simpleService/", "simple-service");
-		Thread.sleep(2000);
+		Thread.sleep(3000);
 		int startHookRunTime = invokeStaticMethod("com.behsa.LibWithDifferentHooks",
 						"getStartHookRunTime", Integer.class, new Class<?>[0]);
 		int startHook2RunTime = invokeStaticMethod("com.behsa.LibWithDifferentHooks",
@@ -50,9 +58,10 @@ class HooksRun {
 		assertEquals(1, startHookRunTime);
 		assertEquals(1, startHook2RunTime);
 		unDeployService("simple-service");
-		Thread.sleep(2000);
-		int shutdownHookRunTime = invokeStaticMethod("com.behsa.LibWithDifferentHooks",
+		Thread.sleep(3000);
+		shutdownHookRunTime = invokeStaticMethod("com.behsa.LibWithDifferentHooks",
 						"getShutdownHookRunTime", Integer.class, new Class<?>[0]);
+		assertNull(Bootstrap.lifecycleManagement().findContext("simple-service"));
 		assertEquals(1, shutdownHookRunTime);
 	}
 
