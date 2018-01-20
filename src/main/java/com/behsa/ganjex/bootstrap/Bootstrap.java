@@ -35,7 +35,7 @@ public class Bootstrap {
 	private static final Logger log = LoggerFactory.getLogger(Bootstrap.class);
 	private static ClassLoader mainClassLoader;
 	private static ClassLoader libClassLoader;
-	private static LifecycleManagement lifecycleManagement = new LifecycleManagement();
+	private static LifecycleManagement lifecycleManagement = LifecycleManagement.newInstance();
 	private static JarWatcher jarWatcher = null;
 	private volatile static boolean bootstrapped = false;
 
@@ -102,6 +102,10 @@ public class Bootstrap {
 		jarWatcher = new JarWatcher(new File(servicePath), new StandardFileChangeListener());
 	}
 
+	/**
+	 * useful for testing, destroy the container and clean all the states, also interrupt all
+	 * watcher threads
+	 */
 	public static void destroy() {
 		mainClassLoader = null;
 		libClassLoader = null;

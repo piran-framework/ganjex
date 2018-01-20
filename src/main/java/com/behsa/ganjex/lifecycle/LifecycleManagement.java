@@ -23,10 +23,25 @@ import java.util.*;
  */
 public class LifecycleManagement {
 	private static final Logger log = LoggerFactory.getLogger(LifecycleManagement.class);
+	private static LifecycleManagement instance;
 	private Map<String, ServiceContext> services = new HashMap<>();
 	private List<StartupHook> startupHooks = new ArrayList<>();
 	private List<ShutdownHook> shutdownHooks = new ArrayList<>();
 	private volatile boolean ready = false;
+
+	private LifecycleManagement() {
+	}
+
+	/**
+	 * LifecycleManagement Class is singleton, this method always return same instance
+	 *
+	 * @return singleton instance
+	 */
+	public static LifecycleManagement newInstance() {
+		if (Objects.isNull(instance))
+			instance = new LifecycleManagement();
+		return instance;
+	}
 
 	/**
 	 * register a new startup hook
@@ -101,10 +116,14 @@ public class LifecycleManagement {
 		services.remove(context.getFileName());
 	}
 
+	/**
+	 * useful for testing, destroy lifecycleManagement instance and clean all the registered hooks
+	 */
 	public void destroy() {
 		services = new HashMap<>();
 		startupHooks = new ArrayList<>();
 		shutdownHooks = new ArrayList<>();
+		instance = null;
 		ready = false;
 	}
 }

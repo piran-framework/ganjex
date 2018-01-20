@@ -100,6 +100,9 @@ public final class JarWatcher {
 		}
 	}
 
+	/**
+	 * useful for testing, interrupt watcher thread
+	 */
 	public void destroy() {
 		scheduledFuture.cancel(true);
 	}
