@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static com.behsa.ganjex.util.Executors.scheduledExecutor;
@@ -36,6 +37,8 @@ public final class JarWatcher {
 	 */
 	private final FileChangeListener listener;
 
+	private ScheduledFuture<?> scheduledFuture;
+
 	/**
 	 * create a new <code>JarWatcher</code>
 	 *
@@ -45,8 +48,9 @@ public final class JarWatcher {
 	public JarWatcher(File watchDir, FileChangeListener listener) {
 		this.watchDir = watchDir;
 		this.listener = listener;
-		scheduledExecutor().scheduleWithFixedDelay(this::check
+		scheduledFuture = scheduledExecutor().scheduleWithFixedDelay(this::check
 						, 1, 1, TimeUnit.SECONDS);
+
 	}
 
 	/**
@@ -94,6 +98,10 @@ public final class JarWatcher {
 			info.setLastState(-1); //assume file is non existent
 			currentStatus.put(jarfile.getAbsolutePath(), info);
 		}
+	}
+
+	public void destroy() {
+		scheduledFuture.cancel(true);
 	}
 
 	/**

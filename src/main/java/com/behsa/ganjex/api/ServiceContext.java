@@ -21,11 +21,12 @@ public class ServiceContext {
 	private final ClassLoader classLoader;
 	private final Properties manifest;
 
-	public ServiceContext(String fileName, String name, int version, ClassLoader classLoader,
+	public ServiceContext(String fileName, ClassLoader classLoader,
 												Properties manifest) {
 		this.fileName = fileName;
-		this.name = name;
-		this.version = version;
+		this.name = manifest.getProperty("name");
+		//TODO:handle exception
+		this.version = Integer.parseInt(manifest.getProperty("version"));
 		this.classLoader = classLoader;
 		this.manifest = manifest;
 	}

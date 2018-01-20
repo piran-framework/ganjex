@@ -28,7 +28,7 @@ public class StandardFileChangeListener implements FileChangeListener {
 
 	@Override
 	public void fileModified(File jar) {
-		log.info("new application found {}", jar.getName());
+		log.info("new service found {}", jar.getName());
 		URL jarUrl;
 		try {
 			jarUrl = new URL("file://" + jar.getAbsolutePath());
@@ -41,9 +41,7 @@ public class StandardFileChangeListener implements FileChangeListener {
 		try {
 			Properties manifest = new Properties();
 			manifest.load(classLoader.getResourceAsStream("manifest.properties"));
-			ServiceContext context = new ServiceContext(jar.getName(), manifest.getProperty("name"),
-							Integer.parseInt(manifest.getProperty("version")),
-							classLoader, manifest);
+			ServiceContext context = new ServiceContext(jar.getName(), classLoader, manifest);
 			Bootstrap.lifecycleManagement().serviceStarted(context);
 		} catch (IOException e) {
 			log.error("could not start service {} cause: ", jar.getName());

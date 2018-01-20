@@ -3,12 +3,12 @@ package com.behsa.ganjex.api;
 import java.lang.annotation.*;
 
 /**
- * This is the startup hook annotation, it used by the ganjex library to register their hook
+ * This is the startup hook annotation, it is used by the ganjex library to register their hook
  * which should be executed right after a new service loaded
  * <p>
- * every method annotated with {@link StartupHook} should surrounded with a class which contain a
- * default constructor and accept just one parameter of type {@link ServiceContext}, this
- * parameter indicate some information about the service, also containing service class loader
+ * every method annotated with {@link StartupHook} should be surrounded with a class which
+ * contains a default constructor and accept just one parameter of type {@link ServiceContext},
+ * this parameter indicates some information about the service, also containing service class loader
  * which hook can use to find element in the service
  *
  * @author Esa Hekmatizadeh

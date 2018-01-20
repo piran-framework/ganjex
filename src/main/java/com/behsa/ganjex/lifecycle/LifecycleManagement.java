@@ -53,7 +53,7 @@ public class LifecycleManagement {
 	}
 
 	/**
-	 * state that registration is done, all calls od registerShutdownHook and registerStartupHook
+	 * state that registration is done, all calls of registerShutdownHook and registerStartupHook
 	 * after calling this method cause {@link IllegalStateException}
 	 *
 	 * @throws IllegalStateException if this method ran before
@@ -62,6 +62,7 @@ public class LifecycleManagement {
 		if (ready)
 			throw new IllegalStateException("call doneRegistering method more than once");
 		Collections.sort(startupHooks);
+		ready = true;
 	}
 
 	/**
@@ -98,5 +99,12 @@ public class LifecycleManagement {
 		log.debug("all shutdown hooks executed for the service {} version {}", context.getName(),
 						context.getVersion());
 		services.remove(context.getFileName());
+	}
+
+	public void destroy() {
+		services = new HashMap<>();
+		startupHooks = new ArrayList<>();
+		shutdownHooks = new ArrayList<>();
+		ready = false;
 	}
 }

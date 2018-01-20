@@ -36,6 +36,7 @@ public class Bootstrap {
 	private static ClassLoader mainClassLoader;
 	private static ClassLoader libClassLoader;
 	private static LifecycleManagement lifecycleManagement = new LifecycleManagement();
+	private static JarWatcher jarWatcher = null;
 	private volatile static boolean bootstrapped = false;
 
 	/**
@@ -98,7 +99,17 @@ public class Bootstrap {
 
 
 	private static void watchServicesDirectory(String servicePath) {
-		new JarWatcher(new File(servicePath), new StandardFileChangeListener());
+		jarWatcher = new JarWatcher(new File(servicePath), new StandardFileChangeListener());
+	}
+
+	public static void destroy() {
+		mainClassLoader = null;
+		libClassLoader = null;
+		lifecycleManagement.destroy();
+		bootstrapped = false;
+		jarWatcher.destroy();
+		jarWatcher = null;
+		System.gc();
 	}
 
 	/**
