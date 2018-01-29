@@ -51,4 +51,14 @@ public class ServiceContext {
 		return manifest;
 	}
 
+	@Override
+	public String toString() {
+		return "ServiceContext{" +
+						"fileName='" + fileName + '\'' +
+						", name='" + name + '\'' +
+						", version=" + version +
+						", classLoader=" + classLoader +
+						", manifest=" + manifest +
+						'}';
+	}
 }

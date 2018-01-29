@@ -5,6 +5,7 @@ import com.behsa.ganjex.config.StandardConfigurationLoader;
 import com.behsa.ganjex.deploy.JarWatcher;
 import com.behsa.ganjex.deploy.StandardFileChangeListener;
 import com.behsa.ganjex.lifecycle.LifecycleManagement;
+import com.behsa.ganjex.util.Executors;
 import com.behsa.ganjex.util.JarFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,14 +107,17 @@ public class Bootstrap {
 	 * useful for testing, destroy the container and clean all the states, also interrupt all
 	 * watcher threads
 	 */
-	public static void destroy() {
-		mainClassLoader = null;
+	public static void destroy() throws InterruptedException {
+		Thread.currentThread().setContextClassLoader(mainClassLoader());
+//		mainClassLoader = null;
 		libClassLoader = null;
 		lifecycleManagement.destroy();
 		bootstrapped = false;
-		jarWatcher.destroy();
-		jarWatcher = null;
+		if (Objects.nonNull(jarWatcher))
+			jarWatcher.destroy();
+		Executors.destroy();
 		System.gc();
+		log.info("ganjex shutdown correctly");
 	}
 
 	/**

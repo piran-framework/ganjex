@@ -16,7 +16,7 @@ public interface FileChangeListener {
 	 *
 	 * @param file the new file
 	 */
-	void fileModified(File file);
+	void fileAdd(File file);
 
 	/**
 	 * listener which executed when a file removed in a specific path

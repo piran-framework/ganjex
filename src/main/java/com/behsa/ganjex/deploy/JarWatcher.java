@@ -49,7 +49,7 @@ public final class JarWatcher {
 		this.watchDir = watchDir;
 		this.listener = listener;
 		scheduledFuture = scheduledExecutor().scheduleWithFixedDelay(this::check
-						, 1, 1, TimeUnit.SECONDS);
+						, 0, 1, TimeUnit.SECONDS);
 
 	}
 
@@ -75,7 +75,7 @@ public final class JarWatcher {
 			JarInfo info = entry.getValue();
 			int check = info.check();
 			if (check == 1) {
-				listener.fileModified(info.jar);
+				listener.fileAdd(info.jar);
 			} else if (check == -1) {
 				listener.fileRemoved(info.jar);
 				//no need to keep in memory
@@ -105,6 +105,7 @@ public final class JarWatcher {
 	 */
 	public void destroy() {
 		scheduledFuture.cancel(true);
+		currentStatus.clear();
 	}
 
 	/**

@@ -27,11 +27,14 @@ public class StandardFileChangeListener implements FileChangeListener {
 
 
 	@Override
-	public void fileModified(File jar) {
-		log.info("new service found {}", jar.getName());
+	public void fileAdd(File jar) {
+		fileRemoved(jar);
+		jar = new File(jar.toURI());
+		log.info("new service found {} by size {}", jar.getName(),jar.length());
 		URL jarUrl;
 		try {
-			jarUrl = new URL("file://" + jar.getAbsolutePath());
+
+			jarUrl = jar.toURI().toURL();//new URL("file://" + jar.getAbsolutePath());
 		} catch (MalformedURLException e) {
 			log.error("could not load {}", jar.getAbsolutePath(), e);
 			return;

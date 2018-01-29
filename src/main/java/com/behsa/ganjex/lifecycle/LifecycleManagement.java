@@ -4,7 +4,10 @@ import com.behsa.ganjex.api.ServiceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.net.URLClassLoader;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * LifecycleManagement class is a heart of the lifecycle management of the services. all of the
@@ -24,7 +27,7 @@ import java.util.*;
 public class LifecycleManagement {
 	private static final Logger log = LoggerFactory.getLogger(LifecycleManagement.class);
 	private static LifecycleManagement instance;
-	private Map<String, ServiceContext> services = new HashMap<>();
+	private Map<String, ServiceContext> services = new ConcurrentHashMap<>();
 	private List<StartupHook> startupHooks = new ArrayList<>();
 	private List<ShutdownHook> shutdownHooks = new ArrayList<>();
 	private volatile boolean ready = false;
@@ -113,6 +116,12 @@ public class LifecycleManagement {
 		shutdownHooks.forEach(h -> h.hook().accept(context));
 		log.debug("all shutdown hooks executed for the service {} version {}", context.getName(),
 						context.getVersion());
+		try {
+			((URLClassLoader) context.getClassLoader()).close();
+		} catch (IOException e) {
+			log.error("could not close service {} version {} classloader", context.getName(), context
+							.getVersion());
+		}
 		services.remove(context.getFileName());
 	}
 
@@ -120,10 +129,9 @@ public class LifecycleManagement {
 	 * useful for testing, destroy lifecycleManagement instance and clean all the registered hooks
 	 */
 	public void destroy() {
-		services = new HashMap<>();
-		startupHooks = new ArrayList<>();
-		shutdownHooks = new ArrayList<>();
-		instance = null;
+		services.clear();
+		startupHooks.clear();
+		shutdownHooks.clear();
 		ready = false;
 	}
 }

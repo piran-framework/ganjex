@@ -1,0 +1,7 @@
+package com.behsa;
+
+public class VersionService {
+	public int getVersion() {
+		return 2;
+	}
+}

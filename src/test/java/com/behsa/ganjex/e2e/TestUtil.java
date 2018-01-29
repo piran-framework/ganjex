@@ -35,6 +35,7 @@ public class TestUtil {
 	 * test config file location relative to the root of project
 	 */
 	public static final String TEST_CONFIG_PATH = "src/test/resources/config-test.properties";
+	public static final long TIMEOUT = 3000L;
 	private static final Logger log = LoggerFactory.getLogger(TestUtil.class);
 
 	/**
@@ -43,14 +44,17 @@ public class TestUtil {
 	 *
 	 * @throws IOException
 	 */
-	public static void clean() throws IOException {
+	public static void clean() throws IOException, InterruptedException {
 		Config.setConfig(new TestConfiguration());
 		File servicePath = new File(Config.config().get("service.path"));
 		File libPath = new File(Config.config().get("lib.path"));
-		FileUtils.deleteDirectory(servicePath);
-		FileUtils.deleteDirectory(libPath);
+		deleteAllFilesInDirectory(servicePath,new String[]{"jar"});
+		deleteAllFilesInDirectory(libPath,new String[]{"jar"});
+//		FileUtils.deleteDirectory(servicePath);
+//		FileUtils.deleteDirectory(libPath);
 		File tmp = new File("tmp");
 		FileUtils.deleteDirectory(tmp);
+		Bootstrap.destroy();
 	}
 
 	/**
@@ -64,6 +68,9 @@ public class TestUtil {
 	public static void deployService(String path, String name) throws IOException, InterruptedException {
 		File tmpSrc = new File("tmp/" + name + "/src");
 		File tmpOut = new File("tmp/" + name + "/out");
+		FileUtils.deleteDirectory(tmpOut);
+		FileUtils.deleteDirectory(tmpSrc);
+		FileUtils.deleteDirectory(new File("tmp/" + name));
 		copyAndCompile("service", path, tmpSrc, tmpOut);
 		commandRun("jar -cf " + name + ".jar -C out/ .", tmpOut.getParentFile());
 		FileUtils.copyFileToDirectory(new File(tmpOut.getParent(), name + ".jar"),

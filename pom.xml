@@ -25,11 +25,17 @@
 				</dependency>
 				<!--testing-->
 				<dependency>
-						<groupId>org.junit.jupiter</groupId>
-						<artifactId>junit-jupiter-api</artifactId>
-						<version>${junit.jupiter.version}</version>
+						<groupId>org.testng</groupId>
+						<artifactId>testng</artifactId>
+						<version>6.10</version>
 						<scope>test</scope>
 				</dependency>
+				<!--<dependency>-->
+						<!--<groupId>org.junit.jupiter</groupId>-->
+						<!--<artifactId>junit-jupiter-api</artifactId>-->
+						<!--<version>${junit.jupiter.version}</version>-->
+						<!--<scope>test</scope>-->
+				<!--</dependency>-->
 				<dependency>
 						<groupId>commons-io</groupId>
 						<artifactId>commons-io</artifactId>
