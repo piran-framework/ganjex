@@ -18,7 +18,6 @@ public class CallServiceDirectlyLibrary {
 	public static long serviceCount(String name) {
 		return contextMap.entrySet().stream().filter(s -> s.getKey().name.equals(name))
 						.count();
-		//findAny().get().getValue().getVersion()
 	}
 
 	public static int getVersion(String name, Integer version) throws ClassNotFoundException,
@@ -37,13 +36,11 @@ public class CallServiceDirectlyLibrary {
 
 	@StartupHook
 	public void startService(ServiceContext context) {
-		System.out.println("start service " + context);
 		contextMap.put(new ServiceInfo(context), context);
 	}
 
 	@ShutdownHook
 	public void shutdownService(ServiceContext context) {
-		System.out.println("shutdown service " + context);
 		contextMap.remove(new ServiceInfo(context));
 	}
 

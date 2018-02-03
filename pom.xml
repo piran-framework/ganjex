@@ -8,10 +8,6 @@
 		<artifactId>ganjex</artifactId>
 		<packaging>jar</packaging>
 		<version>0.1-SNAPSHOT</version>
-		<properties>
-				<junit.jupiter.version>5.0.3</junit.jupiter.version>
-				<junit.platform.version>1.0.3</junit.platform.version>
-		</properties>
 		<dependencies>
 				<dependency>
 						<groupId>ch.qos.logback</groupId>
@@ -30,12 +26,6 @@
 						<version>6.10</version>
 						<scope>test</scope>
 				</dependency>
-				<!--<dependency>-->
-						<!--<groupId>org.junit.jupiter</groupId>-->
-						<!--<artifactId>junit-jupiter-api</artifactId>-->
-						<!--<version>${junit.jupiter.version}</version>-->
-						<!--<scope>test</scope>-->
-				<!--</dependency>-->
 				<dependency>
 						<groupId>commons-io</groupId>
 						<artifactId>commons-io</artifactId>
