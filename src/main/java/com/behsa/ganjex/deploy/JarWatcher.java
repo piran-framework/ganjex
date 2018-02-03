@@ -82,8 +82,6 @@ public final class JarWatcher {
 				i.remove();
 			}
 		}
-
-
 	}
 
 	/**
@@ -115,19 +113,18 @@ public final class JarWatcher {
 	private static class JarInfo {
 		private final File jar;
 
-		private long lastChecked = 0;
-
+		private long lastModified = 0;
 		private long lastState = 0;
 
 		private JarInfo(File jar) {
 			this.jar = jar;
-			this.lastChecked = jar.lastModified();
+			this.lastModified = jar.lastModified();
 			if (!jar.exists())
 				lastState = -1;
 		}
 
 		private boolean modified() {
-			return jar.exists() && jar.lastModified() > lastChecked;
+			return jar.exists() && (jar.lastModified() > lastModified);
 		}
 
 		private boolean exists() {
@@ -143,7 +140,6 @@ public final class JarWatcher {
 		private int check() {
 			//file unchanged by default
 			int result = 0;
-
 			if (modified()) {
 				//file has changed - timestamp
 				result = 1;
@@ -157,7 +153,6 @@ public final class JarWatcher {
 				result = 1;
 				lastState = result;
 			}
-			this.lastChecked = System.currentTimeMillis();
 			return result;
 		}
 

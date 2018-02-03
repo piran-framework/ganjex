@@ -1,4 +1,4 @@
-package com.behsa.ganjex.e2e;
+package com.behsa.ganjex.integration;
 
 import com.behsa.ganjex.config.Configuration;
 import org.slf4j.Logger;

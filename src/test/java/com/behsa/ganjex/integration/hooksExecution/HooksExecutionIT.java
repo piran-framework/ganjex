@@ -1,13 +1,13 @@
-package com.behsa.ganjex.e2e.hooksExecution;
+package com.behsa.ganjex.integration.hooksExecution;
 
 import com.behsa.ganjex.bootstrap.Bootstrap;
-import com.behsa.ganjex.e2e.TestUtil;
+import com.behsa.ganjex.integration.TestUtil;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import static com.behsa.ganjex.e2e.TestUtil.*;
+import static com.behsa.ganjex.integration.TestUtil.*;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 
@@ -15,7 +15,7 @@ import static org.testng.Assert.assertNull;
  * @author Esa Hekmatizadeh
  */
 @Test(sequential = true)
-public class HooksExecution {
+public class HooksExecutionIT {
 
 	@Test
 	public void testJustOneObjectWithDifferentHooks() throws IOException, InterruptedException,
@@ -53,8 +53,8 @@ public class HooksExecution {
 						"getStartHookRunTime", Integer.class, new Class<?>[0]);
 		int startHook2RunTime = invokeStaticMethod("com.behsa.LibWithDifferentHooks",
 						"getStartHook2RunTime", Integer.class, new Class<?>[0]);
-		assertEquals(1, startHookRunTime);
-		assertEquals(1, startHook2RunTime);
+		assertEquals(startHookRunTime, 1);
+		assertEquals(startHook2RunTime, 1);
 		unDeployService("simple-service");
 		Thread.sleep(TIMEOUT);
 		shutdownHookRunTime = invokeStaticMethod("com.behsa.LibWithDifferentHooks",

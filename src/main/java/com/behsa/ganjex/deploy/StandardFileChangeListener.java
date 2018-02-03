@@ -2,16 +2,17 @@ package com.behsa.ganjex.deploy;
 
 import com.behsa.ganjex.api.ServiceContext;
 import com.behsa.ganjex.bootstrap.Bootstrap;
+import com.behsa.ganjex.lifecycle.LifecycleManagement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Objects;
-import java.util.Properties;
 
 /**
  * The <b>StandardFileChangeListener</b> class is responsible to deploy services, assign classloader
@@ -25,16 +26,15 @@ import java.util.Properties;
 public class StandardFileChangeListener implements FileChangeListener {
 	private static final Logger log = LoggerFactory.getLogger(StandardFileChangeListener.class);
 
+	private static LifecycleManagement lifecycleManagement = LifecycleManagement.newInstance();
 
 	@Override
 	public void fileAdd(File jar) {
 		fileRemoved(jar);
-		jar = new File(jar.toURI());
-		log.info("new service found {} by size {}", jar.getName(),jar.length());
+		log.info("new service found {}", jar.getName());
 		URL jarUrl;
 		try {
-
-			jarUrl = jar.toURI().toURL();//new URL("file://" + jar.getAbsolutePath());
+			jarUrl = jar.toURI().toURL();
 		} catch (MalformedURLException e) {
 			log.error("could not load {}", jar.getAbsolutePath(), e);
 			return;
@@ -42,10 +42,10 @@ public class StandardFileChangeListener implements FileChangeListener {
 		ClassLoader classLoader = new URLClassLoader(new URL[]{jarUrl},
 						Bootstrap.libClassLoader());
 		try {
-			Properties manifest = new Properties();
-			manifest.load(classLoader.getResourceAsStream("manifest.properties"));
-			ServiceContext context = new ServiceContext(jar.getName(), classLoader, manifest);
-			Bootstrap.lifecycleManagement().serviceStarted(context);
+			ServiceContext context = new ServiceContext(jar.getName(), classLoader);
+			lifecycleManagement.serviceStarted(context);
+		} catch (FileNotFoundException e) {
+			log.error("could not load manifest.service in {}", jar.getName());
 		} catch (IOException e) {
 			log.error("could not start service {} cause: ", jar.getName());
 			log.error(e.getMessage(), e);
@@ -54,8 +54,8 @@ public class StandardFileChangeListener implements FileChangeListener {
 
 	@Override
 	public void fileRemoved(File f) {
-		ServiceContext context = Bootstrap.lifecycleManagement().findContext(f.getName());
+		ServiceContext context = lifecycleManagement.findContext(f.getName());
 		if (Objects.nonNull(context))
-			Bootstrap.lifecycleManagement().serviceDestroyed(context);
+			lifecycleManagement.serviceDestroyed(context);
 	}
 }

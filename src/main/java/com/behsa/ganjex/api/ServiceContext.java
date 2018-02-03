@@ -1,5 +1,11 @@
 package com.behsa.ganjex.api;
 
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -19,16 +25,20 @@ public class ServiceContext {
 	private final String name;
 	private final int version;
 	private final ClassLoader classLoader;
-	private final Properties manifest;
+	private final Properties manifest = new Properties();
 
-	public ServiceContext(String fileName, ClassLoader classLoader,
-												Properties manifest) {
+	public ServiceContext(String fileName, ClassLoader classLoader) throws IOException {
+		URL resource = classLoader.getResource("manifest.properties");
+		if (Objects.isNull(resource))
+			throw new FileNotFoundException("manifest.properties");
+		URLConnection urlConnection = resource.openConnection();
+		urlConnection.setUseCaches(false);
+		manifest.load(urlConnection.getInputStream());
 		this.fileName = fileName;
 		this.name = manifest.getProperty("name");
 		//TODO:handle exception
 		this.version = Integer.parseInt(manifest.getProperty("version"));
 		this.classLoader = classLoader;
-		this.manifest = manifest;
 	}
 
 	public String getFileName() {

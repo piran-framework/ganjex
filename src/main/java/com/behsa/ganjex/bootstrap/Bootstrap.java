@@ -108,8 +108,6 @@ public class Bootstrap {
 	 * watcher threads
 	 */
 	public static void destroy() throws InterruptedException {
-		Thread.currentThread().setContextClassLoader(mainClassLoader());
-//		mainClassLoader = null;
 		libClassLoader = null;
 		lifecycleManagement.destroy();
 		bootstrapped = false;

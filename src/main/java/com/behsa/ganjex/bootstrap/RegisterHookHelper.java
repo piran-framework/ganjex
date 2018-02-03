@@ -29,9 +29,9 @@ class RegisterHookHelper {
 
 
 	static void loadHooks() {
-		Thread.currentThread().setContextClassLoader(Bootstrap.libClassLoader());
 		Reflections.log = LoggerFactory.getLogger(Reflections.class);
-		Reflections libraries = new Reflections("com.behsa", new MethodAnnotationsScanner());
+		Reflections libraries = new Reflections("com.behsa", new MethodAnnotationsScanner(),
+						Bootstrap.libClassLoader());
 		Set<Method> startupHookMethods = libraries.getMethodsAnnotatedWith(StartupHook.class);
 		Set<Method> shutdownHooksMethods = libraries.getMethodsAnnotatedWith(ShutdownHook.class);
 		startupHookMethods.forEach(RegisterHookHelper::addDeclaringClass);

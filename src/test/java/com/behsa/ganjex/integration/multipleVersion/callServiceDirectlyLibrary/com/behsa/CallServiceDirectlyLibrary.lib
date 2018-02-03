@@ -16,7 +16,7 @@ public class CallServiceDirectlyLibrary {
 	private static Map<ServiceInfo, ServiceContext> contextMap = new ConcurrentHashMap<>();
 
 	public static long serviceCount(String name) {
-		return (long) contextMap.entrySet().stream().filter(s -> s.getKey().name.equals(name))
+		return contextMap.entrySet().stream().filter(s -> s.getKey().name.equals(name))
 						.count();
 		//findAny().get().getValue().getVersion()
 	}

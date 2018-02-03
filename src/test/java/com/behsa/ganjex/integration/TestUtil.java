@@ -1,4 +1,4 @@
-package com.behsa.ganjex.e2e;
+package com.behsa.ganjex.integration;
 
 import com.behsa.ganjex.bootstrap.Bootstrap;
 import com.behsa.ganjex.config.Config;
@@ -30,12 +30,12 @@ public class TestUtil {
 	/**
 	 * directory where all the e2e test placed relative to the root of project
 	 */
-	public static final String TEST_PATH = "src/test/java/com/behsa/ganjex/e2e/";
+	public static final String TEST_PATH = "src/test/java/com/behsa/ganjex/integration/";
 	/**
 	 * test config file location relative to the root of project
 	 */
 	public static final String TEST_CONFIG_PATH = "src/test/resources/config-test.properties";
-	public static final long TIMEOUT = 3000L;
+	public static final long TIMEOUT = 2000L;
 	private static final Logger log = LoggerFactory.getLogger(TestUtil.class);
 
 	/**
@@ -48,10 +48,8 @@ public class TestUtil {
 		Config.setConfig(new TestConfiguration());
 		File servicePath = new File(Config.config().get("service.path"));
 		File libPath = new File(Config.config().get("lib.path"));
-		deleteAllFilesInDirectory(servicePath,new String[]{"jar"});
-		deleteAllFilesInDirectory(libPath,new String[]{"jar"});
-//		FileUtils.deleteDirectory(servicePath);
-//		FileUtils.deleteDirectory(libPath);
+		deleteAllFilesInDirectory(servicePath, new String[]{"jar"});
+		deleteAllFilesInDirectory(libPath, new String[]{"jar"});
 		File tmp = new File("tmp");
 		FileUtils.deleteDirectory(tmp);
 		Bootstrap.destroy();
@@ -74,7 +72,11 @@ public class TestUtil {
 		copyAndCompile("service", path, tmpSrc, tmpOut);
 		commandRun("jar -cf " + name + ".jar -C out/ .", tmpOut.getParentFile());
 		FileUtils.copyFileToDirectory(new File(tmpOut.getParent(), name + ".jar"),
-						new File(Config.config().get("service.path")));
+						new File(Config.config().get("service.path")), false);
+		boolean modified = new File(Config.config().get("service.path"), name + ".jar")
+						.setLastModified(System.currentTimeMillis()+10);
+		if (!modified)
+			log.error("could not set the lastModified date of the newly created service");
 	}
 
 	/**
@@ -104,7 +106,7 @@ public class TestUtil {
 		copyAndCompile("lib", path, tmpSrc, tmpOut);
 		commandRun("jar -cf " + name + ".jar -C out/ .", tmpOut.getParentFile());
 		FileUtils.copyFileToDirectory(new File(tmpOut.getParentFile(), name + ".jar"),
-						new File(Config.config().get("lib.path")));
+						new File(Config.config().get("lib.path")), false);
 	}
 
 	/**
@@ -180,7 +182,7 @@ public class TestUtil {
 			if (f.isDirectory())
 				FileUtils.copyDirectoryToDirectory(f, dest);
 			else
-				FileUtils.copyFileToDirectory(f, dest);
+				FileUtils.copyFileToDirectory(f, dest, false);
 		}
 	}
 
