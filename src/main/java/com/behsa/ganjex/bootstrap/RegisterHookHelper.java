@@ -3,6 +3,7 @@ package com.behsa.ganjex.bootstrap;
 import com.behsa.ganjex.api.ServiceContext;
 import com.behsa.ganjex.api.ShutdownHook;
 import com.behsa.ganjex.api.StartupHook;
+import com.behsa.ganjex.config.Config;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.slf4j.Logger;
@@ -30,7 +31,8 @@ class RegisterHookHelper {
 
 	static void loadHooks() {
 		Reflections.log = LoggerFactory.getLogger(Reflections.class);
-		Reflections libraries = new Reflections("com.behsa", new MethodAnnotationsScanner(),
+		Reflections libraries = new Reflections(Config.config().get("base.package"), new
+						MethodAnnotationsScanner(),
 						Bootstrap.libClassLoader());
 		Set<Method> startupHookMethods = libraries.getMethodsAnnotatedWith(StartupHook.class);
 		Set<Method> shutdownHooksMethods = libraries.getMethodsAnnotatedWith(ShutdownHook.class);

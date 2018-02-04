@@ -1,6 +1,7 @@
 package com.behsa.ganjex.deploy;
 
 
+import com.behsa.ganjex.config.Config;
 import com.behsa.ganjex.util.JarFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import static com.behsa.ganjex.config.Config.*;
 import static com.behsa.ganjex.util.Executors.scheduledExecutor;
 
 /**
@@ -49,7 +51,7 @@ public final class JarWatcher {
 		this.watchDir = watchDir;
 		this.listener = listener;
 		scheduledFuture = scheduledExecutor().scheduleWithFixedDelay(this::check
-						, 0, 1, TimeUnit.SECONDS);
+						, 0, Long.parseLong(config().get("watcher.delay")), TimeUnit.SECONDS);
 
 	}
 

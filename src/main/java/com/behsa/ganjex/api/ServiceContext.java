@@ -67,8 +67,6 @@ public class ServiceContext {
 						"fileName='" + fileName + '\'' +
 						", name='" + name + '\'' +
 						", version=" + version +
-						", classLoader=" + classLoader +
-						", manifest=" + manifest +
 						'}';
 	}
 }
