@@ -22,14 +22,6 @@
 		<groupId>com.behsa</groupId>
 		<artifactId>test-service</artifactId>
 		<version>0.1-SNAPSHOT</version>
-		<dependencies>
-				<dependency>
-						<groupId>com.behsa</groupId>
-						<artifactId>ganjex</artifactId>
-						<version>0.1-SNAPSHOT</version>
-						<scope>provided</scope>
-				</dependency>
-		</dependencies>
 		<build>
 				<plugins>
 						<plugin>
