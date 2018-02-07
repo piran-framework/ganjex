@@ -24,6 +24,12 @@
 		<artifactId>ganjex</artifactId>
 		<packaging>jar</packaging>
 		<version>0.1-RELEASE</version>
+		<distributionManagement>
+				<repository>
+						<id>releases</id>
+						<url>http://172.18.60.100/nexus/repository/maven-releases/</url>
+				</repository>
+		</distributionManagement>
 		<dependencies>
 				<dependency>
 						<groupId>ch.qos.logback</groupId>
