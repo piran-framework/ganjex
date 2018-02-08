@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package com.behsa;
+package com.behsa.ganjex.integration.hooksExecution;
 
 import com.behsa.ganjex.api.ServiceContext;
 import com.behsa.ganjex.api.ShutdownHook;
 import com.behsa.ganjex.api.StartupHook;
 
+/**
+ * @author Esa Hekmatizadeh
+ */
 public class LibWithDifferentHooks {
 	private static int runTime = 0;
 	private static int startHookRunTime = 0;
@@ -27,13 +30,14 @@ public class LibWithDifferentHooks {
 	private static int shutdownHookRunTime = 0;
 
 	public LibWithDifferentHooks() {
-		LibWithDifferentHooks.runTime++;
+		runTime++;
 	}
 
 	public static void clean() {
 		startHookRunTime = 0;
 		startHook2RunTime = 0;
 		shutdownHookRunTime = 0;
+		runTime = 0;
 	}
 
 	public static int getRunTime() {
@@ -66,5 +70,6 @@ public class LibWithDifferentHooks {
 	public void shutdownHook(ServiceContext context) {
 		shutdownHookRunTime++;
 	}
+
 
 }

@@ -16,7 +16,7 @@
 
 package com.behsa.ganjex.integration.hooksExecution;
 
-import com.behsa.ganjex.bootstrap.Bootstrap;
+import com.behsa.ganjex.Ganjex;
 import com.behsa.ganjex.integration.TestUtil;
 import org.testng.annotations.Test;
 
@@ -38,45 +38,38 @@ public class HooksExecutionIT {
 					ClassNotFoundException,
 					NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 		TestUtil.clean();
-		deployLib(TEST_PATH + "hooksExecution/libWithDifferentHooks/", "simple-lib");
-		Bootstrap.main(new String[]{TEST_CONFIG_PATH});
+//		deployLib(TEST_PATH + "hooksExecution/libWithDifferentHooks/", "simple-lib");
+		LibWithDifferentHooks.clean();
+		Ganjex ganjex = Ganjex.run(TestUtil.config);
 		waitToBootstrap();
-		invokeStaticMethod("com.behsa.LibWithDifferentHooks", "clean", Void.class,
-						new Class[0]);
 		deployService(TEST_PATH + "hooksExecution/simpleService/", "simple-service");
 		Thread.sleep(TIMEOUT);
-		int runTime = invokeStaticMethod("com.behsa.LibWithDifferentHooks",
-						"getRunTime", Integer.class, new Class<?>[0]);
-		assertEquals(1, runTime);
-		Bootstrap.destroy();
+		int runTime = LibWithDifferentHooks.getRunTime();
+		assertEquals(runTime, 1);
+		ganjex.destroy();
 	}
 
 	@Test
 	public void testEveryHooksRunOnce() throws IOException, InterruptedException,
 					ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		TestUtil.clean();
-		deployLib(TEST_PATH + "hooksExecution/libWithDifferentHooks/", "simple-lib");
-		Bootstrap.main(new String[]{TEST_CONFIG_PATH});
+//		deployLib(TEST_PATH + "hooksExecution/libWithDifferentHooks/", "simple-lib");
+		LibWithDifferentHooks.clean();
+		Ganjex ganjex = Ganjex.run(config);
 		waitToBootstrap();
-		invokeStaticMethod("com.behsa.LibWithDifferentHooks", "clean", Void.class,
-						new Class[0]);
-		int shutdownHookRunTime = invokeStaticMethod("com.behsa.LibWithDifferentHooks",
-						"getShutdownHookRunTime", Integer.class, new Class<?>[0]);
-		assertEquals(0, shutdownHookRunTime);
+		int shutdownHookRunTime = LibWithDifferentHooks.getShutdownHookRunTime();
+		assertEquals( shutdownHookRunTime,0);
 		deployService(TEST_PATH + "hooksExecution/simpleService/", "simple-service");
 		Thread.sleep(TIMEOUT);
-		int startHookRunTime = invokeStaticMethod("com.behsa.LibWithDifferentHooks",
-						"getStartHookRunTime", Integer.class, new Class<?>[0]);
-		int startHook2RunTime = invokeStaticMethod("com.behsa.LibWithDifferentHooks",
-						"getStartHook2RunTime", Integer.class, new Class<?>[0]);
+		int startHookRunTime = LibWithDifferentHooks.getStartHookRunTime();
+		int startHook2RunTime = LibWithDifferentHooks.getStartHook2RunTime();
 		assertEquals(startHookRunTime, 1);
 		assertEquals(startHook2RunTime, 1);
 		unDeployService("simple-service");
 		Thread.sleep(TIMEOUT);
-		shutdownHookRunTime = invokeStaticMethod("com.behsa.LibWithDifferentHooks",
-						"getShutdownHookRunTime", Integer.class, new Class<?>[0]);
-		assertNull(Bootstrap.lifecycleManagement().findContext("simple-service"));
-		assertEquals(1, shutdownHookRunTime);
-		Bootstrap.destroy();
+		shutdownHookRunTime = LibWithDifferentHooks.getShutdownHookRunTime();
+		assertNull(ganjex.lifecycleManagement().findContext("simple-service"));
+		assertEquals( shutdownHookRunTime,1);
+		ganjex.destroy();
 	}
 }

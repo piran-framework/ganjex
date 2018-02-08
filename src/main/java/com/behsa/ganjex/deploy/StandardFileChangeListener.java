@@ -17,7 +17,6 @@
 package com.behsa.ganjex.deploy;
 
 import com.behsa.ganjex.api.ServiceContext;
-import com.behsa.ganjex.bootstrap.Bootstrap;
 import com.behsa.ganjex.lifecycle.LifecycleManagement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,8 +40,14 @@ import java.util.Objects;
  */
 public class StandardFileChangeListener implements FileChangeListener {
 	private static final Logger log = LoggerFactory.getLogger(StandardFileChangeListener.class);
+	private LifecycleManagement lifecycleManagement;
+	private ClassLoader parentClassLoader;
 
-	private static LifecycleManagement lifecycleManagement = LifecycleManagement.newInstance();
+	public StandardFileChangeListener(ClassLoader parentClassLoader, LifecycleManagement
+					lifecycleManagement) {
+		this.parentClassLoader = parentClassLoader;
+		this.lifecycleManagement = lifecycleManagement;
+	}
 
 	@Override
 	public void fileAdd(File jar) {
@@ -55,8 +60,7 @@ public class StandardFileChangeListener implements FileChangeListener {
 			log.error("could not load {}", jar.getAbsolutePath(), e);
 			return;
 		}
-		ClassLoader classLoader = new URLClassLoader(new URL[]{jarUrl},
-						Bootstrap.libClassLoader());
+		ClassLoader classLoader = new URLClassLoader(new URL[]{jarUrl}, parentClassLoader);
 		try {
 			ServiceContext context = new ServiceContext(jar.getName(), classLoader);
 			lifecycleManagement.serviceStarted(context);

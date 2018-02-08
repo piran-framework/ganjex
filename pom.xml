@@ -23,7 +23,7 @@
 		<groupId>com.behsa</groupId>
 		<artifactId>ganjex</artifactId>
 		<packaging>jar</packaging>
-		<version>0.1-RELEASE</version>
+		<version>0.2-SNAPSHOT</version>
 		<distributionManagement>
 				<repository>
 						<id>releases</id>

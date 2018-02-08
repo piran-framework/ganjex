@@ -17,7 +17,6 @@
 package com.behsa.ganjex.deploy;
 
 
-import com.behsa.ganjex.util.JarFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,11 +25,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import static com.behsa.ganjex.config.Config.*;
-import static com.behsa.ganjex.util.Executors.scheduledExecutor;
 
 /**
  * The <b>JarWatcher</b> watch the given directory and notify the given listener when change in
@@ -53,6 +51,7 @@ public final class JarWatcher {
 	 * Listener to be notified of changes
 	 */
 	private final FileChangeListener listener;
+	private ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
 
 	private ScheduledFuture<?> scheduledFuture;
 
@@ -62,11 +61,11 @@ public final class JarWatcher {
 	 * @param watchDir the directory to watch
 	 * @param listener the listener to notify when changed detected
 	 */
-	public JarWatcher(File watchDir, FileChangeListener listener) {
+	public JarWatcher(File watchDir, FileChangeListener listener, long watcherDelay) {
 		this.watchDir = watchDir;
 		this.listener = listener;
-		scheduledFuture = scheduledExecutor().scheduleWithFixedDelay(this::check
-						, 0, Long.parseLong(config().get("watcher.delay")), TimeUnit.SECONDS);
+		scheduledFuture = executor.scheduleWithFixedDelay(this::check
+						, 0, watcherDelay, TimeUnit.SECONDS);
 
 	}
 
@@ -120,6 +119,13 @@ public final class JarWatcher {
 	 */
 	public void destroy() {
 		scheduledFuture.cancel(true);
+		try {
+			executor.awaitTermination(1, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			log.error(e.getMessage(), e);
+		}
+		if (!executor.isTerminated())
+			executor.shutdownNow();
 		currentStatus.clear();
 	}
 

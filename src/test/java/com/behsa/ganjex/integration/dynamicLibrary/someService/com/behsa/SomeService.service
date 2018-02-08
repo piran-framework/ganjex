@@ -1,0 +1,9 @@
+package com.behsa;
+
+import com.some.SomeLib;
+
+public class SomeService {
+	public String action() {
+		return SomeLib.hello();
+	}
+}

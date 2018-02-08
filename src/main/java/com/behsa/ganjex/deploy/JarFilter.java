@@ -14,32 +14,20 @@
  * limitations under the License.
  */
 
-package com.behsa.ganjex.config;
+package com.behsa.ganjex.deploy;
 
-import java.util.Objects;
+import java.io.File;
+import java.io.FilenameFilter;
 
 /**
- * static class provide static access to the Configuration object
+ * filter class to find jar files
  *
  * @author Esa Hekmatizadeh
  * @version 1.0
  */
-public final class Config {
-	private static Configuration config;
-
-	private Config() throws IllegalAccessException {
-		throw new IllegalAccessException("this method should be invoked");
+public class JarFilter implements FilenameFilter {
+	@Override
+	public boolean accept(File dir, String name) {
+		return name != null && name.endsWith(".jar");
 	}
-
-	public static void setConfig(Configuration configuration) {
-		config = configuration;
-	}
-
-	public static Configuration config() {
-		if (Objects.isNull(config))
-			throw new IllegalStateException("config is null, setConfig method should call before access" +
-							" to config");
-		return config;
-	}
-
 }

@@ -17,6 +17,7 @@
 package com.behsa.ganjex.lifecycle;
 
 import com.behsa.ganjex.api.ServiceContext;
+import com.behsa.ganjex.Ganjex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * LifecycleManagement class is a heart of the lifecycle management of the services. all of the
  * libraries hook will register by the bootstrap process in
- * {@link com.behsa.ganjex.bootstrap.Bootstrap} class. after all the registration object of this
+ * {@link Ganjex} class. after all the registration object of this
  * class is ready to handle start and shutdown of the services.
  * <p>
  * every new service found by the
@@ -47,20 +48,6 @@ public class LifecycleManagement {
 	private List<StartupHook> startupHooks = new ArrayList<>();
 	private List<ShutdownHook> shutdownHooks = new ArrayList<>();
 	private volatile boolean ready = false;
-
-	private LifecycleManagement() {
-	}
-
-	/**
-	 * LifecycleManagement Class is singleton, this method always return same instance
-	 *
-	 * @return singleton instance
-	 */
-	public static LifecycleManagement newInstance() {
-		if (Objects.isNull(instance))
-			instance = new LifecycleManagement();
-		return instance;
-	}
 
 	/**
 	 * register a new startup hook

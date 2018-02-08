@@ -28,7 +28,7 @@
 				<dependency>
 						<groupId>com.behsa</groupId>
 						<artifactId>ganjex</artifactId>
-						<version>0.1-RELEASE</version>
+						<version>0.2-SNAPSHOT</version>
 						<scope>provided</scope>
 				</dependency>
 		</dependencies>

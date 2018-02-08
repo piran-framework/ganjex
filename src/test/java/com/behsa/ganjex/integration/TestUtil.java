@@ -16,8 +16,9 @@
 
 package com.behsa.ganjex.integration;
 
-import com.behsa.ganjex.bootstrap.Bootstrap;
-import com.behsa.ganjex.config.Config;
+import com.behsa.ganjex.Ganjex;
+import com.behsa.ganjex.api.GanjexConfiguration;
+import com.behsa.ganjex.deploy.JarFilter;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
@@ -28,12 +29,7 @@ import org.slf4j.LoggerFactory;
 import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -47,12 +43,19 @@ public class TestUtil {
 	 * directory where all the e2e test placed relative to the root of project
 	 */
 	public static final String TEST_PATH = "src/test/java/com/behsa/ganjex/integration/";
-	/**
-	 * test config file location relative to the root of project
-	 */
-	public static final String TEST_CONFIG_PATH = "src/test/resources/config-test.properties";
+
 	public static final long TIMEOUT = 2000L;
+	public final static GanjexConfiguration config;
 	private static final Logger log = LoggerFactory.getLogger(TestUtil.class);
+
+	static {
+		config = new GanjexConfiguration.Builder()
+						.basePackage("com.behsa")
+						.libPath("test-dist/libs/")
+						.servicePath("test-dist/services/")
+						.watcherDelay(1)
+						.build();
+	}
 
 	/**
 	 * prepare config with {@link TestConfiguration}, delete the tmp location and delete service
@@ -61,14 +64,12 @@ public class TestUtil {
 	 * @throws IOException
 	 */
 	public static void clean() throws IOException, InterruptedException {
-		Config.setConfig(new TestConfiguration());
-		File servicePath = new File(Config.config().get("service.path"));
-		File libPath = new File(Config.config().get("lib.path"));
+		File servicePath = new File(config.getServicePath());
+		File libPath = new File(config.getLibPath());
 		deleteAllFilesInDirectory(servicePath, new String[]{"jar"});
 		deleteAllFilesInDirectory(libPath, new String[]{"jar"});
 		File tmp = new File("tmp");
 		FileUtils.deleteDirectory(tmp);
-		Bootstrap.destroy();
 	}
 
 	/**
@@ -88,9 +89,9 @@ public class TestUtil {
 		copyAndCompile("service", path, tmpSrc, tmpOut);
 		commandRun("jar -cf " + name + ".jar -C out/ .", tmpOut.getParentFile());
 		FileUtils.copyFileToDirectory(new File(tmpOut.getParent(), name + ".jar"),
-						new File(Config.config().get("service.path")), false);
-		boolean modified = new File(Config.config().get("service.path"), name + ".jar")
-						.setLastModified(System.currentTimeMillis()+10);
+						new File(config.getServicePath()), false);
+		boolean modified = new File(config.getServicePath(), name + ".jar")
+						.setLastModified(System.currentTimeMillis() + 10);
 		if (!modified)
 			log.error("could not set the lastModified date of the newly created service");
 	}
@@ -102,7 +103,7 @@ public class TestUtil {
 	 * @throws IOException
 	 */
 	public static void unDeployService(String name) throws IOException {
-		String path = Config.config().get("service.path") + "/" + name + ".jar";
+		String path = config.getServicePath() + "/" + name + ".jar";
 		File serviceJar = new File(path);
 		if (!serviceJar.delete())
 			throw new IOException("could not delete " + path);
@@ -122,41 +123,17 @@ public class TestUtil {
 		copyAndCompile("lib", path, tmpSrc, tmpOut);
 		commandRun("jar -cf " + name + ".jar -C out/ .", tmpOut.getParentFile());
 		FileUtils.copyFileToDirectory(new File(tmpOut.getParentFile(), name + ".jar"),
-						new File(Config.config().get("lib.path")), false);
+						new File(config.getLibPath()), false);
 	}
 
 	/**
-	 * wait until {@link Bootstrap} indicate the ganjex bootstrap process completed
+	 * wait until {@link Ganjex} indicate the ganjex bootstrap process completed
 	 *
 	 * @throws InterruptedException
 	 */
 	public static void waitToBootstrap() throws InterruptedException {
-		while (!Bootstrap.bootstraped())
+		while (!Ganjex.bootstraped())
 			Thread.sleep(500);
-	}
-
-	/**
-	 * invoke a static method of a library
-	 *
-	 * @param className  full class name which static method belongs to
-	 * @param methodName method name
-	 * @param returnType return type of the method
-	 * @param argType    list of classes indicate the type of the arguments of the method
-	 * @param args       method arguments
-	 * @param <T>        return type of the method
-	 * @return the result of the static method
-	 * @throws ClassNotFoundException
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 * @throws IllegalAccessException
-	 */
-	public static <T> T invokeStaticMethod(String className, String methodName, Class<T> returnType,
-																				 Class<?>[] argType, Object... args)
-					throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
-					IllegalAccessException {
-		Class<?> clazz = Bootstrap.libClassLoader().loadClass(className);
-		Method method = clazz.getMethod(methodName, argType);
-		return returnType.cast(method.invoke(null, args));
 	}
 
 	private static void copyAndCompile(String extType, String srcPath, File destFile, File outFile)
@@ -173,9 +150,23 @@ public class TestUtil {
 		});
 		Collection<File> sourceFiles = FileUtils.listFiles(destFile, new String[]{"java"}, true);
 		List<String> args = new ArrayList<>();
+		String cp = new File(".").getCanonicalPath() + File.separator + config.getLibPath();
+		File libFolder = new File(cp);
+		File[] jars = libFolder.listFiles(new JarFilter());
+		if(jars!=null && jars.length>0) {
+			args.add("-cp");
+			args.add(Arrays.stream(jars).map(file -> {
+				try {
+					return file.getCanonicalPath();
+				} catch (IOException e) {
+					return null;
+				}
+			}).filter(Objects::nonNull).collect(Collectors.joining(";")));
+		}
 		args.add("-d");
 		args.add(outFile.getPath());
 		args.addAll(sourceFiles.stream().map(File::getPath).collect(Collectors.toList()));
+		System.out.println(args);
 		ToolProvider.getSystemJavaCompiler().run(null, null, null, args.toArray(new String[0]));
 		copyAllContent(destFile, outFile);
 		deleteAllFilesInDirectory(destFile, new String[]{"java"});
