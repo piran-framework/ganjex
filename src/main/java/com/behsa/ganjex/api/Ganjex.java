@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package com.behsa.ganjex;
+package com.behsa.ganjex.api;
 
-import com.behsa.ganjex.api.GanjexConfiguration;
-import com.behsa.ganjex.api.ServiceContext;
-import com.behsa.ganjex.api.ShutdownHook;
-import com.behsa.ganjex.api.StartupHook;
 import com.behsa.ganjex.deploy.JarFilter;
 import com.behsa.ganjex.deploy.JarWatcher;
 import com.behsa.ganjex.deploy.StandardFileChangeListener;

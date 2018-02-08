@@ -16,7 +16,7 @@
 
 package com.behsa.ganjex.integration;
 
-import com.behsa.ganjex.Ganjex;
+import com.behsa.ganjex.api.Ganjex;
 import com.behsa.ganjex.api.GanjexConfiguration;
 import com.behsa.ganjex.deploy.JarFilter;
 import org.apache.commons.exec.CommandLine;

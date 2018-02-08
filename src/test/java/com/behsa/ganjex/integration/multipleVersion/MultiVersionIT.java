@@ -16,7 +16,7 @@
 
 package com.behsa.ganjex.integration.multipleVersion;
 
-import com.behsa.ganjex.Ganjex;
+import com.behsa.ganjex.api.Ganjex;
 import com.behsa.ganjex.integration.TestUtil;
 import org.testng.annotations.Test;
 

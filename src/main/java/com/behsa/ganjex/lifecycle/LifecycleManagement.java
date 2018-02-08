@@ -17,7 +17,7 @@
 package com.behsa.ganjex.lifecycle;
 
 import com.behsa.ganjex.api.ServiceContext;
-import com.behsa.ganjex.Ganjex;
+import com.behsa.ganjex.api.Ganjex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

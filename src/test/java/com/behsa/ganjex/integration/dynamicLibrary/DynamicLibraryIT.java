@@ -16,7 +16,7 @@
 
 package com.behsa.ganjex.integration.dynamicLibrary;
 
-import com.behsa.ganjex.Ganjex;
+import com.behsa.ganjex.api.Ganjex;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
