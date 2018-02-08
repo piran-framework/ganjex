@@ -30,7 +30,7 @@ import java.net.URLClassLoader;
 import java.util.Objects;
 
 /**
- * The <b>StandardFileChangeListener</b> class is responsible to deploy services, assign classloader
+ * The <b>ServiceFileChangeListener</b> class is responsible to deploy services, assign classloader
  * to them, and start services by calling all the startup hooks registered by the libraries.
  * by implementing <link {@link FileChangeListener}> an instance of this class should be assign
  * to {@link JarWatcher} constructor as a listener.
@@ -38,12 +38,12 @@ import java.util.Objects;
  * @author Esa Hekmatizadeh
  * @version 1.0
  */
-public class StandardFileChangeListener implements FileChangeListener {
-	private static final Logger log = LoggerFactory.getLogger(StandardFileChangeListener.class);
+public class ServiceFileChangeListener implements FileChangeListener {
+	private static final Logger log = LoggerFactory.getLogger(ServiceFileChangeListener.class);
 	private LifecycleManagement lifecycleManagement;
 	private ClassLoader parentClassLoader;
 
-	public StandardFileChangeListener(ClassLoader parentClassLoader, LifecycleManagement
+	public ServiceFileChangeListener(ClassLoader parentClassLoader, LifecycleManagement
 					lifecycleManagement) {
 		this.parentClassLoader = parentClassLoader;
 		this.lifecycleManagement = lifecycleManagement;

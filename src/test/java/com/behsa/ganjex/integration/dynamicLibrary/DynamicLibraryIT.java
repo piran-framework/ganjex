@@ -18,6 +18,7 @@ package com.behsa.ganjex.integration.dynamicLibrary;
 
 import com.behsa.ganjex.api.Ganjex;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -30,17 +31,21 @@ import static com.behsa.ganjex.integration.TestUtil.*;
  */
 @Test(sequential = true)
 public class DynamicLibraryIT {
-
+private Ganjex ganjex;
 	@Test
 	public void testDynamicLibrary() throws IOException, InterruptedException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		clean();
-		Ganjex ganjex = Ganjex.run(config);
+		ganjex = Ganjex.run(config);
 		deployLib(TEST_PATH + "dynamicLibrary/dynamicLib/", "dynamic-lib");
 		deployService(TEST_PATH + "dynamicLibrary/someService/", "service1");
 		Thread.sleep(TIMEOUT);
 		Thread.sleep(TIMEOUT);
 		Thread.sleep(TIMEOUT);
 		Assert.assertEquals(FrameworkHook.invokeMethodOnService(), "hello world");
+	}
+	@AfterClass
+	public void destroy() throws InterruptedException {
+		ganjex.destroy();
 	}
 
 }

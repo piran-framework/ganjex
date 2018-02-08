@@ -18,7 +18,7 @@ package com.behsa.ganjex.api;
 
 import com.behsa.ganjex.deploy.JarFilter;
 import com.behsa.ganjex.deploy.JarWatcher;
-import com.behsa.ganjex.deploy.StandardFileChangeListener;
+import com.behsa.ganjex.deploy.ServiceFileChangeListener;
 import com.behsa.ganjex.lifecycle.LifecycleManagement;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
@@ -136,7 +136,7 @@ public class Ganjex {
 
 	private void watchServicesDirectory(String servicePath) {
 		jarWatcher = new JarWatcher(new File(servicePath),
-						new StandardFileChangeListener(libClassLoader, lifecycleManagement),
+						new ServiceFileChangeListener(libClassLoader, lifecycleManagement),
 						config.getWatcherDelay());
 	}
 
