@@ -37,11 +37,14 @@ private Ganjex ganjex;
 		clean();
 		ganjex = Ganjex.run(config);
 		deployLib(TEST_PATH + "dynamicLibrary/dynamicLib/", "dynamic-lib");
+		Thread.sleep(TIMEOUT);
 		deployService(TEST_PATH + "dynamicLibrary/someService/", "service1");
 		Thread.sleep(TIMEOUT);
-		Thread.sleep(TIMEOUT);
-		Thread.sleep(TIMEOUT);
 		Assert.assertEquals(FrameworkHook.invokeMethodOnService(), "hello world");
+		Thread.sleep(TIMEOUT);
+		deployLib(TEST_PATH + "dynamicLibrary/dynamicLib2/", "dynamic-lib");
+		Thread.sleep(TIMEOUT);
+		Assert.assertEquals(FrameworkHook.invokeMethodOnService(), "hello world2");
 	}
 	@AfterClass
 	public void destroy() throws InterruptedException {

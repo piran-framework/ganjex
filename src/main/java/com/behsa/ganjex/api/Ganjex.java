@@ -16,9 +16,10 @@
 
 package com.behsa.ganjex.api;
 
-import com.behsa.ganjex.deploy.JarFilter;
 import com.behsa.ganjex.deploy.JarWatcher;
 import com.behsa.ganjex.deploy.ServiceFileChangeListener;
+import com.behsa.ganjex.lifecycle.LibraryFileChangeListener;
+import com.behsa.ganjex.lifecycle.LibraryManager;
 import com.behsa.ganjex.lifecycle.LifecycleManagement;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
@@ -29,12 +30,11 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * bootstrap static class of the ganjex to start the container
@@ -53,9 +53,10 @@ public class Ganjex {
 	private static volatile boolean bootstrapped = false;
 	private GanjexConfiguration config;
 	private ClassLoader mainClassLoader;
-	private ClassLoader libClassLoader;
 	private LifecycleManagement lifecycleManagement = new LifecycleManagement();
-	private JarWatcher jarWatcher = null;
+	private JarWatcher serviceWatcher = null;
+	private JarWatcher libWatcher = null;
+	private LibraryManager libraryManager = new LibraryManager();
 	private RegisterHookHelper registerHookHelper;
 
 	public Ganjex(GanjexConfiguration config) {
@@ -77,7 +78,7 @@ public class Ganjex {
 	 *
 	 * @return return true if and only if container bootstrapped
 	 */
-	public static boolean bootstraped() {
+	public static boolean bootstrapped() {
 		return bootstrapped;
 	}
 
@@ -92,12 +93,6 @@ public class Ganjex {
 		return mainClassLoader;
 	}
 
-	/**
-	 * @return library classloader
-	 */
-	public ClassLoader libClassLoader() {
-		return libClassLoader;
-	}
 
 	/**
 	 * {@link LifecycleManagement} instance created in the bootstrapping phase. this instance
@@ -109,35 +104,16 @@ public class Ganjex {
 		return lifecycleManagement;
 	}
 
-	private void loadLibraries(String libraryPath) {
-		log.debug("loading the libraries...");
-		File file = new File(libraryPath);
-		if (!file.isDirectory()) {
-			log.error("lib.path property is not correctly set. it does not point to a directory");
-			System.exit(1);
-		}
-		File[] jars = file.listFiles(new JarFilter());
-		if (Objects.isNull(jars))
-			return;
-		log.debug("libraries: {}",
-						Arrays.stream(jars).map(File::getName).collect(Collectors.joining(", ")));
-		URL[] urls = Arrays.stream(jars).map(jar -> "file://" + jar.getAbsolutePath())
-						.map(spec -> {
-							try {
-								return new URL(spec);
-							} catch (MalformedURLException e) {
-								log.error("could not load {}", spec);
-								return null;
-							}
-						}).filter(Objects::nonNull).collect(Collectors.toList()).toArray(new URL[0]);
-		libClassLoader = new URLClassLoader(urls, mainClassLoader);
-		log.debug("loading library completed");
-	}
 
 	private void watchServicesDirectory(String servicePath) {
-		jarWatcher = new JarWatcher(new File(servicePath),
-						new ServiceFileChangeListener(libClassLoader, lifecycleManagement),
+		serviceWatcher = new JarWatcher(new File(servicePath),
+						new ServiceFileChangeListener(this, libraryManager),
 						config.getWatcherDelay());
+	}
+
+	private void watchLibraryDirectory(String libPath) {
+		libWatcher = new JarWatcher(new File(libPath),
+						new LibraryFileChangeListener(this, libraryManager), config.getWatcherDelay());
 	}
 
 	/**
@@ -145,18 +121,19 @@ public class Ganjex {
 	 * watcher threads
 	 */
 	public void destroy() throws InterruptedException {
-		libClassLoader = null;
 		lifecycleManagement.destroy();
 		bootstrapped = false;
-		if (Objects.nonNull(jarWatcher))
-			jarWatcher.destroy();
+		if (Objects.nonNull(serviceWatcher))
+			serviceWatcher.destroy();
+		if (Objects.nonNull(libWatcher))
+			libWatcher.destroy();
 		System.gc();
 		log.info("ganjex shutdown correctly");
 	}
 
 	public Ganjex run() {
 		mainClassLoader = Ganjex.class.getClassLoader();
-		loadLibraries(config.getLibPath());
+		watchLibraryDirectory(config.getLibPath());
 		registerHookHelper.loadHooks(config.getBasePackage());
 		lifecycleManagement.doneRegistering();
 		watchServicesDirectory(config.getServicePath());

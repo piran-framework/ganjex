@@ -16,9 +16,9 @@
 
 package com.behsa.ganjex.integration.hooksExecution;
 
+import com.behsa.ganjex.api.StartupHook;
 import com.behsa.ganjex.api.ServiceContext;
 import com.behsa.ganjex.api.ShutdownHook;
-import com.behsa.ganjex.api.StartupHook;
 
 /**
  * @author Esa Hekmatizadeh

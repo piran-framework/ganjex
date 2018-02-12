@@ -16,9 +16,9 @@
 
 package com.behsa.ganjex.integration.multipleVersion;
 
+import com.behsa.ganjex.api.StartupHook;
 import com.behsa.ganjex.api.ServiceContext;
 import com.behsa.ganjex.api.ShutdownHook;
-import com.behsa.ganjex.api.StartupHook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -167,6 +167,7 @@ public final class JarWatcher {
 				//file has changed - timestamp
 				result = 1;
 				lastState = result;
+				this.lastModified = jar.lastModified();
 			} else if ((!exists()) && (!(lastState == -1))) {
 				//file was removed
 				result = -1;

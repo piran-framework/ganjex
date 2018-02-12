@@ -68,7 +68,6 @@ public class HooksExecutionIT {
 		unDeployService("simple-service");
 		Thread.sleep(TIMEOUT);
 		shutdownHookRunTime = LibWithDifferentHooks.getShutdownHookRunTime();
-		assertNull(ganjex.lifecycleManagement().findContext("simple-service"));
 		assertEquals( shutdownHookRunTime,1);
 		ganjex.destroy();
 	}

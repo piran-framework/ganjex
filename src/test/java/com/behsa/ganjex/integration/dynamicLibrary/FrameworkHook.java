@@ -16,8 +16,8 @@
 
 package com.behsa.ganjex.integration.dynamicLibrary;
 
-import com.behsa.ganjex.api.ServiceContext;
 import com.behsa.ganjex.api.StartupHook;
+import com.behsa.ganjex.api.ServiceContext;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

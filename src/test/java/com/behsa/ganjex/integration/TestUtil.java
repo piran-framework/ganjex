@@ -124,6 +124,10 @@ public class TestUtil {
 		commandRun("jar -cf " + name + ".jar -C out/ .", tmpOut.getParentFile());
 		FileUtils.copyFileToDirectory(new File(tmpOut.getParentFile(), name + ".jar"),
 						new File(config.getLibPath()), false);
+		boolean modified = new File(config.getLibPath(), name + ".jar")
+						.setLastModified(System.currentTimeMillis() + 10);
+		if (!modified)
+			log.error("could not set the lastModified date of the newly created library");
 	}
 
 	/**
@@ -132,12 +136,14 @@ public class TestUtil {
 	 * @throws InterruptedException
 	 */
 	public static void waitToBootstrap() throws InterruptedException {
-		while (!Ganjex.bootstraped())
+		while (!Ganjex.bootstrapped())
 			Thread.sleep(500);
 	}
 
 	private static void copyAndCompile(String extType, String srcPath, File destFile, File outFile)
 					throws IOException {
+		if(outFile.exists())
+			FileUtils.deleteDirectory(outFile);
 		if (!outFile.mkdirs())
 			log.error("could not make directory {}", outFile);
 		copyAllContent(new File(srcPath), destFile);

@@ -16,18 +16,14 @@
 
 package com.behsa.ganjex.deploy;
 
-import com.behsa.ganjex.api.ServiceContext;
-import com.behsa.ganjex.lifecycle.LifecycleManagement;
+import com.behsa.ganjex.api.Ganjex;
+import com.behsa.ganjex.lifecycle.LibraryManager;
+import com.behsa.ganjex.lifecycle.ServiceDeployer;
+import com.behsa.ganjex.lifecycle.ServiceDestroyer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Objects;
 
 /**
  * The <b>ServiceFileChangeListener</b> class is responsible to deploy services, assign classloader
@@ -40,42 +36,24 @@ import java.util.Objects;
  */
 public class ServiceFileChangeListener implements FileChangeListener {
 	private static final Logger log = LoggerFactory.getLogger(ServiceFileChangeListener.class);
-	private LifecycleManagement lifecycleManagement;
-	private ClassLoader parentClassLoader;
+	private final Ganjex app;
+	private final LibraryManager libraryManager;
 
-	public ServiceFileChangeListener(ClassLoader parentClassLoader, LifecycleManagement
-					lifecycleManagement) {
-		this.parentClassLoader = parentClassLoader;
-		this.lifecycleManagement = lifecycleManagement;
+	public ServiceFileChangeListener(Ganjex ganjex, LibraryManager libraryManager) {
+		this.app = ganjex;
+		this.libraryManager = libraryManager;
 	}
 
 	@Override
 	public void fileAdd(File jar) {
-		fileRemoved(jar);
 		log.info("new service found {}", jar.getName());
-		URL jarUrl;
-		try {
-			jarUrl = jar.toURI().toURL();
-		} catch (MalformedURLException e) {
-			log.error("could not load {}", jar.getAbsolutePath(), e);
-			return;
-		}
-		ClassLoader classLoader = new URLClassLoader(new URL[]{jarUrl}, parentClassLoader);
-		try {
-			ServiceContext context = new ServiceContext(jar.getName(), classLoader);
-			lifecycleManagement.serviceStarted(context);
-		} catch (FileNotFoundException e) {
-			log.error("could not load manifest.service in {}", jar.getName());
-		} catch (IOException e) {
-			log.error("could not start service {} cause: ", jar.getName());
-			log.error(e.getMessage(), e);
-		}
+		fileRemoved(jar);
+		new ServiceDeployer(jar,libraryManager.getLibClassLoader()).deploy(app);
 	}
 
 	@Override
-	public void fileRemoved(File f) {
-		ServiceContext context = lifecycleManagement.findContext(f.getName());
-		if (Objects.nonNull(context))
-			lifecycleManagement.serviceDestroyed(context);
+	public void fileRemoved(File jar) {
+		log.info("service {} is removed", jar.getName());
+		new ServiceDestroyer(jar).destroy(app);
 	}
 }

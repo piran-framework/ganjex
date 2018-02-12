@@ -16,8 +16,8 @@
 
 package com.behsa.ganjex.lifecycle;
 
-import com.behsa.ganjex.api.ServiceContext;
 import com.behsa.ganjex.api.Ganjex;
+import com.behsa.ganjex.api.ServiceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +43,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class LifecycleManagement {
 	private static final Logger log = LoggerFactory.getLogger(LifecycleManagement.class);
-	private static LifecycleManagement instance;
 	private Map<String, ServiceContext> services = new ConcurrentHashMap<>();
 	private List<StartupHook> startupHooks = new ArrayList<>();
 	private List<ShutdownHook> shutdownHooks = new ArrayList<>();
@@ -136,5 +135,9 @@ public class LifecycleManagement {
 		startupHooks.clear();
 		shutdownHooks.clear();
 		ready = false;
+	}
+
+	public Collection<ServiceContext> allServices() {
+		return new ArrayList<>(services.values());
 	}
 }
