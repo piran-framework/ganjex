@@ -24,7 +24,7 @@ import java.util.function.Consumer;
  * inner representation of the methods in the framework which annotated with the
  * {@link StartupHook} annotation
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @since 1.0
  */
 public class StartupHook implements Comparable<StartupHook> {

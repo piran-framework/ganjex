@@ -28,7 +28,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 
 /**
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  */
 @Test(sequential = true)
 public class HooksExecutionIT {

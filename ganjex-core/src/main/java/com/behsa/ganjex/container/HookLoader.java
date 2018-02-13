@@ -36,7 +36,7 @@ import java.util.function.Consumer;
  * {@link HookLoader} is a class responsible to load all hooks in the base package and
  * register all of them into {@link com.behsa.ganjex.lifecycle.LifecycleManagement} instance
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @since 1.0
  */
 public final class HookLoader {

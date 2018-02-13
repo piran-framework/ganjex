@@ -31,7 +31,7 @@ import java.lang.annotation.*;
  * this parameter indicates some information about the service, also containing service classLoader
  * which hooks can use to find elements in the services
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @since 1.0
  */
 @Documented

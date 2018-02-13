@@ -22,7 +22,7 @@ import java.io.FilenameFilter;
 /**
  * Filter class implemented {@link FilenameFilter} to indicate jar files
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @since 1.0
  */
 public class JarFilter implements FilenameFilter {

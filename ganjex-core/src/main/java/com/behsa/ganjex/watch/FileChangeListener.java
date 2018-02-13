@@ -22,7 +22,7 @@ import java.io.File;
  * This listener is responsible to handle the change in a directory which {@link JarWatcher} watch
  * it take action when a file added or removed. fileAdd include modified an existing file
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @since 1.0
  */
 public interface FileChangeListener {

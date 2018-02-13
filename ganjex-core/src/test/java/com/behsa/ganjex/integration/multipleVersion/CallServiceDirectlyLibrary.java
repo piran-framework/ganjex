@@ -30,7 +30,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  */
 public class CallServiceDirectlyLibrary {
 	private static final Logger log = LoggerFactory.getLogger(CallServiceDirectlyLibrary.class);

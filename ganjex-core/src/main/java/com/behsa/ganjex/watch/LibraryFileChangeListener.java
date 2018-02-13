@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * try to stop all the services and reload libraries in the newly created libClassLoader and
  * restart all the services again.
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @see FileChangeListener
  * @since 1.0
  */

@@ -21,7 +21,7 @@ import com.behsa.ganjex.api.ServiceContext;
 import com.behsa.ganjex.api.ShutdownHook;
 
 /**
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  */
 public class LibWithDifferentHooks {
 	private static int runTime = 0;

@@ -20,7 +20,7 @@ import com.behsa.ganjex.api.Ganjex;
 import com.behsa.ganjex.api.GanjexConfiguration;
 
 /**
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  */
 public class TestLib {
 	public static void main(String[] args) {

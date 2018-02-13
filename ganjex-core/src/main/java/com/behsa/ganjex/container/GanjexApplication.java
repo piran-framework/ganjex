@@ -26,7 +26,7 @@ import com.behsa.ganjex.lifecycle.LifecycleManagement;
  * {@link GanjexApplication} Object also responsible to manage the libraries classLoader which
  * should be updated after a change in the libraries detected
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  */
 public final class GanjexApplication {
 	private final GanjexConfiguration config;

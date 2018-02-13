@@ -33,7 +33,7 @@ import java.io.File;
  * An instance of this class should be assign
  * to {@link JarWatcher} constructor as a listener.
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @see ServiceStarter
  * @see ServiceDestroyer
  * @see FileChangeListener

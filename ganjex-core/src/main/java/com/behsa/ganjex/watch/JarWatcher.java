@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
  * The <code>JarWatcher</code> object watch the given directory and notify the given listener when
  * change in jar files in that directory detected
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @since 1.0
  */
 public final class JarWatcher {

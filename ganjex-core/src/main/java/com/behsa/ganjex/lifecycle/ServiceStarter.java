@@ -32,7 +32,7 @@ import java.net.URLClassLoader;
  * An immutable class for start(deploy) a new service, it instantiated with the jar file of the
  * service and libraries classloader and method <code>deploy</code> try to deploy the new service
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @see LifecycleManagement
  * @since 1.0
  */

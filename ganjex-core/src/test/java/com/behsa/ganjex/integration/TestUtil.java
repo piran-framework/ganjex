@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 /**
  * Test utilities for ganjex
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @version 1.0
  */
 public class TestUtil {

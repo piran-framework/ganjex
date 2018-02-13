@@ -22,7 +22,7 @@ package com.behsa.ganjex.api;
  * or the {@link Ganjex} constructor itself. use {@link GanjexConfiguration.Builder} class to
  * create a instance of {@link GanjexConfiguration}
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @since 1.0
  */
 public final class GanjexConfiguration {

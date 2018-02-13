@@ -27,7 +27,7 @@ import static com.behsa.ganjex.integration.TestUtil.*;
 import static org.testng.Assert.assertEquals;
 
 /**
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  */
 @Test(sequential = true)
 public class MultiVersionIT {

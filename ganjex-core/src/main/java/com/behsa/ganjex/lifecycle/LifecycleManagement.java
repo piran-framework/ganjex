@@ -37,7 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * Just one instance of this class is enough for every container
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @since 1.0
  */
 public final class LifecycleManagement {

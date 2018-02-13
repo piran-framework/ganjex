@@ -26,7 +26,7 @@ import java.util.Objects;
  * An immutable class for shutdown(destroy) a service, it instantiated with the jar file of the
  * service and <code>destroy</code> method try to shutdown the service
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @see LifecycleManagement
  * @since 1.0
  */

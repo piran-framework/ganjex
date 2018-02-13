@@ -20,7 +20,7 @@ import com.behsa.ganjex.api.ServiceContext;
 import com.behsa.ganjex.api.StartupHook;
 
 /**
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  */
 public class SomeStartupHook {
 	@StartupHook(priority = 120)

@@ -27,7 +27,7 @@ import java.lang.reflect.InvocationTargetException;
 import static com.behsa.ganjex.integration.TestUtil.*;
 
 /**
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  */
 @Test(sequential = true)
 public class DynamicLibraryIT {

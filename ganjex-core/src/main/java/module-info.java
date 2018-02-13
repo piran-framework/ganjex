@@ -1,6 +1,6 @@
 /**
  * Main module of the ganjex container
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @since 1.0
  */
 module ganjex {

@@ -35,7 +35,7 @@ import java.util.Objects;
  * the changes and start or shutdown service when a jar files under those directory changes.
  * </p>
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @since 1.0
  */
 public final class Ganjex {

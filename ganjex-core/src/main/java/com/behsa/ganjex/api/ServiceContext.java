@@ -33,7 +33,7 @@ import java.util.Properties;
  * Hooks can use specific classloader provided by the object of this class to scan the service
  * code and find some specific points they want to take action against
  *
- * @author Esa Hekmatizadeh
+ * @author hekmatof
  * @since 1.0
  */
 public final class ServiceContext {
