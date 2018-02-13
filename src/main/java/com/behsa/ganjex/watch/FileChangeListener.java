@@ -14,19 +14,30 @@
  * limitations under the License.
  */
 
-package com.behsa.ganjex.lifecycle;
+package com.behsa.ganjex.watch;
+
+import java.io.File;
 
 /**
+ * This listener is responsible to handle the change in a directory which {@link JarWatcher} watch
+ * it take action when a file added or removed. fileAdd include modified an existing file
+ *
  * @author Esa Hekmatizadeh
+ * @since 1.0
  */
-public class LibraryManager {
-	private ClassLoader libClassLoader;
+public interface FileChangeListener {
 
-	public ClassLoader getLibClassLoader() {
-		return libClassLoader;
-	}
+	/**
+	 * listener which executed when a file added into or modified in the specific path
+	 *
+	 * @param file the new file
+	 */
+	void fileAdd(File file);
 
-	synchronized void setLibClassLoader(ClassLoader libClassLoader) {
-		this.libClassLoader = libClassLoader;
-	}
+	/**
+	 * listener which executed when a file removed in the specific path
+	 *
+	 * @param file file which be removed
+	 */
+	void fileRemoved(File file);
 }

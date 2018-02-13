@@ -25,7 +25,7 @@ import java.util.function.Consumer;
  * {@link StartupHook} annotation
  *
  * @author Esa Hekmatizadeh
- * @version 1.0
+ * @since 1.0
  */
 public class StartupHook implements Comparable<StartupHook> {
 	private final Consumer<ServiceContext> hook;

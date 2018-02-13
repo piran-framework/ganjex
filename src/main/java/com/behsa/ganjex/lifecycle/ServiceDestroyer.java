@@ -16,8 +16,8 @@
 
 package com.behsa.ganjex.lifecycle;
 
-import com.behsa.ganjex.api.Ganjex;
 import com.behsa.ganjex.api.ServiceContext;
+import com.behsa.ganjex.container.GanjexApplication;
 
 import java.io.File;
 import java.util.Objects;
@@ -32,7 +32,7 @@ public class ServiceDestroyer {
 		this.jar = jar;
 	}
 
-	public void destroy(Ganjex app) {
+	public void destroy(GanjexApplication app) {
 		ServiceContext context = app.lifecycleManagement().findContext(jar.getName());
 		if (Objects.nonNull(context))
 			app.lifecycleManagement().serviceDestroyed(context);

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.behsa.ganjex.lifecycle;
+package com.behsa.ganjex.watch;
 
-import com.behsa.ganjex.api.Ganjex;
 import com.behsa.ganjex.api.ServiceContext;
-import com.behsa.ganjex.deploy.FileChangeListener;
-import com.behsa.ganjex.deploy.JarFilter;
+import com.behsa.ganjex.container.GanjexApplication;
+import com.behsa.ganjex.lifecycle.ServiceDeployer;
+import com.behsa.ganjex.lifecycle.ServiceDestroyer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,13 +37,10 @@ import java.util.stream.Collectors;
  */
 public class LibraryFileChangeListener implements FileChangeListener {
 	private static final Logger log = LoggerFactory.getLogger(LibraryFileChangeListener.class);
-	private final Ganjex app;
-	private final LibraryManager libraryManager;
+	private final GanjexApplication app;
 
-
-	public LibraryFileChangeListener(Ganjex ganjex,LibraryManager libraryManager) {
-		this.app = ganjex;
-		this.libraryManager = libraryManager;
+	public LibraryFileChangeListener(GanjexApplication app) {
+		this.app = app;
 	}
 
 	@Override
@@ -66,16 +63,16 @@ public class LibraryFileChangeListener implements FileChangeListener {
 	private void startAllService(Collection<ServiceContext> servicesList) {
 		servicesList.stream()
 						.map(ServiceContext::getFileName)
-						.map(name -> app.getConfig().getServicePath() + File.separator + name)
+						.map(name -> app.config().getServicePath() + File.separator + name)
 						.map(File::new)
-						.map(f-> new ServiceDeployer(f,libraryManager.getLibClassLoader()))
+						.map(f -> new ServiceDeployer(f, app.libClassLoader()))
 						.forEach(d -> d.deploy(app));
 	}
 
 	private void stopAllService(Collection<ServiceContext> servicesList) {
 		servicesList.stream()
 						.map(ServiceContext::getFileName)
-						.map(name -> app.getConfig().getServicePath() + File.separator + name)
+						.map(name -> app.config().getServicePath() + File.separator + name)
 						.map(File::new)
 						.map(ServiceDestroyer::new)
 						.forEach(d -> d.destroy(app));
@@ -83,7 +80,7 @@ public class LibraryFileChangeListener implements FileChangeListener {
 
 	private void loadLibraries() {
 		log.debug("loading the libraries...");
-		File file = new File(app.getConfig().getLibPath());
+		File file = new File(app.config().getLibPath());
 		if (!file.isDirectory()) {
 			log.error("lib.path property is not correctly set. it does not point to a directory");
 			System.exit(1);
@@ -102,7 +99,7 @@ public class LibraryFileChangeListener implements FileChangeListener {
 								return null;
 							}
 						}).filter(Objects::nonNull).collect(Collectors.toList()).toArray(new URL[0]);
-		libraryManager.setLibClassLoader(new URLClassLoader(urls, app.mainClassLoader()));
+		app.setLibClassLoader(new URLClassLoader(urls, app.mainClassLoader()));
 		log.debug("loading library completed");
 	}
 }

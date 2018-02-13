@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.behsa.ganjex.deploy;
+package com.behsa.ganjex.watch;
 
 
 import org.slf4j.Logger;
@@ -31,11 +31,11 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * The <b>JarWatcher</b> watch the given directory and notify the given listener when change in
- * jar files in that directory detected
+ * The <code>JarWatcher</code> object watch the given directory and notify the given listener when
+ * change in jar files in that directory detected
  *
  * @author Esa Hekmatizadeh
- * @version 1.0
+ * @since 1.0
  */
 public final class JarWatcher {
 	private static final Logger log = LoggerFactory.getLogger(JarWatcher.class);

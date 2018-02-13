@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.behsa.ganjex.deploy;
+package com.behsa.ganjex.watch;
 
 import java.io.File;
 import java.io.FilenameFilter;
 
 /**
- * filter class to find jar files
+ * Filter class implemented {@link FilenameFilter} to indicate jar files
  *
  * @author Esa Hekmatizadeh
- * @version 1.0
+ * @since 1.0
  */
 public class JarFilter implements FilenameFilter {
 	@Override

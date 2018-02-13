@@ -25,18 +25,18 @@ import java.util.Objects;
 import java.util.Properties;
 
 /**
- * immutable class represents the context information of the service
+ * Immutable class represents the context information of the service
  * <p>
- * this class used by the hooks which libraries register them into ganjex, every hook receive an
- * instance of this class when a service start or destroy depends on a type of hook.
+ * This class used by the hooks, every hook receive an instance of this class when a service
+ * start or destroy depends on a type of hook.
  * <p>
- * hooks can use specific classloader provided by the object of this class to scan the service
- * code and find some specific point they want to take action against
+ * Hooks can use specific classloader provided by the object of this class to scan the service
+ * code and find some specific points they want to take action against
  *
  * @author Esa Hekmatizadeh
- * @version 1.0
+ * @since 1.0
  */
-public class ServiceContext {
+public final class ServiceContext {
 	private final String fileName;
 	private final String name;
 	private final int version;

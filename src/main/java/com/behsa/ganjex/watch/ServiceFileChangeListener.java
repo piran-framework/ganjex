@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package com.behsa.ganjex.deploy;
+package com.behsa.ganjex.watch;
 
-import com.behsa.ganjex.api.Ganjex;
-import com.behsa.ganjex.lifecycle.LibraryManager;
+import com.behsa.ganjex.container.GanjexApplication;
 import com.behsa.ganjex.lifecycle.ServiceDeployer;
 import com.behsa.ganjex.lifecycle.ServiceDestroyer;
 import org.slf4j.Logger;
@@ -32,23 +31,21 @@ import java.io.File;
  * to {@link JarWatcher} constructor as a listener.
  *
  * @author Esa Hekmatizadeh
- * @version 1.0
+ * @since 1.0
  */
 public class ServiceFileChangeListener implements FileChangeListener {
 	private static final Logger log = LoggerFactory.getLogger(ServiceFileChangeListener.class);
-	private final Ganjex app;
-	private final LibraryManager libraryManager;
+	private final GanjexApplication app;
 
-	public ServiceFileChangeListener(Ganjex ganjex, LibraryManager libraryManager) {
-		this.app = ganjex;
-		this.libraryManager = libraryManager;
+	public ServiceFileChangeListener(GanjexApplication app) {
+		this.app = app;
 	}
 
 	@Override
 	public void fileAdd(File jar) {
 		log.info("new service found {}", jar.getName());
 		fileRemoved(jar);
-		new ServiceDeployer(jar,libraryManager.getLibClassLoader()).deploy(app);
+		new ServiceDeployer(jar, app.libClassLoader()).deploy(app);
 	}
 
 	@Override

@@ -18,7 +18,7 @@ package com.behsa.ganjex.integration;
 
 import com.behsa.ganjex.api.Ganjex;
 import com.behsa.ganjex.api.GanjexConfiguration;
-import com.behsa.ganjex.deploy.JarFilter;
+import com.behsa.ganjex.watch.JarFilter;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;

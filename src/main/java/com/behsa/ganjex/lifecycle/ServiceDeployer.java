@@ -16,8 +16,8 @@
 
 package com.behsa.ganjex.lifecycle;
 
-import com.behsa.ganjex.api.Ganjex;
 import com.behsa.ganjex.api.ServiceContext;
+import com.behsa.ganjex.container.GanjexApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,12 +37,12 @@ public class ServiceDeployer {
 	private final ClassLoader libClassLoader;
 
 
-	public ServiceDeployer(File serviceFile,ClassLoader libClassLoader) {
+	public ServiceDeployer(File serviceFile, ClassLoader libClassLoader) {
 		this.jar = serviceFile;
 		this.libClassLoader = libClassLoader;
 	}
 
-	public void deploy(Ganjex app) {
+	public void deploy(GanjexApplication app) {
 		URL jarUrl;
 		try {
 			jarUrl = jar.toURI().toURL();
@@ -55,7 +55,7 @@ public class ServiceDeployer {
 			ServiceContext context = new ServiceContext(jar.getName(), classLoader);
 			app.lifecycleManagement().serviceStarted(context);
 		} catch (FileNotFoundException e) {
-			log.error("could not load manifest.service in {}", jar.getName(),e);
+			log.error("could not load manifest.service in {}", jar.getName(), e);
 		} catch (IOException e) {
 			log.error("could not start service {} cause: ", jar.getName());
 			log.error(e.getMessage(), e);

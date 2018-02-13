@@ -25,7 +25,7 @@ import java.util.function.Consumer;
  * {@link ShutdownHook} annotation
  *
  * @author Esa Hekmatizadeh
- * @version 1.0
+ * @since 1.0
  */
 public class ShutdownHook implements Comparable<ShutdownHook> {
 	private final Consumer<ServiceContext> hook;

@@ -16,58 +16,47 @@
 
 package com.behsa.ganjex.api;
 
-import com.behsa.ganjex.deploy.JarWatcher;
-import com.behsa.ganjex.deploy.ServiceFileChangeListener;
-import com.behsa.ganjex.lifecycle.LibraryFileChangeListener;
-import com.behsa.ganjex.lifecycle.LibraryManager;
-import com.behsa.ganjex.lifecycle.LifecycleManagement;
-import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
+import com.behsa.ganjex.container.GanjexApplication;
+import com.behsa.ganjex.container.HookLoader;
+import com.behsa.ganjex.watch.JarWatcher;
+import com.behsa.ganjex.watch.ServiceFileChangeListener;
+import com.behsa.ganjex.watch.LibraryFileChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-import java.util.function.Consumer;
 
 /**
- * bootstrap static class of the ganjex to start the container
+ * Ganjex container class. each instance of this class represent a ganjex container.
  * <p>
- * the bootstrap process assign main classloader which is top level classloader ganjex use it
- * itself. there is a lib classloader which is responsible to load all the library jar files from
- * specified path. the lib classloader parent is main classloader and it is parent of each
- * service classloader.
+ * clients can use static method <code>run({@link GanjexConfiguration})</code> to start a new
+ * container. running a new container means Ganjex watch the library and service directory for
+ * the changes and start or shutdown service when a jar files under those directory changes.
  * </p>
  *
  * @author Esa Hekmatizadeh
- * @version 1.0
+ * @since 1.0
  */
-public class Ganjex {
+public final class Ganjex {
 	private static final Logger log = LoggerFactory.getLogger(Ganjex.class);
 	private static volatile boolean bootstrapped = false;
-	private GanjexConfiguration config;
-	private ClassLoader mainClassLoader;
-	private LifecycleManagement lifecycleManagement = new LifecycleManagement();
 	private JarWatcher serviceWatcher = null;
 	private JarWatcher libWatcher = null;
-	private LibraryManager libraryManager = new LibraryManager();
-	private RegisterHookHelper registerHookHelper;
+	private GanjexApplication app;
 
 	public Ganjex(GanjexConfiguration config) {
-		this.config = config;
-		registerHookHelper = new RegisterHookHelper();
+		app = new GanjexApplication(config);
 	}
 
 	/**
-	 * start ganjex container
+	 * start a new ganjex container and return an object of this class representing the container
+	 * same as calling <code>new Ganjex(config).run()</code>
 	 *
-	 * @param config configuration object to create ganjex container
+	 * @param config ganjex configuration object, this object should be created by the
+	 *               {@link GanjexConfiguration.Builder} which is a builder for
+	 *               {@link GanjexConfiguration}
+	 * @return a running ganjex container object
 	 */
 	public static Ganjex run(GanjexConfiguration config) {
 		return new Ganjex(config).run();
@@ -76,44 +65,27 @@ public class Ganjex {
 	/**
 	 * indicate the bootstrap process of the container has done or not
 	 *
-	 * @return return true if and only if container bootstrapped
+	 * @return return true if and only if container bootstrapped and not destroyed
 	 */
 	public static boolean bootstrapped() {
 		return bootstrapped;
-	}
-
-	public GanjexConfiguration getConfig() {
-		return config;
 	}
 
 	/**
 	 * @return the top level classloader
 	 */
 	public ClassLoader mainClassLoader() {
-		return mainClassLoader;
+		return app.mainClassLoader();
 	}
-
-
-	/**
-	 * {@link LifecycleManagement} instance created in the bootstrapping phase. this instance
-	 * created in the library classloader and all the hooks of libraries registered to it
-	 *
-	 * @return lifecycleManagement instance
-	 */
-	public LifecycleManagement lifecycleManagement() {
-		return lifecycleManagement;
-	}
-
 
 	private void watchServicesDirectory(String servicePath) {
 		serviceWatcher = new JarWatcher(new File(servicePath),
-						new ServiceFileChangeListener(this, libraryManager),
-						config.getWatcherDelay());
+						new ServiceFileChangeListener(app), app.config().getWatcherDelay());
 	}
 
 	private void watchLibraryDirectory(String libPath) {
 		libWatcher = new JarWatcher(new File(libPath),
-						new LibraryFileChangeListener(this, libraryManager), config.getWatcherDelay());
+						new LibraryFileChangeListener(app), app.config().getWatcherDelay());
 	}
 
 	/**
@@ -121,7 +93,7 @@ public class Ganjex {
 	 * watcher threads
 	 */
 	public void destroy() throws InterruptedException {
-		lifecycleManagement.destroy();
+		app.destroy();
 		bootstrapped = false;
 		if (Objects.nonNull(serviceWatcher))
 			serviceWatcher.destroy();
@@ -131,86 +103,20 @@ public class Ganjex {
 		log.info("ganjex shutdown correctly");
 	}
 
+	/**
+	 * run the container. start watchers on library and service directory and detect any changes
+	 * there. this method has been used in the complicated scenarios, usually clients use
+	 * <code>Ganjex.run({@link GanjexConfiguration})</code> static method.
+	 *
+	 * @return ganjex container object
+	 */
 	public Ganjex run() {
-		mainClassLoader = Ganjex.class.getClassLoader();
-		watchLibraryDirectory(config.getLibPath());
-		registerHookHelper.loadHooks(config.getBasePackage());
-		lifecycleManagement.doneRegistering();
-		watchServicesDirectory(config.getServicePath());
+		watchLibraryDirectory(app.config().getLibPath());
+		new HookLoader(app).loadHooks(app.config().getBasePackage());
+		app.lifecycleManagement().doneRegistering();
+		watchServicesDirectory(app.config().getServicePath());
 		bootstrapped = true;
 		return this;
-	}
-
-	/**
-	 * bootstrapping helper class to register all libraries hooks into lifecycleManagement
-	 *
-	 * @author Esa Hekmatizadeh
-	 * @version 1.0
-	 */
-	private class RegisterHookHelper {
-		private final Logger log = LoggerFactory.getLogger(RegisterHookHelper.class);
-
-		private Map<Class<?>, Object> objectsWithHooks = new HashMap<>();
-
-
-		void loadHooks(String basePackage) {
-			Reflections.log = LoggerFactory.getLogger(Reflections.class);
-			Reflections libraries = new Reflections(basePackage, new MethodAnnotationsScanner(),
-							mainClassLoader());
-			Set<Method> startupHookMethods = libraries.getMethodsAnnotatedWith(StartupHook.class);
-			Set<Method> shutdownHooksMethods = libraries.getMethodsAnnotatedWith(ShutdownHook.class);
-			startupHookMethods.forEach(this::addDeclaringClass);
-			shutdownHooksMethods.forEach(this::addDeclaringClass);
-			startupHookMethods.stream().filter(m -> objectsWithHooks.containsKey(m.getDeclaringClass()))
-							.forEach(method -> lifecycleManagement().registerStartupHook(
-											new com.behsa.ganjex.lifecycle.StartupHook(createHook(method))));
-			shutdownHooksMethods.stream().filter(m -> objectsWithHooks.containsKey(m.getDeclaringClass()))
-							.forEach(method -> lifecycleManagement().registerShutdownHook(
-											new com.behsa.ganjex.lifecycle.ShutdownHook(createHook(method))));
-		}
-
-		private void addDeclaringClass(Method m) {
-			if (!objectsWithHooks.keySet().contains(m.getDeclaringClass())) {
-				Constructor<?> constructor;
-				try {
-					constructor = m.getDeclaringClass().getConstructor((Class<?>[]) null);
-				} catch (NoSuchMethodException e) {
-					log.error("could not find default constructor for class {} ignoring the {} hook",
-									m.getDeclaringClass().getName(), m.getName());
-					return;
-				}
-				try {
-					Object hookClassObj = constructor.newInstance((Object[]) null);
-					objectsWithHooks.put(m.getDeclaringClass(), hookClassObj);
-				} catch (InstantiationException e) {
-					log.error("class {} should not be abstract, ignoring the {} hook",
-									m.getDeclaringClass().getName(), m.getName(), e);
-				} catch (IllegalAccessException e) {
-					log.error("class {} constructor is not accessible for the container, default constructor " +
-													"should be public, ignoring the {} hook",
-									m.getDeclaringClass().getName(), m.getName(), e);
-				} catch (InvocationTargetException e) {
-					log.error(e.getTargetException().getMessage(), e.getTargetException());
-					log.error("ignoring the {} hook", m.getName());
-				}
-			}
-		}
-
-		private Consumer<ServiceContext> createHook(Method m) {
-			return (ServiceContext s) -> {
-				try {
-					m.invoke(objectsWithHooks.get(m.getDeclaringClass()), s);
-				} catch (IllegalAccessException e) {
-					log.error("could not execute hook {} of class {} for service {} version{} because the " +
-													"hook method is not accessible", m.getName(),
-									m.getDeclaringClass().getName(), s.getName(), s.getVersion());
-				} catch (InvocationTargetException e) {
-					log.error("could not execute hook {} of class {} for service {} version {},cause:",
-									m.getName(), m.getDeclaringClass().getName(), s.getName(), s.getVersion(),
-									e.getTargetException());
-				}
-			};
-		}
 	}
 
 }

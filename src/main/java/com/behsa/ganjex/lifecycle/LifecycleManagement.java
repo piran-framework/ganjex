@@ -39,7 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * just one instance of this class is enough for every container
  *
  * @author Esa Hekmatizadeh
- * @version 1.0
+ * @since 1.0
  */
 public class LifecycleManagement {
 	private static final Logger log = LoggerFactory.getLogger(LifecycleManagement.class);
