@@ -66,10 +66,16 @@ public class TestUtil {
 	public static void clean() throws IOException, InterruptedException {
 		File servicePath = new File(config.getServicePath());
 		File libPath = new File(config.getLibPath());
-		deleteAllFilesInDirectory(servicePath, new String[]{"jar"});
-		deleteAllFilesInDirectory(libPath, new String[]{"jar"});
+		if (servicePath.exists())
+			deleteAllFilesInDirectory(servicePath, new String[]{"jar"});
+		if (libPath.exists())
+			deleteAllFilesInDirectory(libPath, new String[]{"jar"});
 		File tmp = new File("tmp");
-		FileUtils.deleteDirectory(tmp);
+		if (tmp.exists())
+			FileUtils.deleteDirectory(tmp);
+		FileUtils.forceMkdir(servicePath);
+		FileUtils.forceMkdir(libPath);
+		FileUtils.forceMkdir(tmp);
 	}
 
 	/**
@@ -142,7 +148,7 @@ public class TestUtil {
 
 	private static void copyAndCompile(String extType, String srcPath, File destFile, File outFile)
 					throws IOException {
-		if(outFile.exists())
+		if (outFile.exists())
 			FileUtils.deleteDirectory(outFile);
 		if (!outFile.mkdirs())
 			log.error("could not make directory {}", outFile);
@@ -159,7 +165,7 @@ public class TestUtil {
 		String cp = new File(".").getCanonicalPath() + File.separator + config.getLibPath();
 		File libFolder = new File(cp);
 		File[] jars = libFolder.listFiles(new JarFilter());
-		if(jars!=null && jars.length>0) {
+		if (jars != null && jars.length > 0) {
 			args.add("-cp");
 			args.add(Arrays.stream(jars).map(file -> {
 				try {
@@ -189,6 +195,9 @@ public class TestUtil {
 
 	private static void copyAllContent(File src, File dest) throws IOException {
 		File[] allSourceFiles = src.listFiles();
+		if (!src.exists())
+			if (!src.mkdir())
+				throw new IOException("can not create directory " + src.getPath());
 		if (Objects.isNull(allSourceFiles))
 			throw new IllegalArgumentException("srcPath is not correct: " + src.getPath());
 		for (File f : allSourceFiles) {
