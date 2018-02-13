@@ -25,7 +25,7 @@ import java.io.File;
  * @author hekmatof
  * @since 1.0
  */
-public interface FileChangeListener {
+interface FileChangeListener {
 
 	/**
 	 * listener which executed when a file added into or modified in the specific path

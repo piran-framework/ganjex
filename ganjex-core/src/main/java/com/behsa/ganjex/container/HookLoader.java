@@ -58,26 +58,27 @@ public final class HookLoader {
 	}
 
 	/**
-	 * Find all hooks under the base package passed to it and register all of them into the
+	 * Find all hooks under the base package and register all of them into the
 	 * lifecycleManagement instance of the container
-	 *
-	 * @param basePackage base package for hook search
 	 */
-	public void loadHooks(String basePackage) {
+	public void loadHooks() {
 		//change the logger of the reflections
 		Reflections.log = LoggerFactory.getLogger(Reflections.class);
-		Reflections libraries = new Reflections(basePackage, new MethodAnnotationsScanner(),
-						app.mainClassLoader());
+		Reflections libraries = new Reflections(app.config().getBasePackage(),
+						new MethodAnnotationsScanner(), app.mainClassLoader());
 		Set<Method> startupHookMethods = libraries.getMethodsAnnotatedWith(StartupHook.class);
 		Set<Method> shutdownHooksMethods = libraries.getMethodsAnnotatedWith(ShutdownHook.class);
 		startupHookMethods.forEach(this::addDeclaringClass);
 		shutdownHooksMethods.forEach(this::addDeclaringClass);
 		startupHookMethods.stream().filter(m -> objectsWithHooks.containsKey(m.getDeclaringClass()))
 						.forEach(method -> app.lifecycleManagement().registerStartupHook(
-										new com.behsa.ganjex.lifecycle.StartupHook(createHook(method))));
+										new com.behsa.ganjex.lifecycle.StartupHook(createHook(method),
+														method.getAnnotationsByType(StartupHook.class)[0].priority())));
 		shutdownHooksMethods.stream().filter(m -> objectsWithHooks.containsKey(m.getDeclaringClass()))
 						.forEach(method -> app.lifecycleManagement().registerShutdownHook(
-										new com.behsa.ganjex.lifecycle.ShutdownHook(createHook(method))));
+										new com.behsa.ganjex.lifecycle.ShutdownHook(createHook(method),
+														method.getAnnotationsByType(ShutdownHook.class)[0].priority()
+										)));
 	}
 
 	private void addDeclaringClass(Method m) {

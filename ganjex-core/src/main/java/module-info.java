@@ -4,7 +4,6 @@
  * @since 1.0
  */
 module ganjex {
-	requires java.base;
 	requires slf4j.api;
 	requires java.compiler;
 	requires reflections;

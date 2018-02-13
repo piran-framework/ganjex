@@ -19,8 +19,8 @@ package com.behsa.ganjex.api;
 import com.behsa.ganjex.container.GanjexApplication;
 import com.behsa.ganjex.container.HookLoader;
 import com.behsa.ganjex.watch.JarWatcher;
-import com.behsa.ganjex.watch.ServiceFileChangeListener;
 import com.behsa.ganjex.watch.LibraryFileChangeListener;
+import com.behsa.ganjex.watch.ServiceFileChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,10 +41,16 @@ import java.util.Objects;
 public final class Ganjex {
 	private static final Logger log = LoggerFactory.getLogger(Ganjex.class);
 	private static volatile boolean bootstrapped = false;
+	private final GanjexApplication app;
 	private JarWatcher serviceWatcher = null;
 	private JarWatcher libWatcher = null;
-	private GanjexApplication app;
 
+	/**
+	 * create a new Ganjex container, to run the container you should call <code>run</code> method
+	 *
+	 * @param config ganjex application configuration instance
+	 */
+	@SuppressWarnings("WeakerAccess")
 	public Ganjex(GanjexConfiguration config) {
 		app = new GanjexApplication(config);
 	}
@@ -78,13 +84,13 @@ public final class Ganjex {
 		return app.mainClassLoader();
 	}
 
-	private void watchServicesDirectory(String servicePath) {
-		serviceWatcher = new JarWatcher(new File(servicePath),
+	private void watchServicesDirectory() {
+		serviceWatcher = new JarWatcher(new File(app.config().getServicePath()),
 						new ServiceFileChangeListener(app), app.config().getWatcherDelay());
 	}
 
-	private void watchLibraryDirectory(String libPath) {
-		libWatcher = new JarWatcher(new File(libPath),
+	private void watchLibraryDirectory() {
+		libWatcher = new JarWatcher(new File(app.config().getLibPath()),
 						new LibraryFileChangeListener(app), app.config().getWatcherDelay());
 	}
 
@@ -92,7 +98,7 @@ public final class Ganjex {
 	 * useful for testing, destroy the container and clean all the states, also interrupt all
 	 * watcher threads
 	 */
-	public void destroy() throws InterruptedException {
+	public void destroy(){
 		app.destroy();
 		bootstrapped = false;
 		if (Objects.nonNull(serviceWatcher))
@@ -110,11 +116,12 @@ public final class Ganjex {
 	 *
 	 * @return ganjex container object
 	 */
+	@SuppressWarnings("WeakerAccess")
 	public Ganjex run() {
-		watchLibraryDirectory(app.config().getLibPath());
-		new HookLoader(app).loadHooks(app.config().getBasePackage());
+		watchLibraryDirectory();
+		new HookLoader(app).loadHooks();
 		app.lifecycleManagement().doneRegistering();
-		watchServicesDirectory(app.config().getServicePath());
+		watchServicesDirectory();
 		bootstrapped = true;
 		return this;
 	}

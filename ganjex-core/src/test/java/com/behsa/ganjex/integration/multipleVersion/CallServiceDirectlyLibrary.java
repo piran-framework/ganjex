@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CallServiceDirectlyLibrary {
 	private static final Logger log = LoggerFactory.getLogger(CallServiceDirectlyLibrary.class);
-	private static Map<ServiceInfo, ServiceContext> contextMap = new ConcurrentHashMap<>();
+	private static final Map<ServiceInfo, ServiceContext> contextMap = new ConcurrentHashMap<>();
 
 	static void clear(){
 		contextMap.clear();

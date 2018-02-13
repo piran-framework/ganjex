@@ -51,9 +51,9 @@ public final class JarWatcher {
 	 * Listener to be notified of changes
 	 */
 	private final FileChangeListener listener;
-	private ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
+	private final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
 
-	private ScheduledFuture<?> scheduledFuture;
+	private final ScheduledFuture<?> scheduledFuture;
 
 	/**
 	 * create a new <code>JarWatcher</code>

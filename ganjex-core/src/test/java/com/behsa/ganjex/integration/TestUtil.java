@@ -82,8 +82,8 @@ public class TestUtil {
 	 *
 	 * @param path path of the source code of the service
 	 * @param name service name
-	 * @throws IOException
-	 * @throws InterruptedException
+	 * @throws IOException          if it cannot create or modified files under directories related
+	 * @throws InterruptedException if it cannot create a jar file of the compiled service code
 	 */
 	public static void deployService(String path, String name) throws IOException, InterruptedException {
 		File tmpSrc = new File("tmp/" + name + "/src");
@@ -105,7 +105,7 @@ public class TestUtil {
 	 * remove a service from the service location of the ganjex
 	 *
 	 * @param name service name
-	 * @throws IOException
+	 * @throws IOException if cannot delete service jar file from services directory
 	 */
 	public static void unDeployService(String name) throws IOException {
 		String path = config.getServicePath() + "/" + name + ".jar";
@@ -183,9 +183,9 @@ public class TestUtil {
 		deleteAllFilesInDirectory(destFile, new String[]{"java"});
 	}
 
-	private static void deleteAllFilesInDirectory(File dir, String[] extentions) {
+	private static void deleteAllFilesInDirectory(File dir, String[] extensions) {
 		Collection<File> filesToDelete =
-						FileUtils.listFiles(dir, extentions, true);
+						FileUtils.listFiles(dir, extensions, true);
 		filesToDelete.forEach(f -> {
 			if (!f.delete())
 				log.error("could not delete file {}", f.getAbsolutePath());

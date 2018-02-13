@@ -29,10 +29,11 @@ import java.util.function.Consumer;
  */
 public class ShutdownHook implements Comparable<ShutdownHook> {
 	private final Consumer<ServiceContext> hook;
-	private Integer priority = 100;
+	private final Integer priority;
 
-	public ShutdownHook(Consumer<ServiceContext> hook) {
+	public ShutdownHook(Consumer<ServiceContext> hook, Integer priority) {
 		this.hook = hook;
+		this.priority = priority == null ? 100 : priority;
 	}
 
 	Consumer<ServiceContext> hook() {

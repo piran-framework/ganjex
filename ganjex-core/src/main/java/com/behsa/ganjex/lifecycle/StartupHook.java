@@ -29,10 +29,11 @@ import java.util.function.Consumer;
  */
 public class StartupHook implements Comparable<StartupHook> {
 	private final Consumer<ServiceContext> hook;
-	private Integer priority = 100;
+	private final Integer priority;
 
-	public StartupHook(Consumer<ServiceContext> hook) {
+	public StartupHook(Consumer<ServiceContext> hook, Integer priority) {
 		this.hook = hook;
+		this.priority = priority == null ? 100 : priority;
 	}
 
 	Consumer<ServiceContext> hook() {

@@ -31,7 +31,7 @@ import java.util.Objects;
  * @since 1.0
  */
 public class ServiceDestroyer {
-	public File jar;
+	private final File jar;
 
 	public ServiceDestroyer(File jar) {
 		this.jar = jar;

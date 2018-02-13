@@ -25,7 +25,6 @@ import java.lang.reflect.InvocationTargetException;
 
 import static com.behsa.ganjex.integration.TestUtil.*;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
 
 /**
  * @author hekmatof
