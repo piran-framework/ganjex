@@ -29,19 +29,29 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 /**
+ * An immutable class for start(deploy) a new service, it instantiated with the jar file of the
+ * service and libraries classloader and method <code>deploy</code> try to deploy the new service
+ *
  * @author Esa Hekmatizadeh
+ * @see LifecycleManagement
+ * @since 1.0
  */
-public class ServiceDeployer {
-	private static final Logger log = LoggerFactory.getLogger(ServiceDeployer.class);
+public class ServiceStarter {
+	private static final Logger log = LoggerFactory.getLogger(ServiceStarter.class);
 	private final File jar;
 	private final ClassLoader libClassLoader;
 
-
-	public ServiceDeployer(File serviceFile, ClassLoader libClassLoader) {
+	public ServiceStarter(File serviceFile, ClassLoader libClassLoader) {
 		this.jar = serviceFile;
 		this.libClassLoader = libClassLoader;
 	}
 
+	/**
+	 * try to deploy the service using {@link LifecycleManagement} instance of the
+	 * {@link GanjexApplication} object given
+	 *
+	 * @param app ganjex container instance
+	 */
 	public void deploy(GanjexApplication app) {
 		URL jarUrl;
 		try {
@@ -50,6 +60,7 @@ public class ServiceDeployer {
 			log.error("could not load {}", jar.getAbsolutePath(), e);
 			return;
 		}
+		//create a dedicated classloader fot the service with libClassLoader parent
 		ClassLoader classLoader = new URLClassLoader(new URL[]{jarUrl}, libClassLoader);
 		try {
 			ServiceContext context = new ServiceContext(jar.getName(), classLoader);

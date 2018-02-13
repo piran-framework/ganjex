@@ -16,7 +16,6 @@
 
 package com.behsa.ganjex.lifecycle;
 
-import com.behsa.ganjex.api.Ganjex;
 import com.behsa.ganjex.api.ServiceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,25 +26,25 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * LifecycleManagement class is a heart of the lifecycle management of the services. all of the
- * libraries hook will register by the bootstrap process in
- * {@link Ganjex} class. after all the registration object of this
- * class is ready to handle start and shutdown of the services.
+ * LifecycleManagement class is a heart of the lifecycle management of the services. All of the
+ * framework hooks will register by the bootstrap process in
+ * {@link com.behsa.ganjex.container.HookLoader} class. after all the registrations, the object of
+ * this class is ready to handle start and shutdown of the services.
  * <p>
- * every new service found by the
- * ganjex the main instance of this class handle running all the startup hooks for it. and every
- * service removed this class execute all the shutdown hooks for it.
+ * This Class Object is responsible to invoke all the startup hooks for every new service found
+ * by the ganjex container, and if any service removed also {@link LifecycleManagement} is
+ * responsible to invoke shutdown hooks for that service.
  * <p>
- * just one instance of this class is enough for every container
+ * Just one instance of this class is enough for every container
  *
  * @author Esa Hekmatizadeh
  * @since 1.0
  */
-public class LifecycleManagement {
+public final class LifecycleManagement {
 	private static final Logger log = LoggerFactory.getLogger(LifecycleManagement.class);
-	private Map<String, ServiceContext> services = new ConcurrentHashMap<>();
-	private List<StartupHook> startupHooks = new ArrayList<>();
-	private List<ShutdownHook> shutdownHooks = new ArrayList<>();
+	private final Map<String, ServiceContext> services = new ConcurrentHashMap<>();
+	private final List<StartupHook> startupHooks = new ArrayList<>();
+	private final List<ShutdownHook> shutdownHooks = new ArrayList<>();
 	private volatile boolean ready = false;
 
 	/**
@@ -73,8 +72,8 @@ public class LifecycleManagement {
 	}
 
 	/**
-	 * state that registration is done, all calls of registerShutdownHook and registerStartupHook
-	 * after calling this method cause {@link IllegalStateException}
+	 * state that registration is done, all calls of <code>registerShutdownHook</code> and
+	 * <code>registerStartupHook</code> after calling this method cause {@link IllegalStateException}
 	 *
 	 * @throws IllegalStateException if this method ran before
 	 */
@@ -91,16 +90,16 @@ public class LifecycleManagement {
 	 * @param fileName file name of the service
 	 * @return service context if found and null if nothing found
 	 */
-	public ServiceContext findContext(String fileName) {
+	ServiceContext findContext(String fileName) {
 		return services.get(fileName);
 	}
 
 	/**
-	 * register a new service with the context provided and run all the startup hooks against it
+	 * register a new service with the context provided and run all the startup hooks on it
 	 *
 	 * @param context context of the service which want to start
 	 */
-	public void serviceStarted(ServiceContext context) {
+	void serviceStarted(ServiceContext context) {
 		services.put(context.getFileName(), context);
 		startupHooks.forEach(h ->
 						h.hook().accept(context));
@@ -109,12 +108,12 @@ public class LifecycleManagement {
 	}
 
 	/**
-	 * run all the shutdown hooks against the service specified by its context, and then remove
+	 * run all the shutdown hooks on the service specified by its context, and then remove
 	 * this service from the list of services
 	 *
 	 * @param context context of the service which want to shutdown
 	 */
-	public void serviceDestroyed(ServiceContext context) {
+	void serviceDestroyed(ServiceContext context) {
 		shutdownHooks.forEach(h -> h.hook().accept(context));
 		log.debug("all shutdown hooks executed for the service {} version {}", context.getName(),
 						context.getVersion());
@@ -137,6 +136,11 @@ public class LifecycleManagement {
 		ready = false;
 	}
 
+	/**
+	 * return a clone of the services list
+	 *
+	 * @return all services registered into ganjex container
+	 */
 	public Collection<ServiceContext> allServices() {
 		return new ArrayList<>(services.values());
 	}

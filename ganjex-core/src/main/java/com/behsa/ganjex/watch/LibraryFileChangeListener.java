@@ -18,8 +18,8 @@ package com.behsa.ganjex.watch;
 
 import com.behsa.ganjex.api.ServiceContext;
 import com.behsa.ganjex.container.GanjexApplication;
-import com.behsa.ganjex.lifecycle.ServiceDeployer;
 import com.behsa.ganjex.lifecycle.ServiceDestroyer;
+import com.behsa.ganjex.lifecycle.ServiceStarter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +33,14 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
+ * The {@link LibraryFileChangeListener} class by implementing {@link FileChangeListener} is a
+ * listener of changes in the libraries directory. if it detect any changes in that directory it
+ * try to stop all the services and reload libraries in the newly created libClassLoader and
+ * restart all the services again.
+ *
  * @author Esa Hekmatizadeh
+ * @see FileChangeListener
+ * @since 1.0
  */
 public class LibraryFileChangeListener implements FileChangeListener {
 	private static final Logger log = LoggerFactory.getLogger(LibraryFileChangeListener.class);
@@ -65,7 +72,7 @@ public class LibraryFileChangeListener implements FileChangeListener {
 						.map(ServiceContext::getFileName)
 						.map(name -> app.config().getServicePath() + File.separator + name)
 						.map(File::new)
-						.map(f -> new ServiceDeployer(f, app.libClassLoader()))
+						.map(f -> new ServiceStarter(f, app.libClassLoader()))
 						.forEach(d -> d.deploy(app));
 	}
 

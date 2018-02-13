@@ -1,5 +1,7 @@
 /**
+ * Main module of the ganjex container
  * @author Esa Hekmatizadeh
+ * @since 1.0
  */
 module ganjex {
 	requires java.base;

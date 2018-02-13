@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  */
 public class TestUtil {
 	/**
-	 * directory where all the e2e test placed relative to the root of project
+	 * directory where all the integration tests placed relative to the root of the project
 	 */
 	public static final String TEST_PATH = "src/test/java/com/behsa/ganjex/integration/";
 
@@ -58,12 +58,11 @@ public class TestUtil {
 	}
 
 	/**
-	 * prepare config with {@link TestConfiguration}, delete the tmp location and delete service
-	 * path and library path
+	 * delete the tmp and services directory and libraries directory and recreate them
 	 *
-	 * @throws IOException
+	 * @throws IOException if it cannot delete or make a directory
 	 */
-	public static void clean() throws IOException, InterruptedException {
+	public static void clean() throws IOException {
 		File servicePath = new File(config.getServicePath());
 		File libPath = new File(config.getLibPath());
 		if (servicePath.exists())
@@ -79,7 +78,7 @@ public class TestUtil {
 	}
 
 	/**
-	 * deploy a new service into ganjex service location
+	 * deploy a new service into ganjex service directory
 	 *
 	 * @param path path of the source code of the service
 	 * @param name service name
@@ -120,8 +119,8 @@ public class TestUtil {
 	 *
 	 * @param path source code path of the library
 	 * @param name library name
-	 * @throws IOException
-	 * @throws InterruptedException
+	 * @throws IOException          if it cannot create or modified files under directories related
+	 * @throws InterruptedException if it cannot create a jar file of the compiled library
 	 */
 	public static void deployLib(String path, String name) throws IOException, InterruptedException {
 		File tmpSrc = new File("tmp/" + name + "/src");
@@ -139,7 +138,7 @@ public class TestUtil {
 	/**
 	 * wait until {@link Ganjex} indicate the ganjex bootstrap process completed
 	 *
-	 * @throws InterruptedException
+	 * @throws InterruptedException if the current thread interrupted while sleeping
 	 */
 	public static void waitToBootstrap() throws InterruptedException {
 		while (!Ganjex.bootstrapped())

@@ -21,7 +21,7 @@ import com.behsa.ganjex.api.ServiceContext;
 import java.util.function.Consumer;
 
 /**
- * inner representation of the methods in the libraries which annotated with the
+ * inner representation of the methods in the framework which annotated with the
  * {@link ShutdownHook} annotation
  *
  * @author Esa Hekmatizadeh

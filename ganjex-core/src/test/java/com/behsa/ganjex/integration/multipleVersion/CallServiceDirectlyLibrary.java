@@ -29,6 +29,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author Esa Hekmatizadeh
+ */
 public class CallServiceDirectlyLibrary {
 	private static final Logger log = LoggerFactory.getLogger(CallServiceDirectlyLibrary.class);
 	private static Map<ServiceInfo, ServiceContext> contextMap = new ConcurrentHashMap<>();

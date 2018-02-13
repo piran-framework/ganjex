@@ -23,7 +23,12 @@ import java.io.File;
 import java.util.Objects;
 
 /**
+ * An immutable class for shutdown(destroy) a service, it instantiated with the jar file of the
+ * service and <code>destroy</code> method try to shutdown the service
+ *
  * @author Esa Hekmatizadeh
+ * @see LifecycleManagement
+ * @since 1.0
  */
 public class ServiceDestroyer {
 	public File jar;
@@ -32,6 +37,12 @@ public class ServiceDestroyer {
 		this.jar = jar;
 	}
 
+	/**
+	 * try to destroy the service using the {@link LifecycleManagement} instance of the ganjex
+	 * container
+	 *
+	 * @param app ganjex container instance
+	 */
 	public void destroy(GanjexApplication app) {
 		ServiceContext context = app.lifecycleManagement().findContext(jar.getName());
 		if (Objects.nonNull(context))

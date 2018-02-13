@@ -17,20 +17,26 @@
 package com.behsa.ganjex.watch;
 
 import com.behsa.ganjex.container.GanjexApplication;
-import com.behsa.ganjex.lifecycle.ServiceDeployer;
 import com.behsa.ganjex.lifecycle.ServiceDestroyer;
+import com.behsa.ganjex.lifecycle.ServiceStarter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
 /**
- * The <b>ServiceFileChangeListener</b> class is responsible to deploy services, assign classloader
- * to them, and start services by calling all the startup hooks registered by the libraries.
- * by implementing <link {@link FileChangeListener}> an instance of this class should be assign
+ * The <b>ServiceFileChangeListener</b> class by implementing {@link FileChangeListener} is a
+ * listener of changes in the services directory. This listener create {@link ServiceStarter} and
+ * {@link ServiceDestroyer} instance for each service added(or modified) or removed from the
+ * directory and call the deploy or destroy method of that objects
+ * <p>
+ * An instance of this class should be assign
  * to {@link JarWatcher} constructor as a listener.
  *
  * @author Esa Hekmatizadeh
+ * @see ServiceStarter
+ * @see ServiceDestroyer
+ * @see FileChangeListener
  * @since 1.0
  */
 public class ServiceFileChangeListener implements FileChangeListener {
@@ -45,7 +51,7 @@ public class ServiceFileChangeListener implements FileChangeListener {
 	public void fileAdd(File jar) {
 		log.info("new service found {}", jar.getName());
 		fileRemoved(jar);
-		new ServiceDeployer(jar, app.libClassLoader()).deploy(app);
+		new ServiceStarter(jar, app.libClassLoader()).deploy(app);
 	}
 
 	@Override
