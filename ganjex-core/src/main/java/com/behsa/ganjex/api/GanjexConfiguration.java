@@ -28,14 +28,14 @@ package com.behsa.ganjex.api;
 public final class GanjexConfiguration {
 	private final String libPath;
 	private final String servicePath;
-	private final String basePackage;
 	private final long watcherDelay;//in second
+	private final Object[] hooks;
 
 	private GanjexConfiguration(Builder builder) {
 		this.libPath = builder.libPath;
 		this.servicePath = builder.servicePath;
-		this.basePackage = builder.basePackage;
 		this.watcherDelay = builder.watcherDelay;
+		this.hooks = builder.hooks;
 	}
 
 	/**
@@ -53,17 +53,17 @@ public final class GanjexConfiguration {
 	}
 
 	/**
-	 * @return base package to scan to find hook annotations
-	 */
-	public String getBasePackage() {
-		return basePackage;
-	}
-
-	/**
 	 * @return file watchers delay in second
 	 */
 	public long getWatcherDelay() {
 		return watcherDelay;
+	}
+
+	/**
+	 * @return list of objects containing {@link StartupHook}s and {@link ShutdownHook}s
+	 */
+	public Object[] getHooks() {
+		return hooks;
 	}
 
 	/**
@@ -72,8 +72,8 @@ public final class GanjexConfiguration {
 	public static class Builder {
 		private String libPath;
 		private String servicePath;
-		private String basePackage;
 		private long watcherDelay;//in second
+		private Object[] hooks;
 
 		/**
 		 * @param libPath path of the directory where libraries jar files resort there
@@ -94,20 +94,20 @@ public final class GanjexConfiguration {
 		}
 
 		/**
-		 * @param basePackage base package to scan to find hook annotations
-		 * @return builder itself
-		 */
-		public Builder basePackage(String basePackage) {
-			this.basePackage = basePackage;
-			return this;
-		}
-
-		/**
 		 * @param watcherDelay file watchers delay in second
 		 * @return builder itself
 		 */
 		public Builder watcherDelay(long watcherDelay) {
 			this.watcherDelay = watcherDelay;
+			return this;
+		}
+
+		/**
+		 * @param hooks list of objects contain the {@link StartupHook}s and {@link ShutdownHook}s
+		 * @return builder itself
+		 */
+		public Builder hooks(Object... hooks) {
+			this.hooks = hooks;
 			return this;
 		}
 

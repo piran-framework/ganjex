@@ -17,7 +17,6 @@
 package com.behsa.ganjex.integration;
 
 import com.behsa.ganjex.api.Ganjex;
-import com.behsa.ganjex.api.GanjexConfiguration;
 import com.behsa.ganjex.watch.JarFilter;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
@@ -45,17 +44,9 @@ public class TestUtil {
 	public static final String TEST_PATH = "src/test/java/com/behsa/ganjex/integration/";
 
 	public static final long TIMEOUT = 2000L;
-	public final static GanjexConfiguration config;
+	public static final String libPath = "test-dist/libs/";
+	public static final String servicePath = "test-dist/services/";
 	private static final Logger log = LoggerFactory.getLogger(TestUtil.class);
-
-	static {
-		config = new GanjexConfiguration.Builder()
-						.basePackage("com.behsa")
-						.libPath("test-dist/libs/")
-						.servicePath("test-dist/services/")
-						.watcherDelay(1)
-						.build();
-	}
 
 	/**
 	 * delete the tmp and services directory and libraries directory and recreate them
@@ -63,8 +54,8 @@ public class TestUtil {
 	 * @throws IOException if it cannot delete or make a directory
 	 */
 	public static void clean() throws IOException {
-		File servicePath = new File(config.getServicePath());
-		File libPath = new File(config.getLibPath());
+		File servicePath = new File(TestUtil.servicePath);
+		File libPath = new File(TestUtil.libPath);
 		if (servicePath.exists())
 			deleteAllFilesInDirectory(servicePath, new String[]{"jar"});
 		if (libPath.exists())
@@ -94,8 +85,8 @@ public class TestUtil {
 		copyAndCompile("service", path, tmpSrc, tmpOut);
 		commandRun("jar -cf " + name + ".jar -C out/ .", tmpOut.getParentFile());
 		FileUtils.copyFileToDirectory(new File(tmpOut.getParent(), name + ".jar"),
-						new File(config.getServicePath()), false);
-		boolean modified = new File(config.getServicePath(), name + ".jar")
+						new File(servicePath), false);
+		boolean modified = new File(servicePath, name + ".jar")
 						.setLastModified(System.currentTimeMillis() + 10);
 		if (!modified)
 			log.error("could not set the lastModified date of the newly created service");
@@ -108,7 +99,7 @@ public class TestUtil {
 	 * @throws IOException if cannot delete service jar file from services directory
 	 */
 	public static void unDeployService(String name) throws IOException {
-		String path = config.getServicePath() + "/" + name + ".jar";
+		String path = servicePath + File.separator + name + ".jar";
 		File serviceJar = new File(path);
 		if (!serviceJar.delete())
 			throw new IOException("could not delete " + path);
@@ -128,8 +119,8 @@ public class TestUtil {
 		copyAndCompile("lib", path, tmpSrc, tmpOut);
 		commandRun("jar -cf " + name + ".jar -C out/ .", tmpOut.getParentFile());
 		FileUtils.copyFileToDirectory(new File(tmpOut.getParentFile(), name + ".jar"),
-						new File(config.getLibPath()), false);
-		boolean modified = new File(config.getLibPath(), name + ".jar")
+						new File(libPath), false);
+		boolean modified = new File(libPath, name + ".jar")
 						.setLastModified(System.currentTimeMillis() + 10);
 		if (!modified)
 			log.error("could not set the lastModified date of the newly created library");
@@ -161,7 +152,7 @@ public class TestUtil {
 		});
 		Collection<File> sourceFiles = FileUtils.listFiles(destFile, new String[]{"java"}, true);
 		List<String> args = new ArrayList<>();
-		String cp = new File(".").getCanonicalPath() + File.separator + config.getLibPath();
+		String cp = new File(".").getCanonicalPath() + File.separator + libPath;
 		File libFolder = new File(cp);
 		File[] jars = libFolder.listFiles(new JarFilter());
 		if (jars != null && jars.length > 0) {

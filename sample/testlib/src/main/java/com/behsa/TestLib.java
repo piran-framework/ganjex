@@ -26,7 +26,7 @@ public class TestLib {
 	public static void main(String[] args) {
 		Ganjex.run(new GanjexConfiguration.Builder()
 						.watcherDelay(10)
-						.basePackage("com.behsa")
+						.hooks(new SomeStartupHook())
 						.servicePath("../../dist/services")
 						.libPath("../../dist/libs").build());
 	}

@@ -17,6 +17,7 @@
 package com.behsa.ganjex.integration.hooksExecution;
 
 import com.behsa.ganjex.api.Ganjex;
+import com.behsa.ganjex.api.GanjexConfiguration;
 import com.behsa.ganjex.integration.TestUtil;
 import org.testng.annotations.Test;
 
@@ -33,31 +34,21 @@ import static org.testng.Assert.assertEquals;
 public class HooksExecutionIT {
 
 	@Test
-	public void testJustOneObjectWithDifferentHooks() throws IOException, InterruptedException,
-					ClassNotFoundException,
-					NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-		TestUtil.clean();
-//		deployLib(TEST_PATH + "hooksExecution/libWithDifferentHooks/", "simple-lib");
-		LibWithDifferentHooks.clean();
-		Ganjex ganjex = Ganjex.run(TestUtil.config);
-		waitToBootstrap();
-		deployService(TEST_PATH + "hooksExecution/simpleService/", "simple-service");
-		Thread.sleep(TIMEOUT);
-		int runTime = LibWithDifferentHooks.getRunTime();
-		assertEquals(runTime, 1);
-		ganjex.destroy();
-	}
-
-	@Test
 	public void testEveryHooksRunOnce() throws IOException, InterruptedException,
 					ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		TestUtil.clean();
 //		deployLib(TEST_PATH + "hooksExecution/libWithDifferentHooks/", "simple-lib");
 		LibWithDifferentHooks.clean();
-		Ganjex ganjex = Ganjex.run(config);
+		Ganjex ganjex = Ganjex.run(new GanjexConfiguration.Builder()
+						.libPath(TestUtil.libPath)
+						.servicePath(TestUtil.servicePath)
+						.watcherDelay(1)
+						.hooks(new LibWithDifferentHooks())
+						.build()
+		);
 		waitToBootstrap();
 		int shutdownHookRunTime = LibWithDifferentHooks.getShutdownHookRunTime();
-		assertEquals( shutdownHookRunTime,0);
+		assertEquals(shutdownHookRunTime, 0);
 		deployService(TEST_PATH + "hooksExecution/simpleService/", "simple-service");
 		Thread.sleep(TIMEOUT);
 		int startHookRunTime = LibWithDifferentHooks.getStartHookRunTime();
@@ -67,7 +58,7 @@ public class HooksExecutionIT {
 		unDeployService("simple-service");
 		Thread.sleep(TIMEOUT);
 		shutdownHookRunTime = LibWithDifferentHooks.getShutdownHookRunTime();
-		assertEquals( shutdownHookRunTime,1);
+		assertEquals(shutdownHookRunTime, 1);
 		ganjex.destroy();
 	}
 }
