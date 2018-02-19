@@ -79,6 +79,7 @@ properties:
 * ganjex.service-path
 * ganjex.watch-delay
 which is the same as `GanjexConfiguration` fields.
+
 ## License
 This software is licensed under the Apache License, version 2 ("ALv2"), quoted below.
 
