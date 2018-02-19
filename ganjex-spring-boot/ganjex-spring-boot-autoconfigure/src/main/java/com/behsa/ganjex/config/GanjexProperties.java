@@ -24,8 +24,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties("ganjex")
 public class GanjexProperties {
-	private String servicePath;
-	private String libPath;
+	private String servicePath = "service";
+	private String libPath = "lib";
 	private int watchDelay = 10;
 
 	public String getServicePath() {
