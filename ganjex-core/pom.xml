@@ -33,6 +33,12 @@
 				<name>Behsa Co.</name>
 				<url>http://www.behsacorp.com</url>
 		</organization>
+		<licenses>
+				<license>
+						<name>Apache License, Version 2.0</name>
+						<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+				</license>
+		</licenses>
 		<developers>
 				<developer>
 						<id>hekmatof</id>

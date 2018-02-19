@@ -17,7 +17,6 @@
 package com.sample.hello;
 
 import com.sample.api.Action;
-import com.sample.api.ActionContainer;
 
 import java.util.Collections;
 import java.util.Map;
@@ -25,10 +24,9 @@ import java.util.Map;
 /**
  * @author hekmatof
  */
-@ActionContainer
 public class HelloAction {
 	@Action("hello")
 	public Map<String, Object> hello(Map<String, Object> input) {
-		return Collections.singletonMap("result", "hello " + input.get("name"));
+		return Collections.singletonMap("result", "goodbye " + input.get("name"));
 	}
 }
