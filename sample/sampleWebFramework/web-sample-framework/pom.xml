@@ -37,7 +37,7 @@
 				<dependency>
 						<groupId>com.behsa</groupId>
 						<artifactId>ganjex-spring-boot-starter</artifactId>
-						<version>0.2-SNAPSHOT</version>
+						<version>0.2-RELEASE</version>
 				</dependency>
 				<dependency>
 						<groupId>org.springframework.boot</groupId>

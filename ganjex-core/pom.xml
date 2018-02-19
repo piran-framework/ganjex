@@ -22,7 +22,7 @@
 		<parent>
 				<groupId>com.behsa</groupId>
 				<artifactId>ganjex-parent</artifactId>
-				<version>0.2-SNAPSHOT</version>
+				<version>0.2-RELEASE</version>
 				<relativePath>../</relativePath>
 		</parent>
 		<artifactId>ganjex</artifactId>

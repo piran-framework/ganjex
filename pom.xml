@@ -21,7 +21,7 @@
 		<modelVersion>4.0.0</modelVersion>
 		<groupId>com.behsa</groupId>
 		<artifactId>ganjex-parent</artifactId>
-		<version>0.2-SNAPSHOT</version>
+		<version>0.2-RELEASE</version>
 		<packaging>pom</packaging>
 		<name>Ganjex Build</name>
 		<description>Ganjex Build</description>
