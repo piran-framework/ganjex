@@ -75,9 +75,14 @@
 						<dependency>
 								<groupId>org.springframework.boot</groupId>
 								<artifactId>spring-boot-dependencies</artifactId>
-								<version>1.5.1.RELEASE</version>
+								<version>1.5.10.RELEASE</version>
 								<type>pom</type>
 								<scope>import</scope>
+						</dependency>
+						<dependency>
+								<groupId>com.behsa</groupId>
+								<artifactId>ganjex</artifactId>
+								<version>0.2-RELEASE</version>
 						</dependency>
 						<dependency>
 								<groupId>ch.qos.logback</groupId>
