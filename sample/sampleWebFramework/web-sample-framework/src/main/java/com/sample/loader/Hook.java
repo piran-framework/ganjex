@@ -14,24 +14,30 @@
  * limitations under the License.
  */
 
-package com.behsa;
+package com.sample.loader;
 
+import com.behsa.ganjex.GanjexHook;
 import com.behsa.ganjex.api.ServiceContext;
+import com.behsa.ganjex.api.ShutdownHook;
 import com.behsa.ganjex.api.StartupHook;
+import com.sample.service.ServiceContainer;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author hekmatof
  */
-public class SomeStartupHook {
-	@StartupHook(priority = 120)
-	public void saySomthing(ServiceContext context) {
-		System.out.println("in the startup hook with priority 120: service name is: "
-						+ context.getName());
+@GanjexHook
+public class Hook {
+	@Autowired
+	private ServiceContainer container;
+
+	@StartupHook
+	public void startService(ServiceContext context) {
+		container.add(context);
 	}
 
-	@StartupHook(priority = 110)
-	public void anotherHook(ServiceContext context) {
-		System.out.println("in the startup hook with priority 110: service name is: "
-						+ context.getName());
+	@ShutdownHook
+	public void shutdownService(ServiceContext context) {
+		container.remove(context);
 	}
 }
