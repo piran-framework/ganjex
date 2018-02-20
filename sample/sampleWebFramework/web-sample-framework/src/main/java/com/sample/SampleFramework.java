@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package com.behsa;
+package com.sample;
 
-import com.behsa.ganjex.api.Ganjex;
-import com.behsa.ganjex.api.GanjexConfiguration;
+import com.behsa.ganjex.EnableGanjexContainer;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @author hekmatof
  */
-public class TestLib {
+@SpringBootApplication
+@EnableGanjexContainer
+public class SampleFramework {
 	public static void main(String[] args) {
-		Ganjex.run(new GanjexConfiguration.Builder()
-						.watcherDelay(10)
-						.hooks(new SomeStartupHook())
-						.servicePath("../../dist/services")
-						.libPath("../../dist/libs").build());
+		SpringApplication.run(SampleFramework.class, args);
 	}
 }

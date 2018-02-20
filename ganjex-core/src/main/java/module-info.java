@@ -6,6 +6,5 @@
 module ganjex {
 	requires slf4j.api;
 	requires java.compiler;
-	requires reflections;
 	exports com.behsa.ganjex.api;
 }

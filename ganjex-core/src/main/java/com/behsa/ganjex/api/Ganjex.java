@@ -120,6 +120,8 @@ public final class Ganjex {
 	@SuppressWarnings("WeakerAccess")
 	public Ganjex run() {
 		watchLibraryDirectory();
+		if(app.libClassLoader()==null)
+			app.setLibClassLoader(mainClassLoader());
 		new HookLoader(app).loadHooks();
 		app.lifecycleManagement().doneRegistering();
 		watchServicesDirectory();

@@ -50,7 +50,7 @@ public class ServiceFileChangeListener implements FileChangeListener {
 	@Override
 	public void fileAdd(File jar) {
 		log.info("new service found {}", jar.getName());
-		fileRemoved(jar);
+		new ServiceDestroyer(jar).destroy(app);
 		new ServiceStarter(jar, app.libClassLoader()).deploy(app);
 	}
 

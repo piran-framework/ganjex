@@ -21,16 +21,37 @@
 		<parent>
 				<artifactId>ganjex-parent</artifactId>
 				<groupId>com.behsa</groupId>
-				<version>0.2-SNAPSHOT</version>
+				<version>0.2-RELEASE</version>
 				<relativePath>../../pom.xml</relativePath>
 		</parent>
 		<modelVersion>4.0.0</modelVersion>
 
 		<artifactId>ganjex-spring-boot-autoconfigure</artifactId>
-		<version>0.2-SNAPSHOT</version>
 		<packaging>jar</packaging>
 		<name>Spring Boot AutoConfiguration :: Ganjex AutoConfiguration</name>
+		<organization>
+				<name>Behsa Co.</name>
+				<url>http://www.behsacorp.com</url>
+		</organization>
+		<licenses>
+				<license>
+						<name>Apache License, Version 2.0</name>
+						<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+				</license>
+		</licenses>
 
+		<developers>
+				<developer>
+						<id>hekmatof</id>
+						<name>Esa Hekmatizadeh</name>
+						<email>i.hekmatizadeh at behsacorp.com</email>
+						<organization>Behsa Co.</organization>
+						<organizationUrl>http://www.behsacorp.com</organizationUrl>
+						<roles>
+								<role>Project lead</role>
+						</roles>
+				</developer>
+		</developers>
 		<properties>
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 				<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -52,7 +73,6 @@
 				<dependency>
 						<groupId>com.behsa</groupId>
 						<artifactId>ganjex</artifactId>
-						<version>0.2-SNAPSHOT</version>
 				</dependency>
 		</dependencies>
 

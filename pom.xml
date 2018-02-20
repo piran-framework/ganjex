@@ -21,7 +21,7 @@
 		<modelVersion>4.0.0</modelVersion>
 		<groupId>com.behsa</groupId>
 		<artifactId>ganjex-parent</artifactId>
-		<version>0.2-SNAPSHOT</version>
+		<version>0.2-RELEASE</version>
 		<packaging>pom</packaging>
 		<name>Ganjex Build</name>
 		<description>Ganjex Build</description>
@@ -67,20 +67,6 @@
 										<artifactId>maven-surefire-plugin</artifactId>
 										<version>2.20.1</version>
 								</plugin>
-								<!--<plugin>-->
-								<!--<groupId>org.apache.maven.plugins</groupId>-->
-								<!--<artifactId>maven-failsafe-plugin</artifactId>-->
-								<!--<version>2.20.1</version>-->
-								<!--<executions>-->
-								<!--<execution>-->
-								<!--<id>integration-test</id>-->
-								<!--<goals>-->
-								<!--<goal>integration-test</goal>-->
-								<!--<goal>verify</goal>-->
-								<!--</goals>-->
-								<!--</execution>-->
-								<!--</executions>-->
-								<!--</plugin>-->
 						</plugins>
 				</pluginManagement>
 		</build>
@@ -89,9 +75,14 @@
 						<dependency>
 								<groupId>org.springframework.boot</groupId>
 								<artifactId>spring-boot-dependencies</artifactId>
-								<version>1.5.1.RELEASE</version>
+								<version>1.5.10.RELEASE</version>
 								<type>pom</type>
 								<scope>import</scope>
+						</dependency>
+						<dependency>
+								<groupId>com.behsa</groupId>
+								<artifactId>ganjex</artifactId>
+								<version>0.2-RELEASE</version>
 						</dependency>
 						<dependency>
 								<groupId>ch.qos.logback</groupId>
