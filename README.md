@@ -1,24 +1,23 @@
 ## Ganjex Overview
-Ganjex is a passive container which is know nothing about the service it contains. Ganjex
-facilitate runtime changing and lifecycle management of services. Ganjex is a platform layer 
-container, users should define their framework to use it properly. There is two 
-type of element which ganjex contain: 1.Library and 2.Service.
+Oblivious to its holding services, Ganjex is a passive container
+facilitating the management of the containing elements' alterations and lifecycle at runtime.
+Ganjex is a platform layer container, so that user must define their own framework
+based on their necessities and preferences properly.   
+There are two types of elements Ganjex contains: 1.Library and 2.Service.
 
 ### Library
-Libraries or frameworks are the units should be available to the ganjex before it starts, all of 
-the libraries are available from the services, if services wants to use libraries they should add
-maven dependency to that library with the ```provided``` scope. also there is two hooks 
-annotations ganjex provide to the libraries to manage their service lifecycle: 
-```@StartupHook``` and ```@ShutdownHook```. Libraries is responsible to treat the services, scan
-and find what they want and use them using services classloader. also they should handle 
-multithreading themselves.
+Libraries or frameworks required to be accessible to the services, must be provided to Ganjex before its startup. 
+A service needing to do so, should add the library's corresponding Maven dependency with the ```provided``` scope.
+In order to manage the lifecycle of libraries' services, Ganjex provides two annotations: 
+```@StartupHook``` and ```@ShutdownHook```. 
+Libraries are responsible for treating the services, meaning that they scan to find services' requirements and dependencies. 
+They also exploit services' class-loaders. This is noteworthy that libraries should handle multi-threading themselves.
 
 ### Service
-services can be deployed or removed on runtime. when a service added to the ganjex container all 
-of the ```@StartupHook``` of the libraries notified with the ```ServiceContext``` of the newly 
-added service. and when a service removed from the ganjex container all of the 
-```@ShutdownHook``` of the libraries notified with the ```ServiceContext``` of that service. it's
- up to library to treat each service and ganjex know nothing about the structure or pattern 
- services uses.
+Services could be deployed or removed at runtime. As soon as a service is added to Ganjex container, all 
+of the libraries' classes annotated with```@StartupHook``` would be notified with the ```ServiceContext``` of the newly 
+added service. Similarly, soon after a service is removed from Ganjex container, all of the libraries' classes annotated 
+with ```@ShutdownHook``` would be notified with the ```ServiceContext``` of that service. This is library's responsibility 
+to treat each service properly, due to the fact that Ganjex knows nothing of the structure and pattern services utilize.
  
 
