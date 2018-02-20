@@ -16,10 +16,10 @@ Framework starts Ganjex container with the code below:
  ```
  	Ganjex ganjex = //you can save an instance of Ganjex container in Ganjex object
  	    Ganjex.run(new GanjexConfiguration.Builder()
- 	        .libPath("/opt/ganjex/lib")         //location where libraries should be added to
- 	        .servicePath("/opt/ganjex/service)  // location where services should be added to
- 	        .watcherDelay(4)                    //how many second watchers should wait to retry
- 	        .hooks(new SomeHookContainer())     //list of all object containing hooks
+ 	        .libPath("/opt/ganjex/lib")         //location where libraries should be added
+ 	        .servicePath("/opt/ganjex/service)  //location where services should be added
+ 	        .watcherDelay(4)                    //how many seconds watchers should wait to retry
+ 	        .hooks(new SomeHookContainer())     //list of all objects containing hooks
  	        .build());
  ``` 
 Please note that `SomeHookContainer` class in the above example should have at least two methods annotated with 
@@ -63,7 +63,7 @@ between services. As we can have many services, this might bring about having du
 in the services which would be inefficient and difficult to maintain. Here Libraries come to rescue, Libraries are 
 typical jar files which can be changed and required to be accessible to the services. They must be provided to Ganjex 
 before its startup. A service needing to do so, should add the library's corresponding Maven dependency with 
-`<scope>provided</scope>` because it would be provided by Ganjex at runtime..
+`<scope>provided</scope>` because it would be provided by Ganjex at runtime.
 
 Libraries are responsible for treating the services, meaning that they scan to find services' requirements and dependencies. 
 They also exploit services' class-loaders. This is noteworthy that libraries should handle multi-threading themselves.
