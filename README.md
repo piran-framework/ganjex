@@ -1,84 +1,88 @@
-# Ganjex
-Ganjex is a passive container which know nothing about the services it contains. Ganjex
-facilitate runtime changing and lifecycle management of services. Ganjex is a platform layer 
-container, users should define their framework to use it properly. There is two 
-type of element which ganjex contain: 1.Library and 2.Service.
+## Ganjex Overview
+Oblivious to its holding services, Ganjex is a passive container
+facilitating the management of the containing elements' alterations and lifecycle at runtime.
+Ganjex is a platform layer container, so that user must define their own framework
+based on their necessities and preferences properly.   
+There are two types of elements Ganjex contains: 1.Library and 2.Service.
 
 ## Framework
-Client should define how it wants to treat services, we call client application framework. 
-Framework start the ganjex container with the code below:
+It is expected that application framework, also called as client, should define how it wants to treat services. 
+Framework starts Ganjex container with the code below:
  ```
  Ganjex.run(ganjexConfiguration);
  ``` 
  In the above code `ganjexConfiguration` is a configuration instance of `GanjexConfiguration` 
- class which should created by the mean of `GanjexConfiguration.Builder`. for example:
+ class which should be created by `GanjexConfiguration.Builder`. As an illustration:
  ```
- 	Ganjex ganjex = //you can save an instance of the ganjex container in the ganjex object
+ 	Ganjex ganjex = //you can save an instance of Ganjex container in Ganjex object
  	    Ganjex.run(new GanjexConfiguration.Builder()
- 	        .libPath("/opt/ganjex/lib")         //location where libraries should be added to
- 	        .servicePath("/opt/ganjex/service)  // location where services should be added to
- 	        .watcherDelay(4)                    //how many second watchers should wait to retry
- 	        .hooks(new SomeHookContainer())     //list of all object containing hooks
+ 	        .libPath("/opt/ganjex/lib")         //location where libraries should be added
+ 	        .servicePath("/opt/ganjex/service)  //location where services should be added
+ 	        .watcherDelay(4)                    //how many seconds watchers should wait to retry
+ 	        .hooks(new SomeHookContainer())     //list of all objects containing hooks
  	        .build());
  ``` 
-note that `SomeHookContainer` class in the above example should have some method annotated by 
-`@StartupHook` or `@ShutdownHook`. This is an example of this class:
+Please note that `SomeHookContainer` class in the above example should have at least two methods annotated with 
+`@StartupHook` or `@ShutdownHook` in order to manage the lifecycle of libraries' services. 
+This is an example of this class:
 ```
 public class SomeHookContainer {
     @StartupHook
     public void start(ServiceContext context){
-        //change some behavior with newly added service
+        //consequent behavior changes mandated by the newly added service
     }
     
     @ShutdownHook
     public void destroy(ServiceContext context){
-        //fallback changes made when this service added
+        //consequent fallback changes mandated by the newly added service
     }
 } 
 ```
-Usually you need the service classLoader to surf the service code and find things you know so we 
-provide service classLoader by the ServiceContext object.
-
-Remember frameworks does not change a lot.
+Usually the service classLoader is needed to surf the service code to find things you know, so 
+the service classLoader is provided by the ServiceContext object.
 
 ## Service     
-Services are changeable units, which should do a specific job, typically implementing a use case.       
-As in business, use cases changes a lot, in ganjex services usually changes a lot too. When a 
-requirement changes, the implementation of that requirement should be changed and should be 
-deployed as soon as possible, so services in ganjex can be deployed or removed on runtime (on the
-fly). When a service added to the ganjex container all of the `@StartupHook`s  notified with 
-the `ServiceContext` of the newly added service, And when a service removed from the ganjex 
-container all of the `@ShutdownHook`s notified with the `ServiceContext` of that service. It's
-up to framework to treat each service and ganjex know nothing about the structure or pattern 
-services uses.
+Accomplishing specific jobs, services are changeable units which typically implement a use case.       
+Since business use cases are frequently changed, Ganjex services are usually changed a lot as well. 
+As soon as a requirement is changed, the implementation of that requirement must be changed and 
+deployed as quickly as possibly. In Ganjex, services could be deployed or removed at runtime (on the fly). 
+As soon as a service is added to Ganjex container, all of the libraries' classes annotated with```@StartupHook``` 
+would be notified with the ```ServiceContext``` of the newly added service. Similarly, soon after a service is removed 
+from Ganjex container, all of the libraries' classes annotated with ```@ShutdownHook``` would be notified with 
+the ```ServiceContext``` of that service. 
+This is library's responsibility to treat each service properly, due to the fact that Ganjex knows nothing of 
+the structure and pattern services utilize. Remember frameworks are not expected to be changed a lot.
 
-### service manifest
+### Service manifest
 Every service should have a file named *manifest.properties* in the root of its classpath. This 
-is a manifest clear the service identity, It should contain two keys: *name* and *version*
+is a manifest clearing the service identity. This should contain two keys: *name* and *version*
 
- 
 ## Library
 There are cases when multiple services need a class, or a domain model class should be shared 
-between services. As we can have many services, duplicating the shared code in the services is 
-not efficient and also hard to maintain. Here Libraries come to rescue, Libraries is a typical 
-jar files which can be changed and also it's available to all of the services. Libraries can
-change, but remember their changes have its cost, when a library change (modified,added or 
-removed) all of the services restart to library change take effect.
+between services. As we can have many services, this might bring about having duplicate shared code 
+in the services which would be inefficient and difficult to maintain. Here Libraries come to rescue, Libraries are 
+typical jar files which can be changed and required to be accessible to the services. They must be provided to Ganjex 
+before its startup. A service needing to do so, should add the library's corresponding Maven dependency with 
+`<scope>provided</scope>` because it would be provided by Ganjex at runtime.
 
-Remember when you use a library code in your service, mark the maven dependency with 
-`<scope>provided</scope>` because it provided by the ganjex on runtime.
-## Use Spring-Boot and Ganjex together
-There is a spring-boot-starter for ganjex. you can add it to your spring-boot application and by 
-adding `@EnableGanjexContainer` annotation into your Configuration class, ganjex starts and scan 
-all the beans with `@GanjexHook` annotation. Note that when a class marked with `@GanjexHook`, 
-that class become a spring component bean, so it's not needed anymore to add @Component or @Service.
+Libraries are responsible for treating the services, meaning that they scan to find services' requirements and dependencies. 
+They also exploit services' class-loaders. This is noteworthy that libraries should handle multi-threading themselves.
+Please note that changing the libraries is costly, meaning that soon after a library is changed (modified, added or 
+removed), all of the services would be restarted in order to affect the consequent changes.
+
+## Use Spring-Boot and Ganjex simultaneously
+A Spring-boot-starter has been particularly designed for Ganjex which could be mounted on Spring-boot applications. 
+By adding `@EnableGanjexContainer` class-level annotation on the Configuration class, Ganjex starts and scans 
+all the beans with `@GanjexHook` annotation. Note that, if a class is marked with `@GanjexHook`, 
+that class would be qualified to be a Spring component bean as well, so there would be no need to add @Component 
+or @Service by doing so.
+
 ### Spring-Boot properties 
-Adding ganjex-starter to a spring-boot application add three properties beside spring-boot 
-properties:
+To add ganjex-starter to a spring-boot application, add three properties besides spring-boot properties:
 * ganjex.lib-path
 * ganjex.service-path
 * ganjex.watch-delay
-which is the same as `GanjexConfiguration` fields.
+They are the same as `GanjexConfiguration` fields.
 
 ## License
 This software is licensed under the Apache License, version 2 ("ALv2"), quoted below.

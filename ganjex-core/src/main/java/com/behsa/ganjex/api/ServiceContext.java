@@ -25,13 +25,13 @@ import java.util.Objects;
 import java.util.Properties;
 
 /**
- * Immutable class represents the context information of the service
+ * This is an immutable class representing the context information of the service.
  * <p>
- * This class used by the hooks, every hook receive an instance of this class when a service
- * start or destroy depends on a type of hook.
+ * This class is used by the hooks, every hook receives an instance of this class as soon as a service
+ * is created or destroyed based on the type of hook.
  * <p>
- * Hooks can use specific classloader provided by the object of this class to scan the service
- * code and find some specific points they want to take action against
+ * Hooks will use specific classloader provided by the object of this class to scan the service
+ * code and find specific points needed to be taken into consideration.
  *
  * @author hekmatof
  * @since 1.0
