@@ -5,8 +5,8 @@ container, so that user must define their own framework based on their necessiti
 preferences properly. There are two types of elements Ganjex contains: 1.Library and 2.Service.
 
 ## Framework
-It is expected that application framework, also called as client, should define how it wants to 
-treat services. Framework starts Ganjex container with the code below:
+It is expected that application framework, also called as client, would define how it plans to 
+treat containing services. Ganjex container is started by framework with the code below:
  ```
  Ganjex.run(ganjexConfiguration);
  ``` 
@@ -37,20 +37,22 @@ public class SomeHookContainer {
     }
 } 
 ```
-Usually the service classLoader is needed to surf the service code to find things you know, so 
-the service classLoader is provided by the ServiceContext object.
+The service classLoader is required to surf the service code to manage business necessities 
+defined by framework, so the service classLoader would be provided by the ServiceContext object.
+In other words, Ganjex would behave in a way that is defined in the framework by the client. 
 
 ## Service     
-Accomplishing specific jobs, services are changeable units which typically implement a use case. 
-Since business use cases are frequently changed, Ganjex services are usually changed a lot as well. 
-As soon as a requirement is changed, the implementation of that requirement must be changed and 
-deployed as quickly as possibly. In Ganjex, services could be deployed or removed at runtime (on 
-the fly). As soon as a service is added to Ganjex container, all of the `@StartupHook` methods  
-would be notified with the `ServiceContext` of the newly added service. Similarly, soon after a 
+Accomplishing specific jobs, services are interchangeable units typically implement a use case. 
+As business use cases are being frequently changed, Ganjex services are supposed to be changed
+repetitively as well. As soon as a requirement is changed, the implementation of that requirement must 
+be changed and deployed consequently. In Ganjex, also, services could be deployed or removed at runtime 
+(on the fly). Soon after a service is added to Ganjex container, all of the `@StartupHook` methods  
+would be notified with the `ServiceContext` of the newly added service. Similarly, right after a 
 service is removed from Ganjex container, all of the frameworks' methods annotated with 
-`@ShutdownHook` would be notified with the `ServiceContext` of that service. This is framework's 
-responsibility to treat each service properly, due to the fact that Ganjex knows nothing of the 
-structure and pattern services utilize. Remember frameworks are not expected to be changed a lot.
+`@ShutdownHook` would be notified with the `ServiceContext` of that service. 
+This is framework's responsibility to treat each service properly, due to the fact that Ganjex 
+knows nothing of the structure and pattern services utilize. Remember frameworks are not 
+expected to be changed frequently.
 
 ### Service manifest
 Every service should have a file named *manifest.properties* in the root of its classpath. This 
