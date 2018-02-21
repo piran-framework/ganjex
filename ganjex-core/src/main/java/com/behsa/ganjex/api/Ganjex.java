@@ -30,10 +30,10 @@ import java.util.Objects;
 /**
  * Ganjex container class. Each instance of this class represents a Ganjex container.
  * <p>
- * The static method <code>run({@link GanjexConfiguration})</code> is expected to invoke for starting a new
- * container. By running a new container, Ganjex watches the library and service directory for
- * any prospective changes. As soon as a jar file is added to or removed from the directory, Ganjex would start or
- * shutdown services pertinent to the altered jar file.
+ * The static method <code>run({@link GanjexConfiguration})</code> is expected to invoke for
+ * starting a new container. By running a new container, Ganjex watches the library and service
+ * directory for any prospective changes. As soon as a jar file is added to or removed from the
+ * directory, Ganjex would start or shutdown services pertinent to the altered jar file.
  * </p>
  *
  * @author hekmatof

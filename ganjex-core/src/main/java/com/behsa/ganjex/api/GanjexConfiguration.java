@@ -17,10 +17,10 @@
 package com.behsa.ganjex.api;
 
 /**
- * This is an immutable class stores the configurations required by Ganjex container. An instance of this
- * class should be passed to <code>{@link Ganjex}.run(GanjexConfiguration) </code> static method
- * or {@link Ganjex} constructor itself. {@link GanjexConfiguration.Builder} class could be used to
- * create an instance of {@link GanjexConfiguration}
+ * This is an immutable class stores the configurations required by Ganjex container. An instance
+ * of this class should be passed to <code>{@link Ganjex}.run(GanjexConfiguration) </code> static
+ * method or {@link Ganjex} constructor itself. {@link GanjexConfiguration.Builder} class could
+ * be used to create an instance of {@link GanjexConfiguration}
  *
  * @author hekmatof
  * @since 1.0

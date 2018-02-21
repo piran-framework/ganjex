@@ -27,8 +27,8 @@ import java.util.Properties;
 /**
  * This is an immutable class representing the context information of the service.
  * <p>
- * This class is used by the hooks, every hook receives an instance of this class as soon as a service
- * is created or destroyed based on the type of hook.
+ * This class is used by the hooks, every hook receives an instance of this class as soon as a
+ * service is created or destroyed based on the type of hook.
  * <p>
  * Hooks will use specific classloader provided by the object of this class to scan the service
  * code and find specific points needed to be taken into consideration.
