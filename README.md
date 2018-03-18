@@ -1,5 +1,6 @@
 ## Ganjex
 [![Travis IC](https://travis-ci.org/behsa-oss/ganjex.svg?branch=master)](https://travis-ci.org/behsa-oss/ganjex)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5bb12607be964e478f507fd04de0fc21)](https://www.codacy.com/app/esahekmat/ganjex?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=behsa-oss/ganjex&amp;utm_campaign=Badge_Grade)
 
 Oblivious to its holding services, Ganjex is a passive container facilitating the management of 
 the containing elements' alterations and lifecycle at runtime. Ganjex is a platform layer 
