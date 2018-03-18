@@ -1,4 +1,6 @@
 ## Ganjex
+[![Travis IC](https://travis-ci.org/behsa-oss/ganjex.svg?branch=master)](https://travis-ci.org/behsa-oss/ganjex)
+
 Oblivious to its holding services, Ganjex is a passive container facilitating the management of 
 the containing elements' alterations and lifecycle at runtime. Ganjex is a platform layer 
 container, so that user must define their own framework based on their necessities and 
