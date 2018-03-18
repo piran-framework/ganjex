@@ -1,0 +1,9 @@
+language: java
+
+sudo: false
+
+jdk:
+  - oraclejdk9
+
+os:
+  - linux
