@@ -188,8 +188,7 @@ public class TestUtil {
 
 	private static void copyAllContent(File src, File dest) throws IOException {
 		File[] allSourceFiles = src.listFiles();
-		if (!src.exists())
-			if (!src.mkdir())
+		if (!src.exists() && !src.mkdir())
 				throw new IOException("can not create directory " + src.getPath());
 		if (Objects.isNull(allSourceFiles))
 			throw new IllegalArgumentException("srcPath is not correct: " + src.getPath());

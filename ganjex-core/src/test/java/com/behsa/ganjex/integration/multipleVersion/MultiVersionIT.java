@@ -38,11 +38,11 @@ public class MultiVersionIT {
 	@Test
 	public void testReplace() throws IOException, InterruptedException, ClassNotFoundException,
 					NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		TestUtil.clean();
+		clean();
 		CallServiceDirectlyLibrary.clear();
 		Ganjex ganjex = Ganjex.run(new GanjexConfiguration.Builder()
-						.libPath(TestUtil.libPath)
-						.servicePath(TestUtil.servicePath)
+						.libPath(libPath)
+						.servicePath(servicePath)
 						.watcherDelay(1)
 						.hooks(new CallServiceDirectlyLibrary())
 						.build());
@@ -63,11 +63,11 @@ public class MultiVersionIT {
 	@Test
 	public void testTwoVersion() throws IOException, InterruptedException, ClassNotFoundException,
 					NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		TestUtil.clean();
+		clean();
 		CallServiceDirectlyLibrary.clear();
 		Ganjex ganjex = Ganjex.run(new GanjexConfiguration.Builder()
-						.libPath(TestUtil.libPath)
-						.servicePath(TestUtil.servicePath)
+						.libPath(libPath)
+						.servicePath(servicePath)
 						.watcherDelay(1)
 						.hooks(new CallServiceDirectlyLibrary())
 						.build());

@@ -39,12 +39,11 @@ public class HooksExecutionIT {
 	@Test
 	public void testEveryHooksRunOnce() throws IOException, InterruptedException,
 					ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		TestUtil.clean();
-//		deployLib(TEST_PATH + "hooksExecution/libWithDifferentHooks/", "simple-lib");
+		clean();
 		LibWithDifferentHooks.clean();
 		Ganjex ganjex = Ganjex.run(new GanjexConfiguration.Builder()
-						.libPath(TestUtil.libPath)
-						.servicePath(TestUtil.servicePath)
+						.libPath(libPath)
+						.servicePath(servicePath)
 						.watcherDelay(1)
 						.hooks(new LibWithDifferentHooks())
 						.build()
