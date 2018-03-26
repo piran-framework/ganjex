@@ -19,7 +19,7 @@
 
 package com.sample.service;
 
-import com.behsa.ganjex.api.ServiceContext;
+import com.behsacorp.ganjex.api.ServiceContext;
 import com.sample.api.Action;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;

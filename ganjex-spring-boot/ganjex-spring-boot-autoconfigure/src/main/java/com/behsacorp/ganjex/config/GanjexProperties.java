@@ -17,19 +17,44 @@
  *    along with Ganjex.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.sample;
+package com.behsacorp.ganjex.config;
 
-import com.behsacorp.ganjex.EnableGanjexContainer;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author hekmatof
+ * @since 1.0
  */
-@SpringBootApplication
-@EnableGanjexContainer
-public class SampleFramework {
-	public static void main(String[] args) {
-		SpringApplication.run(SampleFramework.class, args);
+@ConfigurationProperties("ganjex")
+public class GanjexProperties {
+	private String servicePath = "service";
+	private String libPath = "lib";
+	private int watchDelay = 10;
+
+	public String getServicePath() {
+		return servicePath;
+	}
+
+	public GanjexProperties setServicePath(String servicePath) {
+		this.servicePath = servicePath;
+		return this;
+	}
+
+	public String getLibPath() {
+		return libPath;
+	}
+
+	public GanjexProperties setLibPath(String libPath) {
+		this.libPath = libPath;
+		return this;
+	}
+
+	public int getWatchDelay() {
+		return watchDelay;
+	}
+
+	public GanjexProperties setWatchDelay(int watchDelay) {
+		this.watchDelay = watchDelay;
+		return this;
 	}
 }

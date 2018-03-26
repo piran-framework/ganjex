@@ -17,30 +17,38 @@
  *    along with Ganjex.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.sample.loader;
+package com.behsacorp.ganjex.lifecycle;
 
-import com.behsacorp.ganjex.GanjexHook;
 import com.behsacorp.ganjex.api.ServiceContext;
-import com.behsacorp.ganjex.api.ShutdownHook;
-import com.behsacorp.ganjex.api.StartupHook;
-import com.sample.service.ServiceContainer;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.behsacorp.ganjex.container.GanjexApplication;
+
+import java.io.File;
+import java.util.Objects;
 
 /**
+ * An immutable class for shutdown(destroy) a service, it instantiated with the jar file of the
+ * service and <code>destroy</code> method try to shutdown the service
+ *
  * @author hekmatof
+ * @see LifecycleManagement
+ * @since 1.0
  */
-@GanjexHook
-public class Hook {
-	@Autowired
-	private ServiceContainer container;
+public class ServiceDestroyer {
+	private final File jar;
 
-	@StartupHook
-	public void startService(ServiceContext context) {
-		container.add(context);
+	public ServiceDestroyer(File jar) {
+		this.jar = jar;
 	}
 
-	@ShutdownHook
-	public void shutdownService(ServiceContext context) {
-		container.remove(context);
+	/**
+	 * try to destroy the service using the {@link LifecycleManagement} instance of the ganjex
+	 * container
+	 *
+	 * @param app ganjex container instance
+	 */
+	public void destroy(GanjexApplication app) {
+		ServiceContext context = app.lifecycleManagement().findContext(jar.getName());
+		if (Objects.nonNull(context))
+			app.lifecycleManagement().serviceDestroyed(context);
 	}
 }

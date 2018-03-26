@@ -25,7 +25,7 @@
 				</encoder>
 		</appender>
 
-		<logger name="com.behsa" level="debug"/>
+		<logger name="com.behsacorp" level="debug"/>
 		<root level="info">
 				<appender-ref ref="STDOUT"/>
 		</root>

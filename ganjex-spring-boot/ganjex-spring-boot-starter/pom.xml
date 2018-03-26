@@ -23,7 +23,7 @@
 				 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 		<parent>
 				<artifactId>ganjex-parent</artifactId>
-				<groupId>com.behsa</groupId>
+				<groupId>com.behsacorp</groupId>
 				<version>0.3-SNAPSHOT</version>
 		</parent>
 		<modelVersion>4.0.0</modelVersion>
@@ -54,7 +54,7 @@
 		</developers>
 		<dependencies>
 				<dependency>
-						<groupId>com.behsa</groupId>
+						<groupId>com.behsacorp</groupId>
 						<artifactId>ganjex-spring-boot-autoconfigure</artifactId>
 						<version>0.3-SNAPSHOT</version>
 				</dependency>

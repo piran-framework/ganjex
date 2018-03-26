@@ -17,19 +17,19 @@
  *    along with Ganjex.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.sample;
+package com.behsacorp.ganjex;
 
-import com.behsacorp.ganjex.EnableGanjexContainer;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Component;
+
+import java.lang.annotation.*;
 
 /**
  * @author hekmatof
+ * @since 1.0
  */
-@SpringBootApplication
-@EnableGanjexContainer
-public class SampleFramework {
-	public static void main(String[] args) {
-		SpringApplication.run(SampleFramework.class, args);
-	}
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Component
+public @interface GanjexHook {
 }

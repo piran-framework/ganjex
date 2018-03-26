@@ -17,19 +17,34 @@
  *    along with Ganjex.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.sample;
+package com.behsacorp.ganjex.lifecycle;
 
-import com.behsacorp.ganjex.EnableGanjexContainer;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.behsacorp.ganjex.api.ServiceContext;
+
+import java.util.function.Consumer;
 
 /**
+ * inner representation of the methods in the framework which annotated with the
+ * {@link StartupHook} annotation
+ *
  * @author hekmatof
+ * @since 1.0
  */
-@SpringBootApplication
-@EnableGanjexContainer
-public class SampleFramework {
-	public static void main(String[] args) {
-		SpringApplication.run(SampleFramework.class, args);
+public class StartupHook implements Comparable<StartupHook> {
+	private final Consumer<ServiceContext> hook;
+	private final Integer priority;
+
+	public StartupHook(Consumer<ServiceContext> hook, Integer priority) {
+		this.hook = hook;
+		this.priority = priority == null ? 100 : priority;
+	}
+
+	Consumer<ServiceContext> hook() {
+		return hook;
+	}
+
+	@Override
+	public int compareTo(StartupHook o) {
+		return priority.compareTo(o.priority);
 	}
 }

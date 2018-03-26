@@ -89,6 +89,9 @@ properties:
 * ganjex.watch-delay
 They are the same as `GanjexConfiguration` fields.
 
+### Minimum Requirement
+You need at least java 8 to use Ganjex container.
+
 ## License
 Copyright (c) 2018 Behsa Corporation.
 

@@ -17,19 +17,20 @@
  *    along with Ganjex.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.sample;
+package com.behsacorp.ganjex.config;
 
-import com.behsacorp.ganjex.EnableGanjexContainer;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 /**
  * @author hekmatof
+ * @since 1.0
  */
-@SpringBootApplication
-@EnableGanjexContainer
-public class SampleFramework {
-	public static void main(String[] args) {
-		SpringApplication.run(SampleFramework.class, args);
+public class GanjexMarkerConfiguration {
+	@Bean
+	public Marker enableGanjexMarker() {
+		return new Marker();
+	}
+
+	class Marker {
 	}
 }

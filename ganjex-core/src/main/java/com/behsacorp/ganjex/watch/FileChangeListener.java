@@ -17,19 +17,30 @@
  *    along with Ganjex.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.sample;
+package com.behsacorp.ganjex.watch;
 
-import com.behsacorp.ganjex.EnableGanjexContainer;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.io.File;
 
 /**
+ * This listener is responsible to handle the change in a directory which {@link JarWatcher} watch
+ * it take action when a file added or removed. fileAdd include modified an existing file
+ *
  * @author hekmatof
+ * @since 1.0
  */
-@SpringBootApplication
-@EnableGanjexContainer
-public class SampleFramework {
-	public static void main(String[] args) {
-		SpringApplication.run(SampleFramework.class, args);
-	}
+interface FileChangeListener {
+
+	/**
+	 * listener which executed when a file added into or modified in the specific path
+	 *
+	 * @param file the new file
+	 */
+	void fileAdd(File file);
+
+	/**
+	 * listener which executed when a file removed in the specific path
+	 *
+	 * @param file file which be removed
+	 */
+	void fileRemoved(File file);
 }

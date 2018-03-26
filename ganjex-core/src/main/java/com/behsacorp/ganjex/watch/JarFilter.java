@@ -17,19 +17,20 @@
  *    along with Ganjex.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.sample;
+package com.behsacorp.ganjex.watch;
 
-import com.behsacorp.ganjex.EnableGanjexContainer;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.io.File;
+import java.io.FilenameFilter;
 
 /**
+ * Filter class implemented {@link FilenameFilter} to indicate jar files
+ *
  * @author hekmatof
+ * @since 1.0
  */
-@SpringBootApplication
-@EnableGanjexContainer
-public class SampleFramework {
-	public static void main(String[] args) {
-		SpringApplication.run(SampleFramework.class, args);
+public class JarFilter implements FilenameFilter {
+	@Override
+	public boolean accept(File dir, String name) {
+		return name != null && name.endsWith(".jar");
 	}
 }

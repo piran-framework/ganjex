@@ -22,12 +22,18 @@
 				 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 				 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 		<modelVersion>4.0.0</modelVersion>
-		<groupId>com.behsa</groupId>
+		<groupId>com.behsacorp</groupId>
 		<artifactId>ganjex-parent</artifactId>
 		<version>0.3-SNAPSHOT</version>
 		<packaging>pom</packaging>
-		<name>Ganjex Build</name>
-		<description>Ganjex Build</description>
+		<name>Ganjex Parent</name>
+		<description>Ganjex parent module</description>
+		<url>http://github.com/behsa-oss/ganjex/</url>
+		<scm>
+				<connection>scm:git:git://github.com/behsa-oss/ganjex.git</connection>
+				<developerConnection>scm:git:ssh://github.com:behsa-oss/ganjex.git</developerConnection>
+				<url>http://github.com/behsa-oss/ganjex/tree/master</url>
+		</scm>
 		<organization>
 				<name>Behsa Co.</name>
 				<url>http://www.behsacorp.com</url>
@@ -83,7 +89,7 @@
 								<scope>import</scope>
 						</dependency>
 						<dependency>
-								<groupId>com.behsa</groupId>
+								<groupId>com.behsacorp</groupId>
 								<artifactId>ganjex</artifactId>
 								<version>0.3-SNAPSHOT</version>
 						</dependency>

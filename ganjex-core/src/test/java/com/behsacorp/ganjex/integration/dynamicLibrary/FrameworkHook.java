@@ -17,30 +17,35 @@
  *    along with Ganjex.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.sample.loader;
+package com.behsacorp.ganjex.integration.dynamicLibrary;
 
-import com.behsacorp.ganjex.GanjexHook;
 import com.behsacorp.ganjex.api.ServiceContext;
-import com.behsacorp.ganjex.api.ShutdownHook;
 import com.behsacorp.ganjex.api.StartupHook;
-import com.sample.service.ServiceContainer;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * @author hekmatof
  */
-@GanjexHook
-public class Hook {
-	@Autowired
-	private ServiceContainer container;
+public class FrameworkHook {
+	private static Object actionObject;
+	private static Class<?> actionClass;
 
-	@StartupHook
-	public void startService(ServiceContext context) {
-		container.add(context);
+	public static String invokeMethodOnService() throws NoSuchMethodException,
+					IllegalAccessException, InvocationTargetException {
+		Method action = actionClass.getMethod("action");
+		return (String) action.invoke(actionObject);
 	}
 
-	@ShutdownHook
-	public void shutdownService(ServiceContext context) {
-		container.remove(context);
+	@StartupHook
+	public void startup(ServiceContext context) throws NoSuchMethodException,
+					IllegalAccessException, InvocationTargetException, InstantiationException {
+		try {
+			actionClass = context.getClassLoader().loadClass("com.behsacorp.SomeService");
+			actionObject = actionClass.getConstructor((Class<?>[]) null).newInstance((Object[]) null);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }
