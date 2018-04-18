@@ -19,64 +19,112 @@
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-				 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-				 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-		<parent>
-				<artifactId>ganjex-parent</artifactId>
-				<groupId>com.behsacorp</groupId>
-				<version>0.3-SNAPSHOT</version>
-				<relativePath>../../pom.xml</relativePath>
-		</parent>
-		<modelVersion>4.0.0</modelVersion>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ganjex-parent</artifactId>
+        <groupId>com.behsacorp</groupId>
+        <version>0.3-RELEASE</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-		<artifactId>ganjex-spring-boot-autoconfigure</artifactId>
-		<packaging>jar</packaging>
-		<name>Spring Boot AutoConfiguration :: Ganjex AutoConfiguration</name>
-		<organization>
-				<name>Behsa Co.</name>
-				<url>http://www.behsacorp.com</url>
-		</organization>
-		<licenses>
-				<license>
-						<name>GNU Lesser General Public License</name>
-						<url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
-				</license>
-		</licenses>
+    <artifactId>ganjex-spring-boot-autoconfigure</artifactId>
+    <packaging>jar</packaging>
+    <name>Spring Boot AutoConfiguration :: Ganjex AutoConfiguration</name>
+    <organization>
+        <name>Behsa Co.</name>
+        <url>http://www.behsacorp.com</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License</name>
+            <url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
+        </license>
+    </licenses>
 
-		<developers>
-				<developer>
-						<id>hekmatof</id>
-						<name>Esa Hekmatizadeh</name>
-						<email>i.hekmatizadeh at behsacorp.com</email>
-						<organization>Behsa Co.</organization>
-						<organizationUrl>http://www.behsacorp.com</organizationUrl>
-						<roles>
-								<role>Project lead</role>
-						</roles>
-				</developer>
-		</developers>
-		<properties>
-				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-				<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <developers>
+        <developer>
+            <id>hekmatof</id>
+            <name>Esa Hekmatizadeh</name>
+            <email>i.hekmatizadeh at behsacorp.com</email>
+            <organization>Behsa Co.</organization>
+            <organizationUrl>http://www.behsacorp.com</organizationUrl>
+            <roles>
+                <role>Project lead</role>
+            </roles>
+        </developer>
+    </developers>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-				<maven.compiler.source>1.8</maven.compiler.source>
-				<maven.compiler.target>1.8</maven.compiler.target>
-		</properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 
-		<dependencies>
-				<dependency>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-autoconfigure</artifactId>
-				</dependency>
-				<dependency>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-configuration-processor</artifactId>
-						<optional>true</optional>
-				</dependency>
-				<dependency>
-						<groupId>com.behsacorp</groupId>
-						<artifactId>ganjex</artifactId>
-				</dependency>
-		</dependencies>
-
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.behsacorp</groupId>
+            <artifactId>ganjex</artifactId>
+        </dependency>
+    </dependencies>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
