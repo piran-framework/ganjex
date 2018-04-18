@@ -76,6 +76,16 @@ Please note that changing the libraries is costly, meaning that soon after a lib
 (modified, added or removed), all of the services would be restarted in order to affect the 
 consequent changes.
 
+## Dependency
+To use ganjex library in your project add this dependency into your project pom:
+```
+<dependency>
+    <groupId>com.behsacorp</groupId>
+    <artifactId>ganjex</artifactId>
+    <scope>0.3-RELEASE</scope>
+</dependency>
+```
+
 ## Use Spring-Boot and Ganjex simultaneously
 A Spring-boot-starter has been particularly designed for Ganjex which could be mounted on 
 Spring-boot applications. By adding `@EnableGanjexContainer` class-level annotation on the 
