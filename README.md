@@ -4,10 +4,8 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5bb12607be964e478f507fd04de0fc21)](https://www.codacy.com/app/esahekmat/ganjex?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=behsa-oss/ganjex&amp;utm_campaign=Badge_Grade)
 [![Javadocs](http://javadoc.io/badge/com.behsacorp/ganjex.svg)](http://javadoc.io/doc/com.behsacorp/ganjex)
 
-Oblivious to its holding services, Ganjex is a passive container facilitating the management of 
-the containing elements' alterations and lifecycle at runtime. Ganjex is a platform layer 
-container, so that user must define their own framework based on their necessities and 
-preferences properly. There are two types of elements Ganjex contains: 1.Library and 2.Service.
+Today In the micro-services world sometimes you need to serve lots of micro-services by just one JVM(runtime), with the help of Ganjex you can define your own microservice framework. When you are developing micro-services, usually every micro service need a dedicated JVM, and any changes in it need restarting JVM. Remember tomcat which contains webapps and you can change webapps by removing or changing WAR files without restarting tomcat itself, but tomcat forces you to define your application in webapp schema, tomcat searches for servlet you defined and route HTTP messages to them. So if you want your micro-services communicating with each other by a queue for example or using gRPC you can't use tomcat simply to serve your micro-services. Also if you want to develop your services in a different manner than webapp and servlet, you can't use tomcat. OSGi is another solution but its too complicated and has a high learning curve. Ganjex like tomcat can contain services, and each service has its own classloader and lifecycle, but unlike tomcat which searches for servlets in its containing webapps, Ganjex is oblivious to its holding services, so we say Ganjex is a passive container just facilitating the management of the containing elements' alterations and lifecycle at runtime. The way this container should behave with its services (remember tomcat which searches for servlet and routes HTTP messages to them) should be defined by the client which uses Ganjex. So we say Ganjex is a platform layer container, which user must define their own framework based on their necessities and preferences properly. There are two types of elements Ganjex contains 1. Library and 2. Service.
+
 
 ## Framework
 It is expected that application framework, also called as client, would define how it plans to 
