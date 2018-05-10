@@ -38,13 +38,14 @@ import java.util.function.Function;
 /**
  * @author hekmatof
  */
-@Service
+@GanjexHook
 public class ServiceContainer {
 	private static final Logger log = LoggerFactory.getLogger(ServiceContainer.class);
 	private final Map<String, Map<String, Function<Map<String, Object>, Map<String, Object>>>>
 					actions = new HashMap<>();
 	private final Map<Class<?>, Object> instances = new HashMap<>();
 
+	@StartupHook
 	public void add(ServiceContext context) {
 		Reflections.log = LoggerFactory.getLogger(Reflections.class);
 		Reflections reflections = new Reflections(new MethodAnnotationsScanner(),
@@ -75,6 +76,7 @@ public class ServiceContainer {
 		actions.put(context.getName(), actionsOfTheModule);
 	}
 
+  @ShutdownHook
 	public void remove(ServiceContext context) {
 		actions.remove(context.getName());
 	}
