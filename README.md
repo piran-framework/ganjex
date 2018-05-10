@@ -99,8 +99,16 @@ properties:
 * ganjex.watch-delay
 They are the same as `GanjexConfiguration` fields.
 
+### Sample Guide
+There is a sample dynamic web framework developed using Spring and Ganjex, Full guide also available in 
+[its directory](sample/sampleWebFramework)
+
 ### Minimum Requirement
 You need at least java 8 to use Ganjex container.
+
+### Behsa OSS
+This Project is a part of Behsa-OSS, Behsa Company is a partner of MCI(Largest mobile operator in Middle East) and 
+decided to  make some of their projects as open source with the brand of Behsa-OSS(Behsa Open-Source Software)
 
 ## License
 Copyright (c) 2018 Behsa Corporation.
