@@ -33,8 +33,8 @@ import java.util.Objects;
 /**
  * Ganjex container class. Each instance of this class represents a Ganjex container.
  * <p>
- * The static method <code>run({@link GanjexConfiguration})</code> is expected to invoke for
- * starting a new container. By running a new container, Ganjex watches the library and service
+ * The static method <code>run({@link GanjexConfiguration})</code> is expected to be invoked to
+ * start a new container. By doing so, Ganjex would watch the library and service
  * directory for any prospective changes. As soon as a jar file is added to or removed from the
  * directory, Ganjex would start or shutdown services pertinent to the altered jar file.
  * </p>
@@ -50,7 +50,8 @@ public final class Ganjex {
 	private JarWatcher libWatcher = null;
 
 	/**
-	 * create a new Ganjex container, to run the container you should call <code>run</code> method
+	 * Creates a new Ganjex container. In order to run the container method <code>run</code>
+	 * should be called.
 	 *
 	 * @param config ganjex application configuration instance
 	 */
@@ -60,29 +61,30 @@ public final class Ganjex {
 	}
 
 	/**
-	 * start a new ganjex container and return an object of this class representing the container
+	 * Starts a new Ganjex container and returns an object of this class representing the container.
 	 * same as calling <code>new Ganjex(config).run()</code>
 	 *
 	 * @param config ganjex configuration object, this object should be created by the
 	 *               {@link GanjexConfiguration.Builder} which is a builder for
 	 *               {@link GanjexConfiguration}
-	 * @return a running ganjex container object
+	 * @return a running Ganjex container object
 	 */
 	public static Ganjex run(GanjexConfiguration config) {
 		return new Ganjex(config).run();
 	}
 
 	/**
-	 * indicate the bootstrap process of the container has done or not
+	 * Indicates whether the bootstrap process of the container has been done or not.
 	 *
-	 * @return return true if and only if container bootstrapped and not destroyed
+	 * @return {@code true} if and only if the container has been bootstrapped but
+	 * has not been destroyed.
 	 */
 	public static boolean bootstrapped() {
 		return bootstrapped;
 	}
 
 	/**
-	 * @return the top level classloader
+	 * @return The top level classloader.
 	 */
 	public ClassLoader mainClassLoader() {
 		return app.mainClassLoader();
@@ -99,8 +101,8 @@ public final class Ganjex {
 	}
 
 	/**
-	 * useful for testing, destroy the container and clean all the states, also interrupt all
-	 * watcher threads
+	 * Useful method for testing, which destroys the container, cleans all the states and interrupts
+	 * all watcher threads.
 	 */
 	public void destroy(){
 		app.destroy();
@@ -114,11 +116,11 @@ public final class Ganjex {
 	}
 
 	/**
-	 * run the container. start watchers on library and service directory and detect any changes
-	 * there. this method has been used in the complicated scenarios, usually clients use
+	 * Runs the container. Invokes threads to watch the library and service directory to detect any changes
+	 * might happen. This method has been used in the complicated scenarios, usually clients use
 	 * <code>Ganjex.run({@link GanjexConfiguration})</code> static method.
 	 *
-	 * @return ganjex container object
+	 * @return Ganjex container object.
 	 */
 	@SuppressWarnings("WeakerAccess")
 	public Ganjex run() {
