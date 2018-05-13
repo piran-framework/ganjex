@@ -22,26 +22,31 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.behsacorp</groupId>
         <artifactId>ganjex-parent</artifactId>
         <version>0.3-RELEASE</version>
         <relativePath>../</relativePath>
     </parent>
+
     <artifactId>ganjex</artifactId>
     <packaging>jar</packaging>
     <name>Ganjex</name>
     <description>Ganjex container core library</description>
+
     <organization>
         <name>Behsa Co.</name>
         <url>http://www.behsacorp.com</url>
     </organization>
+
     <licenses>
         <license>
             <name>GNU Lesser General Public License</name>
             <url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
         </license>
     </licenses>
+
     <developers>
         <developer>
             <id>hekmatof</id>
@@ -54,11 +59,13 @@
             </roles>
         </developer>
     </developers>
+
     <scm>
         <connection>scm:git:git://github.com/behsa-oss/ganjex.git</connection>
         <developerConnection>scm:git:ssh://github.com:behsa-oss/ganjex.git</developerConnection>
         <url>http://github.com/behsa-oss/ganjex/tree/master</url>
     </scm>
+
     <distributionManagement>
         <snapshotRepository>
             <id>central-snapshot</id>
@@ -69,6 +76,15 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
     </distributionManagement>
+
+    <properties>
+        <jdk.version>1.8</jdk.version>
+        <apache.maven.plugin.version>2.20.1</apache.maven.plugin.version>
+        <maven.source.plugin.version>2.2.1</maven.source.plugin.version>
+        <maven.javadoc.plugin.version>2.9.1</maven.javadoc.plugin.version>
+        <maven.gpg.plugin.version>1.5</maven.gpg.plugin.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -91,14 +107,15 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -108,10 +125,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.20.1</version>
+                <version>${apache.maven.plugin.version}</version>
             </plugin>
         </plugins>
     </build>
+
     <profiles>
         <profile>
             <id>release</id>
@@ -120,7 +138,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>2.2.1</version>
+                        <version>${maven.source.plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -133,7 +151,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.9.1</version>
+                        <version>${maven.javadoc.plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -146,7 +164,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
+                        <version>${maven.gpg.plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
