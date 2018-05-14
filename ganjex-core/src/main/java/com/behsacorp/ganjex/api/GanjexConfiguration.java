@@ -19,6 +19,12 @@
 
 package com.behsacorp.ganjex.api;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * This is an immutable class stores the configurations required by Ganjex container. An instance
  * of this class should be passed to <code>{@link Ganjex}.run(GanjexConfiguration) </code> static
@@ -33,13 +39,27 @@ public final class GanjexConfiguration {
 	private final String servicePath;
 	private final long watcherDelay;//in second
 	private final Object[] hooks;
+	private final Set<String> classPaths;
 
 	private GanjexConfiguration(Builder builder) {
 		this.libPath = builder.libPath;
 		this.servicePath = builder.servicePath;
 		this.watcherDelay = builder.watcherDelay;
 		this.hooks = builder.hooks;
+		this.classPaths = builder.classPaths;
 	}
+	
+	
+
+	/**
+	 * 
+	 * @return path to create jar file automatically 
+	 */
+	public Set<String> getClassPaths() {
+		return classPaths;
+	}
+
+
 
 	/**
 	 * @return path of the directory where libraries jar files resort there
@@ -77,6 +97,10 @@ public final class GanjexConfiguration {
 		private String servicePath;
 		private long watcherDelay;//in second
 		private Object[] hooks;
+		/**
+		 * comma separated classpath project scanning 
+		 */
+		private Set<String> classPaths;
 
 		/**
 		 * @param libPath path of the directory where libraries jar files resort there
@@ -84,6 +108,16 @@ public final class GanjexConfiguration {
 		 */
 		public Builder libPath(String libPath) {
 			this.libPath = libPath;
+			return this;
+		}
+		
+		public Builder classPaths(String[] path) {
+			if(classPaths == null)
+				classPaths = new HashSet<>();
+			if(path != null)
+			{				
+				classPaths.addAll(Arrays.asList(path));
+			}
 			return this;
 		}
 

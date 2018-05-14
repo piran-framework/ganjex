@@ -19,16 +19,20 @@
 
 package com.behsacorp.ganjex.api;
 
-import com.behsacorp.ganjex.container.GanjexApplication;
-import com.behsacorp.ganjex.container.HookLoader;
-import com.behsacorp.ganjex.watch.JarWatcher;
-import com.behsacorp.ganjex.watch.LibraryFileChangeListener;
-import com.behsacorp.ganjex.watch.ServiceFileChangeListener;
+import java.io.File;
+import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.util.Objects;
+import com.behsacorp.ganjex.container.GanjexApplication;
+import com.behsacorp.ganjex.container.HookLoader;
+import com.behsacorp.ganjex.watch.ClassPathFileChangeListener;
+import com.behsacorp.ganjex.watch.ClasspathWatcher;
+import com.behsacorp.ganjex.watch.JarWatcher;
+import com.behsacorp.ganjex.watch.LibraryFileChangeListener;
+import com.behsacorp.ganjex.watch.ServiceFileChangeListener;
+import com.behsacorp.ganjex.watch.Watcher;
 
 /**
  * Ganjex container class. Each instance of this class represents a Ganjex container.
@@ -46,7 +50,8 @@ public final class Ganjex {
 	private static final Logger log = LoggerFactory.getLogger(Ganjex.class);
 	private static volatile boolean bootstrapped = false;
 	private final GanjexApplication app;
-	private JarWatcher serviceWatcher = null;
+	private Watcher serviceWatcher = null;
+	private Watcher classpathWatcher = null;
 	private JarWatcher libWatcher = null;
 
 	/**
@@ -89,6 +94,8 @@ public final class Ganjex {
 	}
 
 	private void watchServicesDirectory() {
+		classpathWatcher = new ClasspathWatcher(
+				new ClassPathFileChangeListener(app), app.config().getWatcherDelay(), app.config().getClassPaths());
 		serviceWatcher = new JarWatcher(new File(app.config().getServicePath()),
 						new ServiceFileChangeListener(app), app.config().getWatcherDelay());
 	}
@@ -107,6 +114,8 @@ public final class Ganjex {
 		bootstrapped = false;
 		if (Objects.nonNull(serviceWatcher))
 			serviceWatcher.destroy();
+		if (Objects.nonNull(classpathWatcher))
+			classpathWatcher.destroy();
 		if (Objects.nonNull(libWatcher))
 			libWatcher.destroy();
 		System.gc();
