@@ -24,7 +24,7 @@
     <parent>
         <artifactId>ganjex-parent</artifactId>
         <groupId>com.behsacorp</groupId>
-        <version>0.3-RELEASE</version>
+        <version>0.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ganjex-spring-boot-starter</artifactId>
@@ -56,7 +56,7 @@
         <dependency>
             <groupId>com.behsacorp</groupId>
             <artifactId>ganjex-spring-boot-autoconfigure</artifactId>
-            <version>0.3-RELEASE</version>
+            <version>0.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <profiles>

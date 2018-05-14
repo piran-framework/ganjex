@@ -36,31 +36,31 @@ import static com.behsacorp.ganjex.integration.TestUtil.*;
  */
 @Test(sequential = true)
 public class DynamicLibraryIT {
-	private Ganjex ganjex;
+  private Ganjex ganjex;
 
-	@Test
-	public void testDynamicLibrary() throws IOException, InterruptedException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		clean();
-		ganjex = Ganjex.run(new GanjexConfiguration.Builder()
-						.libPath(TestUtil.libPath)
-						.servicePath(TestUtil.servicePath)
-						.watcherDelay(1)
-						.hooks(new FrameworkHook())
-						.build());
-		deployLib(TEST_PATH + "dynamicLibrary/dynamicLib/", "dynamic-lib");
-		Thread.sleep(TIMEOUT);
-		deployService(TEST_PATH + "dynamicLibrary/someService/", "service1");
-		Thread.sleep(TIMEOUT);
-		Assert.assertEquals(FrameworkHook.invokeMethodOnService(), "hello world");
-		Thread.sleep(TIMEOUT);
-		deployLib(TEST_PATH + "dynamicLibrary/dynamicLib2/", "dynamic-lib");
-		Thread.sleep(TIMEOUT);
-		Assert.assertEquals(FrameworkHook.invokeMethodOnService(), "hello world2");
-	}
+  @Test
+  public void testDynamicLibrary() throws IOException, InterruptedException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    clean();
+    ganjex = Ganjex.run(new GanjexConfiguration.Builder()
+        .libPath(TestUtil.libPath)
+        .servicePath(TestUtil.servicePath)
+        .watcherDelay(1)
+        .hooks(new FrameworkHook())
+        .build());
+    deployLib(TEST_PATH + "dynamicLibrary/dynamicLib/", "dynamic-lib");
+    Thread.sleep(TIMEOUT);
+    deployService(TEST_PATH + "dynamicLibrary/someService/", "service1");
+    Thread.sleep(TIMEOUT);
+    Assert.assertEquals(FrameworkHook.invokeMethodOnService(), "hello world");
+    Thread.sleep(TIMEOUT);
+    deployLib(TEST_PATH + "dynamicLibrary/dynamicLib2/", "dynamic-lib");
+    Thread.sleep(TIMEOUT);
+    Assert.assertEquals(FrameworkHook.invokeMethodOnService(), "hello world2");
+  }
 
-	@AfterClass
-	public void destroy() throws InterruptedException {
-		ganjex.destroy();
-	}
+  @AfterClass
+  public void destroy() throws InterruptedException {
+    ganjex.destroy();
+  }
 
 }

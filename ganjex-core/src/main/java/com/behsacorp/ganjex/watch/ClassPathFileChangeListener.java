@@ -19,8 +19,9 @@
 
 package com.behsacorp.ganjex.watch;
 
-import java.io.File;
-
+import com.behsacorp.ganjex.container.GanjexApplication;
+import com.behsacorp.ganjex.lifecycle.ServiceDestroyer;
+import com.behsacorp.ganjex.lifecycle.ServiceStarter;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.exporter.ZipExporter;
 import org.jboss.shrinkwrap.api.importer.ExplodedImporter;
@@ -28,9 +29,7 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.behsacorp.ganjex.container.GanjexApplication;
-import com.behsacorp.ganjex.lifecycle.ServiceDestroyer;
-import com.behsacorp.ganjex.lifecycle.ServiceStarter;
+import java.io.File;
 
 /**
  * The <b>ClassPathFileChangeListener</b> class by implementing
@@ -50,39 +49,39 @@ import com.behsacorp.ganjex.lifecycle.ServiceStarter;
  * @since 1.0
  */
 public class ClassPathFileChangeListener implements FileChangeListener {
-	private static final Logger log = LoggerFactory.getLogger(ClassPathFileChangeListener.class);
-	private final GanjexApplication app;
+  private static final Logger log = LoggerFactory.getLogger(ClassPathFileChangeListener.class);
+  private final GanjexApplication app;
 
-	public ClassPathFileChangeListener(GanjexApplication app) {
-		this.app = app;		
-	}
+  public ClassPathFileChangeListener(GanjexApplication app) {
+    this.app = app;
+  }
 
-	private void createArchive() {
-		int cnt = 0;
-		for (String cp : app.config().getClassPaths()) {
-			log.info("creating service jar file for path {}", cp);
-			String name = cnt + ".jar";
-			JavaArchive archive = ShrinkWrap.create(JavaArchive.class, name);
-			JavaArchive explodedArchive = ShrinkWrap.create(ExplodedImporter.class, name).importDirectory(new File(cp))
-					.as(JavaArchive.class);
-			archive.merge(explodedArchive);
-			archive.as(ZipExporter.class)
-					.exportTo(new File(app.config().getServicePath() + File.separator + name), true);
-			cnt++;
-		}
+  private void createArchive() {
+    int cnt = 0;
+    for (String cp : app.config().getClassPaths()) {
+      log.info("creating service jar file for path {}", cp);
+      String name = cnt + ".jar";
+      JavaArchive archive = ShrinkWrap.create(JavaArchive.class, name);
+      JavaArchive explodedArchive = ShrinkWrap.create(ExplodedImporter.class, name).importDirectory(new File(cp))
+          .as(JavaArchive.class);
+      archive.merge(explodedArchive);
+      archive.as(ZipExporter.class)
+          .exportTo(new File(app.config().getServicePath() + File.separator + name), true);
+      cnt++;
+    }
 
-	}
+  }
 
-	@Override
-	public void fileAdd(File file) {
-		log.info("new file added to jar {}", file.getName());
-		createArchive();
-	}
+  @Override
+  public void fileAdd(File file) {
+    log.info("new file added to jar {}", file.getName());
+    createArchive();
+  }
 
-	@Override
-	public void fileRemoved(File file) {
-		log.info("service {} is removed", file.getName());
-		createArchive();
-	}
+  @Override
+  public void fileRemoved(File file) {
+    log.info("service {} is removed", file.getName());
+    createArchive();
+  }
 
 }

@@ -30,17 +30,17 @@ import java.io.File;
  */
 interface FileChangeListener {
 
-	/**
-	 * listener which executed when a file added into or modified in the specific path
-	 *
-	 * @param file the new file
-	 */
-	void fileAdd(File file);
+  /**
+   * listener which executed when a file added into or modified in the specific path
+   *
+   * @param file the new file
+   */
+  void fileAdd(File file);
 
-	/**
-	 * listener which executed when a file removed in the specific path
-	 *
-	 * @param file file which be removed
-	 */
-	void fileRemoved(File file);
+  /**
+   * listener which executed when a file removed in the specific path
+   *
+   * @param file file which be removed
+   */
+  void fileRemoved(File file);
 }

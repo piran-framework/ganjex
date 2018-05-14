@@ -34,21 +34,21 @@ import java.util.Objects;
  * @since 1.0
  */
 public class ServiceDestroyer {
-	private final File jar;
+  private final File jar;
 
-	public ServiceDestroyer(File jar) {
-		this.jar = jar;
-	}
+  public ServiceDestroyer(File jar) {
+    this.jar = jar;
+  }
 
-	/**
-	 * try to destroy the service using the {@link LifecycleManagement} instance of the ganjex
-	 * container
-	 *
-	 * @param app ganjex container instance
-	 */
-	public void destroy(GanjexApplication app) {
-		ServiceContext context = app.lifecycleManagement().findContext(jar.getName());
-		if (Objects.nonNull(context))
-			app.lifecycleManagement().serviceDestroyed(context);
-	}
+  /**
+   * try to destroy the service using the {@link LifecycleManagement} instance of the ganjex
+   * container
+   *
+   * @param app ganjex container instance
+   */
+  public void destroy(GanjexApplication app) {
+    ServiceContext context = app.lifecycleManagement().findContext(jar.getName());
+    if (Objects.nonNull(context))
+      app.lifecycleManagement().serviceDestroyed(context);
+  }
 }

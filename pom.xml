@@ -24,7 +24,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.behsacorp</groupId>
     <artifactId>ganjex-parent</artifactId>
-    <version>0.3-RELEASE</version>
+    <version>0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Ganjex Parent</name>
     <description>Ganjex parent module</description>
@@ -96,7 +96,7 @@
             <dependency>
                 <groupId>com.behsacorp</groupId>
                 <artifactId>ganjex</artifactId>
-                <version>0.3-RELEASE</version>
+                <version>0.4-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>

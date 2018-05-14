@@ -24,196 +24,112 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FilenameFilter;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * The <code>ClasspathWatcher</code> object watch the given directory and notify the
+ * The <code>ClasspathWatcher</code> object watch the classpath directory and notify the
  * given listener when change in class files in that directory detected
  *
  * @author omidp
  * @since 1.0
  */
-public final class ClasspathWatcher implements Watcher {
-	private static final Logger log = LoggerFactory.getLogger(ClasspathWatcher.class);
-	/**
-	 * Currently deployed files
-	 */
-	private final Map<String, JarInfo> currentStatus = new HashMap<>();
-	
-	/**
-	 * Listener to be notified of changes
-	 */
-	private final FileChangeListener listener;
-	private final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
+public final class ClasspathWatcher {
+  private static final Logger log = LoggerFactory.getLogger(ClasspathWatcher.class);
+  /**
+   * Currently classpath files
+   */
+  private final Map<String, FileInfo> currentStatus = new HashMap<>();
 
-	private final ScheduledFuture<?> scheduledFuture;
-	
-	private Set<String> classPaths;
+  /**
+   * Listener to be notified of changes
+   */
+  private final FileChangeListener listener;
+  private final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
 
-	/**
-	 * create a new <code>JarWatcher</code>
-	 *
-	 * @param watchDir
-	 *            the directory to watch
-	 * @param listener
-	 *            the listener to notify when changed detected
-	 * @param set 
-	 */
-	public ClasspathWatcher(FileChangeListener listener, long watcherDelay, Set<String> classPaths) {
-		this.listener = listener;
-		 scheduledFuture = executor.scheduleWithFixedDelay(this::check
-		 , 0, watcherDelay, TimeUnit.SECONDS);		
-		 this.classPaths = classPaths == null ? new HashSet<>() : classPaths;
-	}
+  private final ScheduledFuture<?> scheduledFuture;
 
-	/**
-	 * check for modification and send notification to listener
-	 */
-	public void check() {
-		classPaths.forEach(dir->{
-			File directoryPath = new File(dir);
-			if(directoryPath.exists())
-			{
-				log.trace("checking {} directories to find changes", dir);
-				Collection<File> listFiles = FileUtils.listFiles(new File(dir), new String[] { "class" }, true);
-				if (listFiles != null && listFiles.isEmpty() == false) {
-					listFiles.forEach(f -> {
-						if (f.exists())
-							addJarInfo(f);
-					});
-					
-					// Check all the status codes and notify the listener
-					for (Iterator<Map.Entry<String, JarInfo>> i = currentStatus.entrySet().iterator(); i.hasNext();) {
-						Map.Entry<String, JarInfo> entry = i.next();
-						JarInfo info = entry.getValue();
-						int check = info.check();
-						if (check == 1) {
-							listener.fileAdd(directoryPath);
-						} else if (check == -1) {
-							listener.fileRemoved(directoryPath);
-							// no need to keep in memory
-							i.remove();
-						}
-					}
-				}
-			}
-		});
-		
-		
+  private Set<String> classPaths;
 
-	}
+  /**
+   * create a new <code>JarWatcher</code>
+   *
+   * @param classPaths   list of directories to watch
+   * @param listener     the listener to notify when changed detected
+   * @param watcherDelay delay between checks in second
+   */
+  public ClasspathWatcher(Set<String> classPaths, FileChangeListener listener,
+                          long watcherDelay) {
+    this.listener = listener;
+    scheduledFuture = executor.scheduleWithFixedDelay(this::check
+        , 0, watcherDelay, TimeUnit.SECONDS);
+    this.classPaths = classPaths == null ? new HashSet<>() : classPaths;
+  }
 
-	/**
-	 * add jar to the watcher state
-	 *
-	 * @param jarfile
-	 *            The JAR to add
-	 */
-	private void addJarInfo(File jarfile) {
-		JarInfo info = currentStatus.get(jarfile.getAbsolutePath());
-		if (info == null) {
-			info = new JarInfo(jarfile);
-			info.setLastState(-1); // assume file is non existent
-			currentStatus.put(jarfile.getAbsolutePath(), info);
-		}
-	}
+  /**
+   * check for modification and send notification to listener
+   */
+  private void check() {
+    classPaths.forEach(dir -> {
+      File directoryPath = new File(dir);
+      if (directoryPath.exists()) {
+        log.trace("checking {} directories to find changes", dir);
+        Collection<File> listFiles = FileUtils.listFiles(new File(dir), new String[]{"class"}, true);
+        if (!listFiles.isEmpty()) {
+          listFiles.forEach(f -> {
+            if (f.exists())
+              addFileInfo(f);
+          });
 
-	/**
-	 * useful for testing, interrupt watcher thread
-	 */
-	public void destroy() {
-		scheduledFuture.cancel(true);
-		try {
-			executor.awaitTermination(1, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			log.error(e.getMessage(), e);
-		}
-		if (!executor.isTerminated())
-			executor.shutdownNow();
-		currentStatus.clear();
-	}
+          // Check all the status codes and notify the listener
+          for (Iterator<Map.Entry<String, FileInfo>> i = currentStatus.entrySet().iterator();
+               i.hasNext(); ) {
+            Map.Entry<String, FileInfo> entry = i.next();
+            FileInfo info = entry.getValue();
+            int check = info.check();
+            if (check == 1) {
+              listener.fileAdd(directoryPath);
+            } else if (check == -1) {
+              listener.fileRemoved(directoryPath);
+              // no need to keep in memory
+              i.remove();
+            }
+          }
+        }
+      }
+    });
+  }
 
-	/**
-	 * the information of the jar files. check for changes in the status of the
-	 * files and find out of the removed filed
-	 */
-	private static class JarInfo {
-		private final File jar;
+  /**
+   * add file to the watcher state
+   *
+   * @param file The file to add
+   */
+  private void addFileInfo(File file) {
+    FileInfo info = currentStatus.get(file.getAbsolutePath());
+    if (info == null) {
+      info = new FileInfo(file);
+      info.setLastState(-1); // assume file is non existent
+      currentStatus.put(file.getAbsolutePath(), info);
+    }
+  }
 
-		private long lastModified = 0;
-		private long lastState = 0;
-
-		private JarInfo(File jar) {
-			this.jar = jar;
-			this.lastModified = jar.lastModified();
-			if (!jar.exists())
-				lastState = -1;
-		}
-
-		private boolean modified() {
-			return jar.exists() && (jar.lastModified() > lastModified);
-		}
-
-		private boolean exists() {
-			return jar.exists();
-		}
-
-		/**
-		 * Returns 1 if the file has been added/modified, 0 if the file is
-		 * unchanged and -1 if the file has been removed
-		 *
-		 * @return int 1=file added; 0=unchanged; -1=file removed
-		 */
-		private int check() {
-			// file unchanged by default
-			int result = 0;
-			if (modified()) {
-				// file has changed - timestamp
-				result = 1;
-				lastState = result;
-				this.lastModified = jar.lastModified();
-			} else if ((!exists()) && (!(lastState == -1))) {
-				// file was removed
-				result = -1;
-				lastState = result;
-			} else if ((lastState == -1) && exists()) {
-				// file was added
-				result = 1;
-				lastState = result;
-			}
-			return result;
-		}
-
-		@Override
-		public int hashCode() {
-			return jar.getAbsolutePath().hashCode();
-		}
-
-		@Override
-		public boolean equals(Object other) {
-			if (other instanceof JarInfo) {
-				JarInfo jo = (JarInfo) other;
-				return jo.jar.equals(jar);
-			} else {
-				return false;
-			}
-		}
-
-		private void setLastState(int lastState) {
-			this.lastState = lastState;
-		}
-
-	}
+  /**
+   * useful for testing, interrupt watcher thread
+   */
+  public void destroy() {
+    scheduledFuture.cancel(true);
+    try {
+      executor.awaitTermination(1, TimeUnit.SECONDS);
+    } catch (InterruptedException e) {
+      log.error(e.getMessage(), e);
+    }
+    if (!executor.isTerminated())
+      executor.shutdownNow();
+    currentStatus.clear();
+  }
 
 }

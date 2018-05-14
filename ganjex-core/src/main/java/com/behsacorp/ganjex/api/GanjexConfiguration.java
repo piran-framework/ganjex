@@ -19,10 +19,8 @@
 
 package com.behsacorp.ganjex.api;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -35,127 +33,127 @@ import java.util.Set;
  * @since 1.0
  */
 public final class GanjexConfiguration {
-	private final String libPath;
-	private final String servicePath;
-	private final long watcherDelay;//in second
-	private final Object[] hooks;
-	private final Set<String> classPaths;
+  private final String libPath;
+  private final String servicePath;
+  private final long watcherDelay;//in second
+  private final Object[] hooks;
+  private final Set<String> classPaths;
 
-	private GanjexConfiguration(Builder builder) {
-		this.libPath = builder.libPath;
-		this.servicePath = builder.servicePath;
-		this.watcherDelay = builder.watcherDelay;
-		this.hooks = builder.hooks;
-		this.classPaths = builder.classPaths;
-	}
-	
-	
-
-	/**
-	 * 
-	 * @return path to create jar file automatically 
-	 */
-	public Set<String> getClassPaths() {
-		return classPaths;
-	}
+  private GanjexConfiguration(Builder builder) {
+    this.libPath = builder.libPath;
+    this.servicePath = builder.servicePath;
+    this.watcherDelay = builder.watcherDelay;
+    this.hooks = builder.hooks;
+    this.classPaths = builder.classPaths;
+  }
 
 
+  /**
+   * @return path to create jar file automatically
+   */
+  public Set<String> getClassPaths() {
+    return classPaths;
+  }
 
-	/**
-	 * @return path of the directory where libraries jar files resort there
-	 */
-	public String getLibPath() {
-		return libPath;
-	}
 
-	/**
-	 * @return path of the directory where services jar files resort there
-	 */
-	public String getServicePath() {
-		return servicePath;
-	}
+  /**
+   * @return path of the directory where libraries jar files resort there
+   */
+  public String getLibPath() {
+    return libPath;
+  }
 
-	/**
-	 * @return file watchers delay in second
-	 */
-	public long getWatcherDelay() {
-		return watcherDelay;
-	}
+  /**
+   * @return path of the directory where services jar files resort there
+   */
+  public String getServicePath() {
+    return servicePath;
+  }
 
-	/**
-	 * @return list of objects containing {@link StartupHook}s and {@link ShutdownHook}s
-	 */
-	public Object[] getHooks() {
-		return hooks;
-	}
+  /**
+   * @return file watchers delay in second
+   */
+  public long getWatcherDelay() {
+    return watcherDelay;
+  }
 
-	/**
-	 * default builder of the {@link GanjexConfiguration}
-	 */
-	public static class Builder {
-		private String libPath;
-		private String servicePath;
-		private long watcherDelay;//in second
-		private Object[] hooks;
-		/**
-		 * comma separated classpath project scanning 
-		 */
-		private Set<String> classPaths;
+  /**
+   * @return list of objects containing {@link StartupHook}s and {@link ShutdownHook}s
+   */
+  public Object[] getHooks() {
+    return hooks;
+  }
 
-		/**
-		 * @param libPath path of the directory where libraries jar files resort there
-		 * @return builder itself
-		 */
-		public Builder libPath(String libPath) {
-			this.libPath = libPath;
-			return this;
-		}
-		
-		public Builder classPaths(String[] path) {
-			if(classPaths == null)
-				classPaths = new HashSet<>();
-			if(path != null)
-			{				
-				classPaths.addAll(Arrays.asList(path));
-			}
-			return this;
-		}
+  /**
+   * default builder of the {@link GanjexConfiguration}
+   */
+  public static class Builder {
+    private String libPath;
+    private String servicePath;
+    private long watcherDelay;//in second
+    private Object[] hooks;
+    /**
+     * comma separated classpath project scanning
+     */
+    private Set<String> classPaths;
 
-		/**
-		 * @param servicePath path of the directory where services jar files resort there
-		 * @return builder itself
-		 */
-		public Builder servicePath(String servicePath) {
-			this.servicePath = servicePath;
-			return this;
-		}
+    /**
+     * @param libPath path of the directory where libraries jar files resort there
+     * @return builder itself
+     */
+    public Builder libPath(String libPath) {
+      this.libPath = libPath;
+      return this;
+    }
 
-		/**
-		 * @param watcherDelay file watchers delay in second
-		 * @return builder itself
-		 */
-		public Builder watcherDelay(long watcherDelay) {
-			this.watcherDelay = watcherDelay;
-			return this;
-		}
+    /**
+     * @param path list of directories which compiled files located to use as service
+     * @return builder itself
+     */
+    public Builder classPaths(String[] path) {
+      if (classPaths == null)
+        classPaths = new HashSet<>();
+      if (path != null) {
+        classPaths.addAll(Arrays.asList(path));
+      }
+      return this;
+    }
 
-		/**
-		 * @param hooks list of objects contain the {@link StartupHook}s and {@link ShutdownHook}s
-		 * @return builder itself
-		 */
-		public Builder hooks(Object... hooks) {
-			this.hooks = hooks;
-			return this;
-		}
+    /**
+     * @param servicePath path of the directory where services jar files resort there
+     * @return builder itself
+     */
+    public Builder servicePath(String servicePath) {
+      this.servicePath = servicePath;
+      return this;
+    }
 
-		/**
-		 * create the {@link GanjexConfiguration} instance and return it
-		 *
-		 * @return {@link GanjexConfiguration} instance created by the builder properties
-		 */
-		public GanjexConfiguration build() {
-			return new GanjexConfiguration(this);
-		}
+    /**
+     * @param watcherDelay file watchers delay in second
+     * @return builder itself
+     */
+    public Builder watcherDelay(long watcherDelay) {
+      this.watcherDelay = watcherDelay;
+      return this;
+    }
 
-	}
+    /**
+     * @param hooks list of objects contain the {@link StartupHook}s and {@link ShutdownHook}s
+     * @return builder itself
+     */
+    public Builder hooks(Object... hooks) {
+      this.hooks = hooks;
+      return this;
+    }
+
+    /**
+     * create the {@link GanjexConfiguration} instance and return it
+     *
+     * @return {@link GanjexConfiguration} instance created by the builder properties
+     */
+    public GanjexConfiguration build() {
+      return new GanjexConfiguration(this);
+    }
+
+  }
 }

@@ -34,54 +34,54 @@ import static org.testng.Assert.assertEquals;
  */
 @Test(sequential = true)
 public class MultiVersionIT {
-	@Test
-	public void testReplace() throws IOException, InterruptedException, ClassNotFoundException,
-					NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		clean();
-		CallServiceDirectlyLibrary.clear();
-		Ganjex ganjex = Ganjex.run(new GanjexConfiguration.Builder()
-						.libPath(libPath)
-						.servicePath(servicePath)
-						.watcherDelay(1)
-						.hooks(new CallServiceDirectlyLibrary())
-						.build());
-		waitToBootstrap();
-		deployService(TEST_PATH + "multipleVersion/versionService/", "version-service");
-		Thread.sleep(TIMEOUT);
-		int version1 = CallServiceDirectlyLibrary.getVersion("version-service", 1);
-		assertEquals(version1, 1);
-		deployService(TEST_PATH + "multipleVersion/versionService2/", "version-service");
-		Thread.sleep(TIMEOUT);
-		long count = CallServiceDirectlyLibrary.serviceCount("version-service");
-		assertEquals(count, 1L);
-		int version2 = CallServiceDirectlyLibrary.getVersion("version-service", 2);
-		assertEquals(version2, 2);
-		ganjex.destroy();
-	}
+  @Test
+  public void testReplace() throws IOException, InterruptedException, ClassNotFoundException,
+      NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    clean();
+    CallServiceDirectlyLibrary.clear();
+    Ganjex ganjex = Ganjex.run(new GanjexConfiguration.Builder()
+        .libPath(libPath)
+        .servicePath(servicePath)
+        .watcherDelay(1)
+        .hooks(new CallServiceDirectlyLibrary())
+        .build());
+    waitToBootstrap();
+    deployService(TEST_PATH + "multipleVersion/versionService/", "version-service");
+    Thread.sleep(TIMEOUT);
+    int version1 = CallServiceDirectlyLibrary.getVersion("version-service", 1);
+    assertEquals(version1, 1);
+    deployService(TEST_PATH + "multipleVersion/versionService2/", "version-service");
+    Thread.sleep(TIMEOUT);
+    long count = CallServiceDirectlyLibrary.serviceCount("version-service");
+    assertEquals(count, 1L);
+    int version2 = CallServiceDirectlyLibrary.getVersion("version-service", 2);
+    assertEquals(version2, 2);
+    ganjex.destroy();
+  }
 
-	@Test
-	public void testTwoVersion() throws IOException, InterruptedException, ClassNotFoundException,
-					NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		clean();
-		CallServiceDirectlyLibrary.clear();
-		Ganjex ganjex = Ganjex.run(new GanjexConfiguration.Builder()
-						.libPath(libPath)
-						.servicePath(servicePath)
-						.watcherDelay(1)
-						.hooks(new CallServiceDirectlyLibrary())
-						.build());
-		waitToBootstrap();
-		deployService(TEST_PATH + "multipleVersion/versionService/", "version-service");
-		Thread.sleep(TIMEOUT);
-		int version1 = CallServiceDirectlyLibrary.getVersion("version-service", 1);
-		assertEquals(version1, 1);
-		deployService(TEST_PATH + "multipleVersion/versionService2/", "version-service2");
-		Thread.sleep(TIMEOUT);
-		int version2 = CallServiceDirectlyLibrary.getVersion("version-service", 2);
-		assertEquals(2, version2);
-		version1 = CallServiceDirectlyLibrary.getVersion("version-service", 1);
-		assertEquals(1, version1);
-		ganjex.destroy();
-	}
+  @Test
+  public void testTwoVersion() throws IOException, InterruptedException, ClassNotFoundException,
+      NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    clean();
+    CallServiceDirectlyLibrary.clear();
+    Ganjex ganjex = Ganjex.run(new GanjexConfiguration.Builder()
+        .libPath(libPath)
+        .servicePath(servicePath)
+        .watcherDelay(1)
+        .hooks(new CallServiceDirectlyLibrary())
+        .build());
+    waitToBootstrap();
+    deployService(TEST_PATH + "multipleVersion/versionService/", "version-service");
+    Thread.sleep(TIMEOUT);
+    int version1 = CallServiceDirectlyLibrary.getVersion("version-service", 1);
+    assertEquals(version1, 1);
+    deployService(TEST_PATH + "multipleVersion/versionService2/", "version-service2");
+    Thread.sleep(TIMEOUT);
+    int version2 = CallServiceDirectlyLibrary.getVersion("version-service", 2);
+    assertEquals(2, version2);
+    version1 = CallServiceDirectlyLibrary.getVersion("version-service", 1);
+    assertEquals(1, version1);
+    ganjex.destroy();
+  }
 
 }

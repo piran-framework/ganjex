@@ -41,11 +41,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface ShutdownHook {
-	/**
-	 * the priority of this hook, low number executed with high priority, it's better to not use 0
-	 * and any other low number if it's not very necessary
-	 *
-	 * @return the priority of this hook
-	 */
-	int priority() default 100;
+  /**
+   * the priority of this hook, low number executed with high priority, it's better to not use 0
+   * and any other low number if it's not very necessary
+   *
+   * @return the priority of this hook
+   */
+  int priority() default 100;
 }
