@@ -30,6 +30,15 @@ public class GanjexProperties {
 	private String servicePath = "service";
 	private String libPath = "lib";
 	private int watchDelay = 10;
+	private String classPaths = "classes";
+	
+	public String getClassPaths() {
+		return classPaths;
+	}
+
+	public void setClassPaths(String classPaths) {
+		this.classPaths = classPaths;
+	}
 
 	public String getServicePath() {
 		return servicePath;

@@ -19,37 +19,38 @@
 
 package com.behsacorp.ganjex.watch;
 
-
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * The <code>JarWatcher</code> object watch the given directory and notify the given listener when
- * change in jar files in that directory detected
+ * The <code>ClasspathWatcher</code> object watch the given directory and notify the
+ * given listener when change in class files in that directory detected
  *
- * @author hekmatof
+ * @author omidp
  * @since 1.0
  */
-public final class JarWatcher implements Watcher{
-	private static final Logger log = LoggerFactory.getLogger(JarWatcher.class);
+public final class ClasspathWatcher implements Watcher {
+	private static final Logger log = LoggerFactory.getLogger(ClasspathWatcher.class);
 	/**
 	 * Currently deployed files
 	 */
 	private final Map<String, JarInfo> currentStatus = new HashMap<>();
-	/**
-	 * Directory to watch for service jar files
-	 */
-	private final File watchDir;
+	
 	/**
 	 * Listener to be notified of changes
 	 */
@@ -57,62 +58,73 @@ public final class JarWatcher implements Watcher{
 	private final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
 
 	private final ScheduledFuture<?> scheduledFuture;
+	
+	private Set<String> classPaths;
 
 	/**
 	 * create a new <code>JarWatcher</code>
 	 *
-	 * @param watchDir the directory to watch
-	 * @param listener the listener to notify when changed detected
+	 * @param watchDir
+	 *            the directory to watch
+	 * @param listener
+	 *            the listener to notify when changed detected
+	 * @param set 
 	 */
-	public JarWatcher(File watchDir, FileChangeListener listener, long watcherDelay) {
-		this.watchDir = watchDir;
+	public ClasspathWatcher(FileChangeListener listener, long watcherDelay, Set<String> classPaths) {
 		this.listener = listener;
-		scheduledFuture = executor.scheduleWithFixedDelay(this::check
-						, 0, watcherDelay, TimeUnit.SECONDS);
-
+		 scheduledFuture = executor.scheduleWithFixedDelay(this::check
+		 , 0, watcherDelay, TimeUnit.SECONDS);		
+		 this.classPaths = classPaths == null ? new HashSet<>() : classPaths;
 	}
 
 	/**
 	 * check for modification and send notification to listener
 	 */
 	public void check() {
-		log.trace("checking {} directory to find changes", watchDir.getPath());
-		File[] list = watchDir.listFiles(new JarFilter());
-		if (list == null)
-			list = new File[0];
-		Arrays.stream(list).forEach(f -> {
-							if (!f.exists())
-								log.warn("listed file does not exist: {}", f);
+		classPaths.forEach(dir->{
+			File directoryPath = new File(dir);
+			if(directoryPath.exists())
+			{
+				log.trace("checking {} directories to find changes", dir);
+				Collection<File> listFiles = FileUtils.listFiles(new File(dir), new String[] { "class" }, true);
+				if (listFiles != null && listFiles.isEmpty() == false) {
+					listFiles.forEach(f -> {
+						if (f.exists())
 							addJarInfo(f);
+					});
+					
+					// Check all the status codes and notify the listener
+					for (Iterator<Map.Entry<String, JarInfo>> i = currentStatus.entrySet().iterator(); i.hasNext();) {
+						Map.Entry<String, JarInfo> entry = i.next();
+						JarInfo info = entry.getValue();
+						int check = info.check();
+						if (check == 1) {
+							listener.fileAdd(directoryPath);
+						} else if (check == -1) {
+							listener.fileRemoved(directoryPath);
+							// no need to keep in memory
+							i.remove();
 						}
-		);
-
-		// Check all the status codes and notify the listener
-		for (Iterator<Map.Entry<String, JarInfo>> i =
-				 currentStatus.entrySet().iterator(); i.hasNext(); ) {
-			Map.Entry<String, JarInfo> entry = i.next();
-			JarInfo info = entry.getValue();
-			int check = info.check();
-			if (check == 1) {
-				listener.fileAdd(info.jar);
-			} else if (check == -1) {
-				listener.fileRemoved(info.jar);
-				//no need to keep in memory
-				i.remove();
+					}
+				}
 			}
-		}
+		});
+		
+		
+
 	}
 
 	/**
 	 * add jar to the watcher state
 	 *
-	 * @param jarfile The JAR to add
+	 * @param jarfile
+	 *            The JAR to add
 	 */
 	private void addJarInfo(File jarfile) {
 		JarInfo info = currentStatus.get(jarfile.getAbsolutePath());
 		if (info == null) {
 			info = new JarInfo(jarfile);
-			info.setLastState(-1); //assume file is non existent
+			info.setLastState(-1); // assume file is non existent
 			currentStatus.put(jarfile.getAbsolutePath(), info);
 		}
 	}
@@ -133,8 +145,8 @@ public final class JarWatcher implements Watcher{
 	}
 
 	/**
-	 * the information of the jar files. check for changes in the status of the files and
-	 * find out of the removed filed
+	 * the information of the jar files. check for changes in the status of the
+	 * files and find out of the removed filed
 	 */
 	private static class JarInfo {
 		private final File jar;
@@ -164,25 +176,24 @@ public final class JarWatcher implements Watcher{
 		 * @return int 1=file added; 0=unchanged; -1=file removed
 		 */
 		private int check() {
-			//file unchanged by default
+			// file unchanged by default
 			int result = 0;
 			if (modified()) {
-				//file has changed - timestamp
+				// file has changed - timestamp
 				result = 1;
 				lastState = result;
 				this.lastModified = jar.lastModified();
 			} else if ((!exists()) && (!(lastState == -1))) {
-				//file was removed
+				// file was removed
 				result = -1;
 				lastState = result;
 			} else if ((lastState == -1) && exists()) {
-				//file was added
+				// file was added
 				result = 1;
 				lastState = result;
 			}
 			return result;
 		}
-
 
 		@Override
 		public int hashCode() {
