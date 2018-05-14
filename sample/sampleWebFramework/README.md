@@ -182,17 +182,16 @@ public class Dispatcher {
 		this.container = container;
 	}
 
-	@RequestMapping(value = "{moduleName}/{action}", method = {RequestMethod.GET, RequestMethod.POST,
-					RequestMethod.PUT, RequestMethod.DELETE})
-	public ResponseEntity<?> dispatch(@PathVariable String moduleName,
-																		@PathVariable String action,
-																		@RequestBody Map<String, Object> object) {
-		try {
-			return ResponseEntity.ok(container.get(moduleName, action).apply(object));
-		} catch (IllegalStateException e) {
-			return ResponseEntity.notFound().build();
-		}
-	}
+	@PostMapping("{moduleName}/{action}")
+    	public ResponseEntity<?> dispatch(@PathVariable String moduleName,
+                                            @PathVariable String action,
+                                            @RequestBody Map<String, Object> object) {
+    		try {
+    			return ResponseEntity.ok(container.get(moduleName, action).apply(object));
+    		} catch (IllegalStateException e) {
+    			return ResponseEntity.notFound().build();
+    		}
+    	}
 }
 ```
 ## Build and run it
@@ -205,9 +204,15 @@ now you can run the created jar file.
 java -jar target/*.jar
 ```
 After running our application we can build `web-sample-service-hello` by maven and copy the created jar file into 
-service directory. application detect it, now you can send http request and see the response. you can also change hello 
-service and redeploy it and retry, you see the changes detected dynamically and application behavior changed dynamically 
-without any restarting.
+service directory(by default it's located in the root of repository dist/services but you can 
+change it in applicaion.properties file ganjex.service-path field). application detect it (you 
+can check log to ensure that), now you can send http request and see the response. For example 
+using curl:
+```
+curl  -H"Content-Type: application/json" localhost:8080/helloworld/hello -d '{"name":"esa"}'
+```
+You can also change hello service and redeploy it and retry, you see the changes detected 
+dynamically and application behavior changed dynamically without any restarting.
 
 ## Conclusion
 Was it hard? maybe, but was it worth? It depends on your requirements. remember you have created a dynamic framework, 

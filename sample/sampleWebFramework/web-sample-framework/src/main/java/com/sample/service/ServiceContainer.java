@@ -19,13 +19,15 @@
 
 package com.sample.service;
 
+import com.behsacorp.ganjex.GanjexHook;
 import com.behsacorp.ganjex.api.ServiceContext;
+import com.behsacorp.ganjex.api.ShutdownHook;
+import com.behsacorp.ganjex.api.StartupHook;
 import com.sample.api.Action;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
