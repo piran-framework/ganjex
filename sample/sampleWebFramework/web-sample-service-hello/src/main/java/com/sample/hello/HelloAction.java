@@ -30,6 +30,6 @@ import java.util.Map;
 public class HelloAction {
 	@Action("hello")
 	public Map<String, Object> hello(Map<String, Object> input) {
-		return Collections.singletonMap("result", "goodbye " + input.get("name"));
+		return Collections.singletonMap("result", "Hi " + input.get("name"));
 	}
 }

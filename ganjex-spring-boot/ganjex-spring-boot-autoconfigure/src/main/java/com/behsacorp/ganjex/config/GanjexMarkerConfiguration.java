@@ -26,11 +26,11 @@ import org.springframework.context.annotation.Bean;
  * @since 1.0
  */
 public class GanjexMarkerConfiguration {
-	@Bean
-	public Marker enableGanjexMarker() {
-		return new Marker();
-	}
+  @Bean
+  public Marker enableGanjexMarker() {
+    return new Marker();
+  }
 
-	class Marker {
-	}
+  class Marker {
+  }
 }

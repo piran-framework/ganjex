@@ -19,60 +19,60 @@
 
 package com.behsacorp.ganjex.integration.hooksExecution;
 
-import com.behsacorp.ganjex.api.StartupHook;
 import com.behsacorp.ganjex.api.ServiceContext;
 import com.behsacorp.ganjex.api.ShutdownHook;
+import com.behsacorp.ganjex.api.StartupHook;
 
 /**
  * @author hekmatof
  */
 public class LibWithDifferentHooks {
-	private static int runTime = 0;
-	private static int startHookRunTime = 0;
-	private static int startHook2RunTime = 0;
-	private static int shutdownHookRunTime = 0;
+  private static int runTime = 0;
+  private static int startHookRunTime = 0;
+  private static int startHook2RunTime = 0;
+  private static int shutdownHookRunTime = 0;
 
-	public LibWithDifferentHooks() {
-		runTime++;
-	}
+  public LibWithDifferentHooks() {
+    runTime++;
+  }
 
-	public static void clean() {
-		startHookRunTime = 0;
-		startHook2RunTime = 0;
-		shutdownHookRunTime = 0;
-		runTime = 0;
-	}
+  public static void clean() {
+    startHookRunTime = 0;
+    startHook2RunTime = 0;
+    shutdownHookRunTime = 0;
+    runTime = 0;
+  }
 
-	public static int getRunTime() {
-		return runTime;
-	}
+  public static int getRunTime() {
+    return runTime;
+  }
 
-	public static int getStartHookRunTime() {
-		return startHookRunTime;
-	}
+  public static int getStartHookRunTime() {
+    return startHookRunTime;
+  }
 
-	public static int getStartHook2RunTime() {
-		return startHook2RunTime;
-	}
+  public static int getStartHook2RunTime() {
+    return startHook2RunTime;
+  }
 
-	public static int getShutdownHookRunTime() {
-		return shutdownHookRunTime;
-	}
+  public static int getShutdownHookRunTime() {
+    return shutdownHookRunTime;
+  }
 
-	@StartupHook
-	public void startHook(ServiceContext context) {
-		startHookRunTime++;
-	}
+  @StartupHook
+  public void startHook(ServiceContext context) {
+    startHookRunTime++;
+  }
 
-	@StartupHook(priority = 90)
-	public void startHook2(ServiceContext context) {
-		startHook2RunTime++;
-	}
+  @StartupHook(priority = 90)
+  public void startHook2(ServiceContext context) {
+    startHook2RunTime++;
+  }
 
-	@ShutdownHook
-	public void shutdownHook(ServiceContext context) {
-		shutdownHookRunTime++;
-	}
+  @ShutdownHook
+  public void shutdownHook(ServiceContext context) {
+    shutdownHookRunTime++;
+  }
 
 
 }

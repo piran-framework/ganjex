@@ -19,13 +19,15 @@
 
 package com.sample.service;
 
+import com.behsacorp.ganjex.GanjexHook;
 import com.behsacorp.ganjex.api.ServiceContext;
+import com.behsacorp.ganjex.api.ShutdownHook;
+import com.behsacorp.ganjex.api.StartupHook;
 import com.sample.api.Action;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -38,13 +40,14 @@ import java.util.function.Function;
 /**
  * @author hekmatof
  */
-@Service
+@GanjexHook
 public class ServiceContainer {
 	private static final Logger log = LoggerFactory.getLogger(ServiceContainer.class);
 	private final Map<String, Map<String, Function<Map<String, Object>, Map<String, Object>>>>
 					actions = new HashMap<>();
 	private final Map<Class<?>, Object> instances = new HashMap<>();
 
+	@StartupHook
 	public void add(ServiceContext context) {
 		Reflections.log = LoggerFactory.getLogger(Reflections.class);
 		Reflections reflections = new Reflections(new MethodAnnotationsScanner(),
@@ -75,6 +78,7 @@ public class ServiceContainer {
 		actions.put(context.getName(), actionsOfTheModule);
 	}
 
+  @ShutdownHook
 	public void remove(ServiceContext context) {
 		actions.remove(context.getName());
 	}

@@ -38,8 +38,7 @@ public class Dispatcher {
 		this.container = container;
 	}
 
-	@RequestMapping(value = "{moduleName}/{action}", method = {RequestMethod.GET, RequestMethod.POST,
-					RequestMethod.PUT, RequestMethod.DELETE})
+	@PostMapping("{moduleName}/{action}")
 	public ResponseEntity<?> dispatch(@PathVariable String moduleName,
 																		@PathVariable String action,
 																		@RequestBody Map<String, Object> object) {

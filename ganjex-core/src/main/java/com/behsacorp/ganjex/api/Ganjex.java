@@ -21,9 +21,7 @@ package com.behsacorp.ganjex.api;
 
 import com.behsacorp.ganjex.container.GanjexApplication;
 import com.behsacorp.ganjex.container.HookLoader;
-import com.behsacorp.ganjex.watch.JarWatcher;
-import com.behsacorp.ganjex.watch.LibraryFileChangeListener;
-import com.behsacorp.ganjex.watch.ServiceFileChangeListener;
+import com.behsacorp.ganjex.watch.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,13 +41,14 @@ import java.util.Objects;
  * @since 1.0
  */
 public final class Ganjex {
-	private static final Logger log = LoggerFactory.getLogger(Ganjex.class);
-	private static volatile boolean bootstrapped = false;
-	private final GanjexApplication app;
-	private JarWatcher serviceWatcher = null;
-	private JarWatcher libWatcher = null;
+  private static final Logger log = LoggerFactory.getLogger(Ganjex.class);
+  private static volatile boolean bootstrapped = false;
+  private final GanjexApplication app;
+  private JarWatcher serviceWatcher = null;
+  private ClasspathWatcher classpathWatcher = null;
+  private JarWatcher libWatcher = null;
 
-	/**
+  /**
 	 * Creates a new Ganjex container. In order to run the container method <code>run</code>
 	 * should be called.
 	 *
@@ -60,7 +59,7 @@ public final class Ganjex {
 		app = new GanjexApplication(config);
 	}
 
-	/**
+  /**
 	 * Starts a new Ganjex container and returns an object of this class representing the container.
 	 * same as calling <code>new Ganjex(config).run()</code>
 	 *
@@ -72,7 +71,7 @@ public final class Ganjex {
 	public static Ganjex run(GanjexConfiguration config) {
 		return new Ganjex(config).run();
 	}
-
+	
 	/**
 	 * Indicates whether the bootstrap process of the container has been done or not.
 	 *
@@ -90,15 +89,17 @@ public final class Ganjex {
 		return app.mainClassLoader();
 	}
 
-	private void watchServicesDirectory() {
-		serviceWatcher = new JarWatcher(new File(app.config().getServicePath()),
-						new ServiceFileChangeListener(app), app.config().getWatcherDelay());
-	}
+  private void watchServicesDirectory() {
+    classpathWatcher = new ClasspathWatcher(app.config().getClassPaths(),
+        new ClassPathFileChangeListener(app), app.config().getWatcherDelay());
+    serviceWatcher = new JarWatcher(new File(app.config().getServicePath()),
+        new ServiceFileChangeListener(app), app.config().getWatcherDelay());
+  }
 
-	private void watchLibraryDirectory() {
-		libWatcher = new JarWatcher(new File(app.config().getLibPath()),
-						new LibraryFileChangeListener(app), app.config().getWatcherDelay());
-	}
+  private void watchLibraryDirectory() {
+    libWatcher = new JarWatcher(new File(app.config().getLibPath()),
+        new LibraryFileChangeListener(app), app.config().getWatcherDelay());
+  }
 
 	/**
 	 * Useful method for testing, which destroys the container, cleans all the states and interrupts
@@ -109,6 +110,8 @@ public final class Ganjex {
 		bootstrapped = false;
 		if (Objects.nonNull(serviceWatcher))
 			serviceWatcher.destroy();
+    if (Objects.nonNull(classpathWatcher))
+      classpathWatcher.destroy();
 		if (Objects.nonNull(libWatcher))
 			libWatcher.destroy();
 		System.gc();
@@ -133,5 +136,4 @@ public final class Ganjex {
 		bootstrapped = true;
 		return this;
 	}
-
 }

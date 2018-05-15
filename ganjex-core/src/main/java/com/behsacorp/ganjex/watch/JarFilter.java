@@ -29,8 +29,8 @@ import java.io.FilenameFilter;
  * @since 1.0
  */
 public class JarFilter implements FilenameFilter {
-	@Override
-	public boolean accept(File dir, String name) {
-		return name != null && name.endsWith(".jar");
-	}
+  @Override
+  public boolean accept(File dir, String name) {
+    return name != null && name.endsWith(".jar");
+  }
 }

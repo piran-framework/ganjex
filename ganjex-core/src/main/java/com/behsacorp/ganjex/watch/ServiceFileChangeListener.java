@@ -43,23 +43,23 @@ import java.io.File;
  * @since 1.0
  */
 public class ServiceFileChangeListener implements FileChangeListener {
-	private static final Logger log = LoggerFactory.getLogger(ServiceFileChangeListener.class);
-	private final GanjexApplication app;
+  private static final Logger log = LoggerFactory.getLogger(ServiceFileChangeListener.class);
+  private final GanjexApplication app;
 
-	public ServiceFileChangeListener(GanjexApplication app) {
-		this.app = app;
-	}
+  public ServiceFileChangeListener(GanjexApplication app) {
+    this.app = app;
+  }
 
-	@Override
-	public void fileAdd(File jar) {
-		log.info("new service found {}", jar.getName());
-		new ServiceDestroyer(jar).destroy(app);
-		new ServiceStarter(jar, app.libClassLoader()).deploy(app);
-	}
+  @Override
+  public void fileAdd(File jar) {
+    log.info("new service found {}", jar.getName());
+    new ServiceDestroyer(jar).destroy(app);
+    new ServiceStarter(jar, app.libClassLoader()).deploy(app);
+  }
 
-	@Override
-	public void fileRemoved(File jar) {
-		log.info("service {} is removed", jar.getName());
-		new ServiceDestroyer(jar).destroy(app);
-	}
+  @Override
+  public void fileRemoved(File jar) {
+    log.info("service {} is removed", jar.getName());
+    new ServiceDestroyer(jar).destroy(app);
+  }
 }

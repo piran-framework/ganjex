@@ -24,7 +24,7 @@
     <parent>
         <artifactId>ganjex-parent</artifactId>
         <groupId>com.behsacorp</groupId>
-        <version>0.3-RELEASE</version>
+        <version>0.4-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
