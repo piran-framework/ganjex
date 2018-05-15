@@ -22,7 +22,7 @@ package com.behsacorp.ganjex.api;
 import java.lang.annotation.*;
 
 /**
- * The {@link ShutdownHook} annotated elements are used by the framework to register their hook
+ * The {@link ShutdownHook} annotated elements are used by the framework to register their hooks
  * to be executed right after a service is removed.
  * <p>
  * Note that if a library changes, all the elements annotated with {@link ShutdownHook} in all services
