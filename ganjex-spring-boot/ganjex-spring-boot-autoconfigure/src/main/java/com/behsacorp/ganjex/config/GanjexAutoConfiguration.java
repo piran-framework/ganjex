@@ -41,21 +41,22 @@ import java.util.Map;
 @ConditionalOnBean(GanjexMarkerConfiguration.Marker.class)
 @EnableConfigurationProperties(GanjexProperties.class)
 public class GanjexAutoConfiguration {
-	private static final Logger log = LoggerFactory.getLogger(GanjexAutoConfiguration.class);
+  private static final Logger log = LoggerFactory.getLogger(GanjexAutoConfiguration.class);
 
-	@Bean
-	@ConditionalOnMissingBean
-	public Ganjex ganjex(ApplicationContext applicationContext, GanjexProperties ganjexProperties) {
-		Map<String, Object> hookMap =
-						applicationContext.getBeansWithAnnotation(GanjexHook.class);
-		Ganjex ganjex = Ganjex.run(new GanjexConfiguration.Builder()
-						.servicePath(ganjexProperties.getServicePath())
-						.libPath(ganjexProperties.getLibPath())
-						.watcherDelay(ganjexProperties.getWatchDelay())
-						.hooks(hookMap.values().toArray()).build()
-		);
-		log.info("ganjex container bootstrap finished");
-		log.info("ganjex registered hooks: {}", hookMap.values());
-		return ganjex;
-	}
+  @Bean
+  @ConditionalOnMissingBean
+  public Ganjex ganjex(ApplicationContext applicationContext, GanjexProperties ganjexProperties) {
+    Map<String, Object> hookMap =
+        applicationContext.getBeansWithAnnotation(GanjexHook.class);
+    Ganjex ganjex = Ganjex.run(new GanjexConfiguration.Builder()
+        .servicePath(ganjexProperties.getServicePath())
+        .libPath(ganjexProperties.getLibPath())
+        .watcherDelay(ganjexProperties.getWatchDelay())
+        .classPaths(ganjexProperties.getClassPaths().split(","))
+        .hooks(hookMap.values().toArray()).build()
+    );
+    log.info("ganjex container bootstrap finished");
+    log.info("ganjex registered hooks: {}", hookMap.values());
+    return ganjex;
+  }
 }

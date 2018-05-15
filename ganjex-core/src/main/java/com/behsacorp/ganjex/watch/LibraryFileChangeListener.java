@@ -46,70 +46,70 @@ import java.util.stream.Collectors;
  * @since 1.0
  */
 public class LibraryFileChangeListener implements FileChangeListener {
-	private static final Logger log = LoggerFactory.getLogger(LibraryFileChangeListener.class);
-	private final GanjexApplication app;
+  private static final Logger log = LoggerFactory.getLogger(LibraryFileChangeListener.class);
+  private final GanjexApplication app;
 
-	public LibraryFileChangeListener(GanjexApplication app) {
-		this.app = app;
-	}
+  public LibraryFileChangeListener(GanjexApplication app) {
+    this.app = app;
+  }
 
-	@Override
-	public void fileAdd(File file) {
-		reloadLibraries();
-	}
+  @Override
+  public void fileAdd(File file) {
+    reloadLibraries();
+  }
 
-	@Override
-	public void fileRemoved(File file) {
-		reloadLibraries();
-	}
+  @Override
+  public void fileRemoved(File file) {
+    reloadLibraries();
+  }
 
-	private void reloadLibraries() {
-		Collection<ServiceContext> services = app.lifecycleManagement().allServices();
-		stopAllService(services);
-		loadLibraries();
-		startAllService(services);
-	}
+  private void reloadLibraries() {
+    Collection<ServiceContext> services = app.lifecycleManagement().allServices();
+    stopAllService(services);
+    loadLibraries();
+    startAllService(services);
+  }
 
-	private void startAllService(Collection<ServiceContext> servicesList) {
-		servicesList.stream()
-						.map(ServiceContext::getFileName)
-						.map(name -> app.config().getServicePath() + File.separator + name)
-						.map(File::new)
-						.map(f -> new ServiceStarter(f, app.libClassLoader()))
-						.forEach(d -> d.deploy(app));
-	}
+  private void startAllService(Collection<ServiceContext> servicesList) {
+    servicesList.stream()
+        .map(ServiceContext::getFileName)
+        .map(name -> app.config().getServicePath() + File.separator + name)
+        .map(File::new)
+        .map(f -> new ServiceStarter(f, app.libClassLoader()))
+        .forEach(d -> d.deploy(app));
+  }
 
-	private void stopAllService(Collection<ServiceContext> servicesList) {
-		servicesList.stream()
-						.map(ServiceContext::getFileName)
-						.map(name -> app.config().getServicePath() + File.separator + name)
-						.map(File::new)
-						.map(ServiceDestroyer::new)
-						.forEach(d -> d.destroy(app));
-	}
+  private void stopAllService(Collection<ServiceContext> servicesList) {
+    servicesList.stream()
+        .map(ServiceContext::getFileName)
+        .map(name -> app.config().getServicePath() + File.separator + name)
+        .map(File::new)
+        .map(ServiceDestroyer::new)
+        .forEach(d -> d.destroy(app));
+  }
 
-	private void loadLibraries() {
-		log.debug("loading the libraries...");
-		File file = new File(app.config().getLibPath());
-		if (!file.isDirectory()) {
-			log.error("lib.path property is not correctly set. it does not point to a directory");
-			System.exit(1);
-		}
-		File[] jars = file.listFiles(new JarFilter());
-		if (Objects.isNull(jars))
-			return;
-		log.debug("libraries: {}",
-						Arrays.stream(jars).map(File::getName).collect(Collectors.joining(", ")));
-		URL[] urls = Arrays.stream(jars).map(jar -> "file://" + jar.getAbsolutePath())
-						.map(spec -> {
-							try {
-								return new URL(spec);
-							} catch (MalformedURLException e) {
-								log.error("could not load {}", spec);
-								return null;
-							}
-						}).filter(Objects::nonNull).collect(Collectors.toList()).toArray(new URL[0]);
-		app.setLibClassLoader(new URLClassLoader(urls, app.mainClassLoader()));
-		log.debug("loading library completed");
-	}
+  private void loadLibraries() {
+    log.debug("loading the libraries...");
+    File file = new File(app.config().getLibPath());
+    if (!file.isDirectory()) {
+      log.error("lib.path property is not correctly set. it does not point to a directory");
+      System.exit(1);
+    }
+    File[] jars = file.listFiles(new JarFilter());
+    if (Objects.isNull(jars))
+      return;
+    log.debug("libraries: {}",
+        Arrays.stream(jars).map(File::getName).collect(Collectors.joining(", ")));
+    URL[] urls = Arrays.stream(jars).map(jar -> "file://" + jar.getAbsolutePath())
+        .map(spec -> {
+          try {
+            return new URL(spec);
+          } catch (MalformedURLException e) {
+            log.error("could not load {}", spec);
+            return null;
+          }
+        }).filter(Objects::nonNull).collect(Collectors.toList()).toArray(new URL[0]);
+    app.setLibClassLoader(new URLClassLoader(urls, app.mainClassLoader()));
+    log.debug("loading library completed");
+  }
 }

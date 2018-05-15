@@ -40,52 +40,52 @@ import java.util.Properties;
  * @since 1.0
  */
 public final class ServiceContext {
-	private final String fileName;
-	private final String name;
-	private final int version;
-	private final ClassLoader classLoader;
-	private final Properties manifest = new Properties();
+  private final String fileName;
+  private final String name;
+  private final int version;
+  private final ClassLoader classLoader;
+  private final Properties manifest = new Properties();
 
-	public ServiceContext(String fileName, ClassLoader classLoader) throws IOException {
-		URL resource = classLoader.getResource("manifest.properties");
-		if (Objects.isNull(resource))
-			throw new FileNotFoundException("manifest.properties");
-		URLConnection urlConnection = resource.openConnection();
-		urlConnection.setUseCaches(false);
-		manifest.load(urlConnection.getInputStream());
-		this.fileName = fileName;
-		this.name = manifest.getProperty("name");
-		//TODO:handle exception
-		this.version = Integer.parseInt(manifest.getProperty("version"));
-		this.classLoader = classLoader;
-	}
+  public ServiceContext(String fileName, ClassLoader classLoader) throws IOException {
+    URL resource = classLoader.getResource("manifest.properties");
+    if (Objects.isNull(resource))
+      throw new FileNotFoundException("manifest.properties");
+    URLConnection urlConnection = resource.openConnection();
+    urlConnection.setUseCaches(false);
+    manifest.load(urlConnection.getInputStream());
+    this.fileName = fileName;
+    this.name = manifest.getProperty("name");
+    //TODO:handle exception
+    this.version = Integer.parseInt(manifest.getProperty("version"));
+    this.classLoader = classLoader;
+  }
 
-	public String getFileName() {
-		return fileName;
-	}
+  public String getFileName() {
+    return fileName;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public int getVersion() {
-		return version;
-	}
+  public int getVersion() {
+    return version;
+  }
 
-	public ClassLoader getClassLoader() {
-		return classLoader;
-	}
+  public ClassLoader getClassLoader() {
+    return classLoader;
+  }
 
-	public Properties getManifest() {
-		return manifest;
-	}
+  public Properties getManifest() {
+    return manifest;
+  }
 
-	@Override
-	public String toString() {
-		return "ServiceContext{" +
-						"fileName='" + fileName + '\'' +
-						", name='" + name + '\'' +
-						", version=" + version +
-						'}';
-	}
+  @Override
+  public String toString() {
+    return "ServiceContext{" +
+        "fileName='" + fileName + '\'' +
+        ", name='" + name + '\'' +
+        ", version=" + version +
+        '}';
+  }
 }

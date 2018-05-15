@@ -27,34 +27,43 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties("ganjex")
 public class GanjexProperties {
-	private String servicePath = "service";
-	private String libPath = "lib";
-	private int watchDelay = 10;
+  private String servicePath = "service";
+  private String libPath = "lib";
+  private int watchDelay = 10;
+  private String classPaths = "classes";
 
-	public String getServicePath() {
-		return servicePath;
-	}
+  public String getClassPaths() {
+    return classPaths;
+  }
 
-	public GanjexProperties setServicePath(String servicePath) {
-		this.servicePath = servicePath;
-		return this;
-	}
+  public void setClassPaths(String classPaths) {
+    this.classPaths = classPaths;
+  }
 
-	public String getLibPath() {
-		return libPath;
-	}
+  public String getServicePath() {
+    return servicePath;
+  }
 
-	public GanjexProperties setLibPath(String libPath) {
-		this.libPath = libPath;
-		return this;
-	}
+  public GanjexProperties setServicePath(String servicePath) {
+    this.servicePath = servicePath;
+    return this;
+  }
 
-	public int getWatchDelay() {
-		return watchDelay;
-	}
+  public String getLibPath() {
+    return libPath;
+  }
 
-	public GanjexProperties setWatchDelay(int watchDelay) {
-		this.watchDelay = watchDelay;
-		return this;
-	}
+  public GanjexProperties setLibPath(String libPath) {
+    this.libPath = libPath;
+    return this;
+  }
+
+  public int getWatchDelay() {
+    return watchDelay;
+  }
+
+  public GanjexProperties setWatchDelay(int watchDelay) {
+    this.watchDelay = watchDelay;
+    return this;
+  }
 }

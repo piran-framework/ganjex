@@ -44,107 +44,107 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 1.0
  */
 public final class LifecycleManagement {
-	private static final Logger log = LoggerFactory.getLogger(LifecycleManagement.class);
-	private final Map<String, ServiceContext> services = new ConcurrentHashMap<>();
-	private final List<StartupHook> startupHooks = new ArrayList<>();
-	private final List<ShutdownHook> shutdownHooks = new ArrayList<>();
-	private volatile boolean ready = false;
+  private static final Logger log = LoggerFactory.getLogger(LifecycleManagement.class);
+  private final Map<String, ServiceContext> services = new ConcurrentHashMap<>();
+  private final List<StartupHook> startupHooks = new ArrayList<>();
+  private final List<ShutdownHook> shutdownHooks = new ArrayList<>();
+  private volatile boolean ready = false;
 
-	/**
-	 * register a new startup hook
-	 *
-	 * @param startupHook hook representation
-	 * @throws IllegalStateException if called after doneRegistering
-	 */
-	public void registerStartupHook(StartupHook startupHook) {
-		if (ready)
-			throw new IllegalStateException("registering hook after startup is not supported");
-		startupHooks.add(startupHook);
-	}
+  /**
+   * register a new startup hook
+   *
+   * @param startupHook hook representation
+   * @throws IllegalStateException if called after doneRegistering
+   */
+  public void registerStartupHook(StartupHook startupHook) {
+    if (ready)
+      throw new IllegalStateException("registering hook after startup is not supported");
+    startupHooks.add(startupHook);
+  }
 
-	/**
-	 * register a new shutdown hook
-	 *
-	 * @param shutdownHook hook representation
-	 * @throws IllegalStateException if called after doneRegistering
-	 */
-	public void registerShutdownHook(ShutdownHook shutdownHook) {
-		if (ready)
-			throw new IllegalStateException("registering hook after startup is not supported");
-		shutdownHooks.add(shutdownHook);
-	}
+  /**
+   * register a new shutdown hook
+   *
+   * @param shutdownHook hook representation
+   * @throws IllegalStateException if called after doneRegistering
+   */
+  public void registerShutdownHook(ShutdownHook shutdownHook) {
+    if (ready)
+      throw new IllegalStateException("registering hook after startup is not supported");
+    shutdownHooks.add(shutdownHook);
+  }
 
-	/**
-	 * state that registration is done, all calls of <code>registerShutdownHook</code> and
-	 * <code>registerStartupHook</code> after calling this method cause {@link IllegalStateException}
-	 *
-	 * @throws IllegalStateException if this method ran before
-	 */
-	public void doneRegistering() {
-		if (ready)
-			throw new IllegalStateException("call doneRegistering method more than once");
-		Collections.sort(startupHooks);
-		ready = true;
-	}
+  /**
+   * state that registration is done, all calls of <code>registerShutdownHook</code> and
+   * <code>registerStartupHook</code> after calling this method cause {@link IllegalStateException}
+   *
+   * @throws IllegalStateException if this method ran before
+   */
+  public void doneRegistering() {
+    if (ready)
+      throw new IllegalStateException("call doneRegistering method more than once");
+    Collections.sort(startupHooks);
+    ready = true;
+  }
 
-	/**
-	 * find a service context by its file name
-	 *
-	 * @param fileName file name of the service
-	 * @return service context if found and null if nothing found
-	 */
-	ServiceContext findContext(String fileName) {
-		return services.get(fileName);
-	}
+  /**
+   * find a service context by its file name
+   *
+   * @param fileName file name of the service
+   * @return service context if found and null if nothing found
+   */
+  ServiceContext findContext(String fileName) {
+    return services.get(fileName);
+  }
 
-	/**
-	 * register a new service with the context provided and run all the startup hooks on it
-	 *
-	 * @param context context of the service which want to start
-	 */
-	void serviceStarted(ServiceContext context) {
-		services.put(context.getFileName(), context);
-		startupHooks.forEach(h ->
-						h.hook().accept(context));
-		log.debug("all startup hooks executed for the service {} version {}", context.getName(),
-						context.getVersion());
-	}
+  /**
+   * register a new service with the context provided and run all the startup hooks on it
+   *
+   * @param context context of the service which want to start
+   */
+  void serviceStarted(ServiceContext context) {
+    services.put(context.getFileName(), context);
+    startupHooks.forEach(h ->
+        h.hook().accept(context));
+    log.debug("all startup hooks executed for the service {} version {}", context.getName(),
+        context.getVersion());
+  }
 
-	/**
-	 * run all the shutdown hooks on the service specified by its context, and then remove
-	 * this service from the list of services
-	 *
-	 * @param context context of the service which want to shutdown
-	 */
-	void serviceDestroyed(ServiceContext context) {
-		shutdownHooks.forEach(h -> h.hook().accept(context));
-		log.debug("all shutdown hooks executed for the service {} version {}", context.getName(),
-						context.getVersion());
-		try {
-			((URLClassLoader) context.getClassLoader()).close();
-		} catch (IOException e) {
-			log.error("could not close service {} version {} classloader", context.getName(), context
-							.getVersion());
-		}
-		services.remove(context.getFileName());
-	}
+  /**
+   * run all the shutdown hooks on the service specified by its context, and then remove
+   * this service from the list of services
+   *
+   * @param context context of the service which want to shutdown
+   */
+  void serviceDestroyed(ServiceContext context) {
+    shutdownHooks.forEach(h -> h.hook().accept(context));
+    log.debug("all shutdown hooks executed for the service {} version {}", context.getName(),
+        context.getVersion());
+    try {
+      ((URLClassLoader) context.getClassLoader()).close();
+    } catch (IOException e) {
+      log.error("could not close service {} version {} classloader", context.getName(), context
+          .getVersion());
+    }
+    services.remove(context.getFileName());
+  }
 
-	/**
-	 * useful for testing, destroy lifecycleManagement instance and clean all the registered hooks
-	 */
-	public void destroy() {
-		services.clear();
-		startupHooks.clear();
-		shutdownHooks.clear();
-		ready = false;
-	}
+  /**
+   * useful for testing, destroy lifecycleManagement instance and clean all the registered hooks
+   */
+  public void destroy() {
+    services.clear();
+    startupHooks.clear();
+    shutdownHooks.clear();
+    ready = false;
+  }
 
-	/**
-	 * return a clone of the services list
-	 *
-	 * @return all services registered into ganjex container
-	 */
-	public Collection<ServiceContext> allServices() {
-		return new ArrayList<>(services.values());
-	}
+  /**
+   * return a clone of the services list
+   *
+   * @return all services registered into ganjex container
+   */
+  public Collection<ServiceContext> allServices() {
+    return new ArrayList<>(services.values());
+  }
 }

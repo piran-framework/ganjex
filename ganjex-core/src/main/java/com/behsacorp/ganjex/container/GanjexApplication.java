@@ -32,66 +32,66 @@ import com.behsacorp.ganjex.lifecycle.LifecycleManagement;
  * @author hekmatof
  */
 public final class GanjexApplication {
-	private final GanjexConfiguration config;
-	private final LifecycleManagement lifecycleManagement = new LifecycleManagement();
-	private final ClassLoader mainClassLoader;
-	private ClassLoader libClassLoader;
+  private final GanjexConfiguration config;
+  private final LifecycleManagement lifecycleManagement = new LifecycleManagement();
+  private final ClassLoader mainClassLoader;
+  private ClassLoader libClassLoader;
 
-	public GanjexApplication(GanjexConfiguration config) {
-		this.config = config;
-		this.mainClassLoader = GanjexApplication.class.getClassLoader();
-	}
+  public GanjexApplication(GanjexConfiguration config) {
+    this.config = config;
+    this.mainClassLoader = GanjexApplication.class.getClassLoader();
+  }
 
-	/**
-	 * Getter for the configuration instance which include all of the configuration needed by the
-	 * Ganjex container
-	 *
-	 * @return the configuration instance
-	 */
-	public GanjexConfiguration config() {
-		return config;
-	}
+  /**
+   * Getter for the configuration instance which include all of the configuration needed by the
+   * Ganjex container
+   *
+   * @return the configuration instance
+   */
+  public GanjexConfiguration config() {
+    return config;
+  }
 
-	/**
-	 * Getter for the {@link LifecycleManagement} instance created in the bootstrapping phase.
-	 *
-	 * @return lifecycleManagement instance
-	 */
-	public LifecycleManagement lifecycleManagement() {
-		return lifecycleManagement;
-	}
+  /**
+   * Getter for the {@link LifecycleManagement} instance created in the bootstrapping phase.
+   *
+   * @return lifecycleManagement instance
+   */
+  public LifecycleManagement lifecycleManagement() {
+    return lifecycleManagement;
+  }
 
-	/**
-	 * Getter for the top level classloader
-	 *
-	 * @return the top level classloader
-	 */
-	public ClassLoader mainClassLoader() {
-		return mainClassLoader;
-	}
+  /**
+   * Getter for the top level classloader
+   *
+   * @return the top level classloader
+   */
+  public ClassLoader mainClassLoader() {
+    return mainClassLoader;
+  }
 
-	/**
-	 * Getter for the libraries classLoader
-	 *
-	 * @return libraries classloader
-	 */
-	public ClassLoader libClassLoader() {
-		return libClassLoader;
-	}
+  /**
+   * Getter for the libraries classLoader
+   *
+   * @return libraries classloader
+   */
+  public ClassLoader libClassLoader() {
+    return libClassLoader;
+  }
 
-	/**
-	 * change the libraries classloader
-	 *
-	 * @param libClassLoader new libraries classloader
-	 */
-	public void setLibClassLoader(ClassLoader libClassLoader) {
-		this.libClassLoader = libClassLoader;
-	}
+  /**
+   * change the libraries classloader
+   *
+   * @param libClassLoader new libraries classloader
+   */
+  public void setLibClassLoader(ClassLoader libClassLoader) {
+    this.libClassLoader = libClassLoader;
+  }
 
-	/**
-	 * destroy the object, useful for testing purpose
-	 */
-	public void destroy() {
-		this.lifecycleManagement.destroy();
-	}
+  /**
+   * destroy the object, useful for testing purpose
+   */
+  public void destroy() {
+    this.lifecycleManagement.destroy();
+  }
 }

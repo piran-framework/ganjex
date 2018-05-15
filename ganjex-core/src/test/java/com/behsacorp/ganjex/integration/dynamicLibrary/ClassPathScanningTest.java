@@ -32,10 +32,10 @@ import java.lang.reflect.InvocationTargetException;
 import static com.behsacorp.ganjex.integration.TestUtil.*;
 
 /**
- * @author hekmatof
+ * @author omidp
  */
 @Test(sequential = true)
-public class DynamicLibraryIT {
+public class ClassPathScanningTest {
   private Ganjex ganjex;
 
   @Test
@@ -45,6 +45,7 @@ public class DynamicLibraryIT {
         .libPath(TestUtil.libPath)
         .servicePath(TestUtil.servicePath)
         .watcherDelay(1)
+        .classPaths(new String[]{"../../../sample/sampleWebFramework/web-sample-service-hello/target/classes", "noop"})
         .hooks(new FrameworkHook())
         .build());
     deployLib(TEST_PATH + "dynamicLibrary/dynamicLib/", "dynamic-lib");

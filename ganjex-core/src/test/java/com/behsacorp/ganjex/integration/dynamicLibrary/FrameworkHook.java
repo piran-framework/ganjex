@@ -29,23 +29,23 @@ import java.lang.reflect.Method;
  * @author hekmatof
  */
 public class FrameworkHook {
-	private static Object actionObject;
-	private static Class<?> actionClass;
+  private static Object actionObject;
+  private static Class<?> actionClass;
 
-	public static String invokeMethodOnService() throws NoSuchMethodException,
-					IllegalAccessException, InvocationTargetException {
-		Method action = actionClass.getMethod("action");
-		return (String) action.invoke(actionObject);
-	}
+  public static String invokeMethodOnService() throws NoSuchMethodException,
+      IllegalAccessException, InvocationTargetException {
+    Method action = actionClass.getMethod("action");
+    return (String) action.invoke(actionObject);
+  }
 
-	@StartupHook
-	public void startup(ServiceContext context) throws NoSuchMethodException,
-					IllegalAccessException, InvocationTargetException, InstantiationException {
-		try {
-			actionClass = context.getClassLoader().loadClass("com.behsacorp.SomeService");
-			actionObject = actionClass.getConstructor((Class<?>[]) null).newInstance((Object[]) null);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
+  @StartupHook
+  public void startup(ServiceContext context) throws NoSuchMethodException,
+      IllegalAccessException, InvocationTargetException, InstantiationException {
+    try {
+      actionClass = context.getClassLoader().loadClass("com.behsacorp.SomeService");
+      actionObject = actionClass.getConstructor((Class<?>[]) null).newInstance((Object[]) null);
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    }
+  }
 }
