@@ -22,16 +22,16 @@ package com.behsacorp.ganjex.api;
 import java.lang.annotation.*;
 
 /**
- * The {@link ShutdownHook} annotated element is used by the framework to register their hook
- * which should be executed right after a service removed.
+ * The {@link ShutdownHook} annotated elements are used by the framework to register their hook
+ * to be executed right after a service is removed.
  * <p>
- * Note that if a library changes all of the services {@link ShutdownHook} would be
- * invoked, libraries would be reloaded and then all of the services {@link StartupHook} would be
- * invoked again.
+ * Note that if a library changes, all the elements annotated with {@link ShutdownHook} in all services
+ * would be invoked, libraries would be reloaded and then all the elements annotated with {@link StartupHook}
+ * in all services would be invoked again.
  * <p>
  * The {@link ShutdownHook} annotated methods should be surrounded by a class
  * containing a default constructor with only one parameter of {@link ServiceContext} type.
- * This parameter indicates information about the service and contains service classLoader
+ * This parameter indicates information about the service and contains the service classLoader
  * used by the hooks to find elements in the services.
  *
  * @author hekmatof
