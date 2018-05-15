@@ -31,8 +31,8 @@ import java.util.Objects;
 /**
  * Ganjex container class. Each instance of this class represents a Ganjex container.
  * <p>
- * The static method <code>run({@link GanjexConfiguration})</code> is expected to invoke for
- * starting a new container. By running a new container, Ganjex watches the library and service
+ * The static method <code>run({@link GanjexConfiguration})</code> is expected to be invoked to
+ * start a new container. By doing so, Ganjex would watch the library and service
  * directory for any prospective changes. As soon as a jar file is added to or removed from the
  * directory, Ganjex would start or shutdown services pertinent to the altered jar file.
  * </p>
@@ -49,43 +49,45 @@ public final class Ganjex {
   private JarWatcher libWatcher = null;
 
   /**
-   * create a new Ganjex container, to run the container you should call <code>run</code> method
-   *
-   * @param config ganjex application configuration instance
-   */
-  @SuppressWarnings("WeakerAccess")
-  public Ganjex(GanjexConfiguration config) {
-    app = new GanjexApplication(config);
-  }
+	 * Creates a new Ganjex container. In order to run the container method <code>run</code>
+	 * should be called.
+	 *
+	 * @param config ganjex application configuration instance
+	 */
+	@SuppressWarnings("WeakerAccess")
+	public Ganjex(GanjexConfiguration config) {
+		app = new GanjexApplication(config);
+	}
 
   /**
-   * start a new ganjex container and return an object of this class representing the container
-   * same as calling <code>new Ganjex(config).run()</code>
-   *
-   * @param config ganjex configuration object, this object should be created by the
-   *               {@link GanjexConfiguration.Builder} which is a builder for
-   *               {@link GanjexConfiguration}
-   * @return a running ganjex container object
-   */
-  public static Ganjex run(GanjexConfiguration config) {
-    return new Ganjex(config).run();
-  }
+	 * Starts a new Ganjex container and returns an object of this class representing the container.
+	 * same as calling <code>new Ganjex(config).run()</code>
+	 *
+	 * @param config ganjex configuration object, this object should be created by the
+	 *               {@link GanjexConfiguration.Builder} which is a builder for
+	 *               {@link GanjexConfiguration}
+	 * @return a running Ganjex container object
+	 */
+	public static Ganjex run(GanjexConfiguration config) {
+		return new Ganjex(config).run();
+	}
+	
+	/**
+	 * Indicates whether the bootstrap process of the container has been done or not.
+	 *
+	 * @return {@code true} if and only if the container has been bootstrapped but
+	 * has not been destroyed.
+	 */
+	public static boolean bootstrapped() {
+		return bootstrapped;
+	}
 
-  /**
-   * indicate the bootstrap process of the container has done or not
-   *
-   * @return return true if and only if container bootstrapped and not destroyed
-   */
-  public static boolean bootstrapped() {
-    return bootstrapped;
-  }
-
-  /**
-   * @return the top level classloader
-   */
-  public ClassLoader mainClassLoader() {
-    return app.mainClassLoader();
-  }
+	/**
+	 * @return The top level classloader.
+	 */
+	public ClassLoader mainClassLoader() {
+		return app.mainClassLoader();
+	}
 
   private void watchServicesDirectory() {
     classpathWatcher = new ClasspathWatcher(app.config().getClassPaths(),
@@ -99,40 +101,39 @@ public final class Ganjex {
         new LibraryFileChangeListener(app), app.config().getWatcherDelay());
   }
 
-  /**
-   * useful for testing, destroy the container and clean all the states, also interrupt all
-   * watcher threads
-   */
-  public void destroy() {
-    app.destroy();
-    bootstrapped = false;
-    if (Objects.nonNull(serviceWatcher))
-      serviceWatcher.destroy();
+	/**
+	 * Useful method for testing, which destroys the container, cleans all the states and interrupts
+	 * all watcher threads.
+	 */
+	public void destroy(){
+		app.destroy();
+		bootstrapped = false;
+		if (Objects.nonNull(serviceWatcher))
+			serviceWatcher.destroy();
     if (Objects.nonNull(classpathWatcher))
       classpathWatcher.destroy();
-    if (Objects.nonNull(libWatcher))
-      libWatcher.destroy();
-    System.gc();
-    log.info("ganjex shutdown correctly");
-  }
+		if (Objects.nonNull(libWatcher))
+			libWatcher.destroy();
+		System.gc();
+		log.info("ganjex shutdown correctly");
+	}
 
-  /**
-   * run the container. start watchers on library and service directory and detect any changes
-   * there. this method has been used in the complicated scenarios, usually clients use
-   * <code>Ganjex.run({@link GanjexConfiguration})</code> static method.
-   *
-   * @return ganjex container object
-   */
-  @SuppressWarnings("WeakerAccess")
-  public Ganjex run() {
-    watchLibraryDirectory();
-    if (app.libClassLoader() == null)
-      app.setLibClassLoader(mainClassLoader());
-    new HookLoader(app).loadHooks();
-    app.lifecycleManagement().doneRegistering();
-    watchServicesDirectory();
-    bootstrapped = true;
-    return this;
-  }
-
+	/**
+	 * Runs the container. Invokes threads to watch the library and service directory to detect any changes
+	 * might happen. This method has been used in the complicated scenarios, usually clients use
+	 * <code>Ganjex.run({@link GanjexConfiguration})</code> static method.
+	 *
+	 * @return Ganjex container object.
+	 */
+	@SuppressWarnings("WeakerAccess")
+	public Ganjex run() {
+		watchLibraryDirectory();
+		if(app.libClassLoader()==null)
+			app.setLibClassLoader(mainClassLoader());
+		new HookLoader(app).loadHooks();
+		app.lifecycleManagement().doneRegistering();
+		watchServicesDirectory();
+		bootstrapped = true;
+		return this;
+	}
 }
