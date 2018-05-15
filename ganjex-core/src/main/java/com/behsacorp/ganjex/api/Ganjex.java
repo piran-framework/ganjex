@@ -45,7 +45,6 @@ public final class Ganjex {
   private static volatile boolean bootstrapped = false;
   private final GanjexApplication app;
   private JarWatcher serviceWatcher = null;
-  private ClasspathWatcher classpathWatcher = null;
   private JarWatcher libWatcher = null;
 
   /**
@@ -90,8 +89,6 @@ public final class Ganjex {
 	}
 
   private void watchServicesDirectory() {
-    classpathWatcher = new ClasspathWatcher(app.config().getClassPaths(),
-        new ClassPathFileChangeListener(app), app.config().getWatcherDelay());
     serviceWatcher = new JarWatcher(new File(app.config().getServicePath()),
         new ServiceFileChangeListener(app), app.config().getWatcherDelay());
   }
@@ -110,8 +107,6 @@ public final class Ganjex {
 		bootstrapped = false;
 		if (Objects.nonNull(serviceWatcher))
 			serviceWatcher.destroy();
-    if (Objects.nonNull(classpathWatcher))
-      classpathWatcher.destroy();
 		if (Objects.nonNull(libWatcher))
 			libWatcher.destroy();
 		System.gc();

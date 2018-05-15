@@ -52,7 +52,6 @@ public class GanjexAutoConfiguration {
         .servicePath(ganjexProperties.getServicePath())
         .libPath(ganjexProperties.getLibPath())
         .watcherDelay(ganjexProperties.getWatchDelay())
-        .classPaths(ganjexProperties.getClassPaths().split(","))
         .hooks(hookMap.values().toArray()).build()
     );
     log.info("ganjex container bootstrap finished");
