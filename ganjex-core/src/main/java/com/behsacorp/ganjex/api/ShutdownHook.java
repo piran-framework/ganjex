@@ -25,7 +25,7 @@ import java.lang.annotation.*;
  * The {@link ShutdownHook} annotated elements are used by the framework to register their hooks
  * to be executed right after a service is removed.
  * <p>
- * Note that if a library changes, all the elements annotated with {@link ShutdownHook} in all services
+ * Note that if a library is changed, all the elements annotated with {@link ShutdownHook} in all services
  * would be invoked, libraries would be reloaded and then all the elements annotated with {@link StartupHook}
  * in all services would be invoked again.
  * <p>
@@ -41,11 +41,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface ShutdownHook {
-	/**
-	 * Indicates the priority of the hook. The lower the number, the higher the priority of the execution.
-	 * It is recommended not to use 0 or any number lower than 10 if it is not vital.
-	 *
-	 * @return the priority of this hook
-	 */
-	int priority() default 100;
+    /**
+     * Indicates the priority of the hook. The lower the number, the higher the priority of the execution.
+     * It is recommended not to use 0 or any number lower than 10 if it is not vital.
+     *
+     * @return the priority of the hook.
+     */
+    int priority() default 100;
 }
