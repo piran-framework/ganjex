@@ -23,75 +23,75 @@ import com.behsacorp.ganjex.api.GanjexConfiguration;
 import com.behsacorp.ganjex.lifecycle.LifecycleManagement;
 
 /**
- * The objects of this class contain all of the ganjex application states and necessary
- * internal dependencies
+ * Objects of this class contain all of the ganjex application states and required
+ * internal dependencies.
  * <p>
- * {@link GanjexApplication} Object also responsible to manage the libraries classLoader which
- * should be updated after a change in the libraries detected
+ * Moreover, {@link GanjexApplication} object is responsible for managing the libraries classLoaders which
+ * would be updated after any potential changes that might occur in detected libraries.
  *
  * @author hekmatof
  */
 public final class GanjexApplication {
-  private final GanjexConfiguration config;
-  private final LifecycleManagement lifecycleManagement = new LifecycleManagement();
-  private final ClassLoader mainClassLoader;
-  private ClassLoader libClassLoader;
+    private final GanjexConfiguration config;
+    private final LifecycleManagement lifecycleManagement = new LifecycleManagement();
+    private final ClassLoader mainClassLoader;
+    private ClassLoader libClassLoader;
 
-  public GanjexApplication(GanjexConfiguration config) {
-    this.config = config;
-    this.mainClassLoader = GanjexApplication.class.getClassLoader();
-  }
+    public GanjexApplication(GanjexConfiguration config) {
+        this.config = config;
+        this.mainClassLoader = GanjexApplication.class.getClassLoader();
+    }
 
-  /**
-   * Getter for the configuration instance which include all of the configuration needed by the
-   * Ganjex container
-   *
-   * @return the configuration instance
-   */
-  public GanjexConfiguration config() {
-    return config;
-  }
+    /**
+     * Getter for the configuration instance which include all of the configuration needed by the
+     * Ganjex container
+     *
+     * @return the configuration instance
+     */
+    public GanjexConfiguration config() {
+        return config;
+    }
 
-  /**
-   * Getter for the {@link LifecycleManagement} instance created in the bootstrapping phase.
-   *
-   * @return lifecycleManagement instance
-   */
-  public LifecycleManagement lifecycleManagement() {
-    return lifecycleManagement;
-  }
+    /**
+     * Getter for the {@link LifecycleManagement} instance created in the bootstrapping phase.
+     *
+     * @return lifecycleManagement instance
+     */
+    public LifecycleManagement lifecycleManagement() {
+        return lifecycleManagement;
+    }
 
-  /**
-   * Getter for the top level classloader
-   *
-   * @return the top level classloader
-   */
-  public ClassLoader mainClassLoader() {
-    return mainClassLoader;
-  }
+    /**
+     * Getter for the top level classloader
+     *
+     * @return the top level classloader
+     */
+    public ClassLoader mainClassLoader() {
+        return mainClassLoader;
+    }
 
-  /**
-   * Getter for the libraries classLoader
-   *
-   * @return libraries classloader
-   */
-  public ClassLoader libClassLoader() {
-    return libClassLoader;
-  }
+    /**
+     * Getter for the libraries classLoader
+     *
+     * @return libraries classloader
+     */
+    public ClassLoader libClassLoader() {
+        return libClassLoader;
+    }
 
-  /**
-   * change the libraries classloader
-   *
-   * @param libClassLoader new libraries classloader
-   */
-  public void setLibClassLoader(ClassLoader libClassLoader) {
-    this.libClassLoader = libClassLoader;
-  }
+    /**
+     * change the libraries classloader
+     *
+     * @param libClassLoader new libraries classloader
+     */
+    public void setLibClassLoader(ClassLoader libClassLoader) {
+        this.libClassLoader = libClassLoader;
+    }
 
-  /**
-   * destroy the object, useful for testing purpose
-   */
-  public void destroy() {
-    this.lifecycleManagement.destroy();
-  }
+    /**
+     * destroy the object, useful for testing purpose
+     */
+    public void destroy() {
+        this.lifecycleManagement.destroy();
+    }
 }
