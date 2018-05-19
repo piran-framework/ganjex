@@ -31,8 +31,8 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * The <code>ClasspathWatcher</code> object watch the classpath directory and notify the
- * given listener when change in class files in that directory detected
+ * The <code>ClasspathWatcher</code> object watches the classpath directory and notifies the
+ * given listener as soon as any changes in class files in that directory are detected.
  *
  * @author omidp
  * @since 1.0

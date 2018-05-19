@@ -29,7 +29,7 @@ import java.io.File;
 import java.util.Objects;
 
 /**
- * Ganjex container class. Each instance of this class represents a Ganjex container.
+ * Ganjex container class whose instance obviously represents a Ganjex container.
  * <p>
  * The static method <code>run({@link GanjexConfiguration})</code> is expected to be invoked to
  * start a new container. By doing so, Ganjex would watch the library and service

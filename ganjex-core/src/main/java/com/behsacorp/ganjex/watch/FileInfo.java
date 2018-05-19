@@ -22,8 +22,8 @@ package com.behsacorp.ganjex.watch;
 import java.io.File;
 
 /**
- * the information of the files. check for changes in the status of the files and
- * find out of the removed filed
+ * Represents the information of the files, checking for any changes of files statuses and
+ * detecting any files removed.
  *
  * @author hekmatof
  */
@@ -50,7 +50,7 @@ public class FileInfo {
 
   /**
    * Returns 1 if the file has been added/modified, 0 if the file is
-   * unchanged and -1 if the file has been removed
+   * unchanged and -1 if the file has been removed.
    *
    * @return int 1=file added; 0=unchanged; -1=file removed
    */
