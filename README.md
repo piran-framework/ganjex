@@ -4,7 +4,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5bb12607be964e478f507fd04de0fc21)](https://www.codacy.com/app/esahekmat/ganjex?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=behsa-oss/ganjex&amp;utm_campaign=Badge_Grade)
 [![Javadocs](http://javadoc.io/badge/com.behsacorp/ganjex.svg)](http://javadoc.io/doc/com.behsacorp/ganjex)
 
-There are a situation when you want to serve lots of services by just one JVM(runtime), with the 
+There are  situations when you want to serve lots of dynamic services by just one JVM(runtime), with the 
 help of Ganjex you can define your own framework.When you are developing micro-services, usually 
 every micro service need a dedicated JVM, and any changes in it need restarting JVM. Remember 
 tomcat which contains webapps and you can change webapps by removing or changing WAR files 
