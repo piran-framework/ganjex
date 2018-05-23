@@ -68,7 +68,7 @@ public final class JarWatcher {
     this.watchDir = watchDir;
     this.listener = listener;
     scheduledFuture = executor.scheduleWithFixedDelay(this::check
-        , 0, watcherDelay, TimeUnit.SECONDS);
+      , 0, watcherDelay, TimeUnit.SECONDS);
 
   }
 
@@ -81,10 +81,10 @@ public final class JarWatcher {
     if (list == null)
       list = new File[0];
     Arrays.stream(list).forEach(f -> {
-          if (!f.exists())
-            log.warn("listed file does not exist: {}", f);
-          addJarInfo(f);
-        }
+        if (!f.exists())
+          log.warn("listed file does not exist: {}", f);
+        addJarInfo(f);
+      }
     );
 
     // Check all the status codes and notify the listener
@@ -109,9 +109,8 @@ public final class JarWatcher {
    * @param jarfile The JAR to add
    */
   private void addJarInfo(File jarfile) {
-    FileInfo info = currentStatus.get(jarfile.getAbsolutePath());
-    if (info == null) {
-      info = new FileInfo(jarfile);
+    if (!currentStatus.containsKey(jarfile.getAbsolutePath())) {
+      FileInfo info = new FileInfo(jarfile);
       info.setLastState(-1); //assume file is non existent
       currentStatus.put(jarfile.getAbsolutePath(), info);
     }
