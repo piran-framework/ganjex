@@ -33,8 +33,12 @@ import java.util.Objects;
  * @see LifecycleManagement
  * @since 1.0
  */
-public class ServiceDestroyer {
+public final class ServiceDestroyer {
   private final File jar;
+
+  private ServiceDestroyer() throws IllegalAccessException {
+    throw new IllegalAccessException("Service Destroyer is not supposed to be instantiated reflectively.");
+  }
 
   public ServiceDestroyer(File jar) {
     this.jar = jar;
