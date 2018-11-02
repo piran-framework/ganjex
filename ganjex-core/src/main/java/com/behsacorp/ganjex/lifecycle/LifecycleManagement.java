@@ -104,10 +104,8 @@ public final class LifecycleManagement {
      */
     void serviceStarted(ServiceContext context) {
         services.put(context.getFileName(), context);
-        startupHooks.forEach(h ->
-                h.hook().accept(context));
-        log.debug("all startup hooks executed for the service {} version {}", context.getName(),
-                context.getVersion());
+        startupHooks.forEach(h -> h.hook().accept(context));
+        log.debug("all startup hooks executed for the service {} version {}", context.getName(), context.getVersion());
     }
 
     /**
@@ -118,8 +116,7 @@ public final class LifecycleManagement {
      */
     void serviceDestroyed(ServiceContext context) {
         shutdownHooks.forEach(h -> h.hook().accept(context));
-        log.debug("all shutdown hooks executed for the service {} version {}", context.getName(),
-                context.getVersion());
+        log.debug("all shutdown hooks executed for the service {} version {}", context.getName(), context.getVersion());
         try {
             ((URLClassLoader) context.getClassLoader()).close();
         } catch (IOException e) {
