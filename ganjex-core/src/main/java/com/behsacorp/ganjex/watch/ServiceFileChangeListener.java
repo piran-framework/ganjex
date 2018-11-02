@@ -30,11 +30,10 @@ import java.io.File;
 /**
  * The <b>ServiceFileChangeListener</b> class by implementing {@link FileChangeListener} is a
  * listener of changes in the services directory. This listener create {@link ServiceStarter} and
- * {@link ServiceDestroyer} instance for each service added(or modified) or removed from the
+ * {@link ServiceDestroyer} instances for each service added(or modified) or removed from the
  * directory and call the deploy or destroy method of that objects
  * <p>
- * An instance of this class should be assign
- * to {@link JarWatcher} constructor as a listener.
+ * An instance of this class should be assigned to {@link JarWatcher} constructor as a listener.
  *
  * @author hekmatof
  * @see ServiceStarter
