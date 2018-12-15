@@ -39,7 +39,7 @@ import java.net.URLClassLoader;
  * @see LifecycleManagement
  * @since 1.0
  */
-public class ServiceStarter {
+public final class ServiceStarter {
   private static final Logger log = LoggerFactory.getLogger(ServiceStarter.class);
   private final File jar;
   private final ClassLoader libClassLoader;

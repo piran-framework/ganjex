@@ -21,3 +21,6 @@ hs_err_pid*
 test-dist/
 tmp/
 out/
+
+# OS associated files
+.DS_Store
