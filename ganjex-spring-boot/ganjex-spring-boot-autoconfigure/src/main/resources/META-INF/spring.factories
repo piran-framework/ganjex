@@ -1,4 +1,4 @@
 # Autoconfiguration
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.behsacorp.ganjex.config.GanjexAutoConfiguration
+com.piran.ganjex.config.GanjexAutoConfiguration
 

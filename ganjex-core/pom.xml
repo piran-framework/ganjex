@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- ~ Copyright (c) 2018 Behsa Corporation.
+<!-- ~ Copyright (c) 2018 Isa Hekmatizadeh.
   ~
   ~   This file is part of Ganjex.
   ~
@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.behsacorp</groupId>
+        <groupId>com.piran-framework</groupId>
         <artifactId>ganjex-parent</artifactId>
         <version>0.4-SNAPSHOT</version>
         <relativePath>../</relativePath>
@@ -33,11 +33,6 @@
     <packaging>jar</packaging>
     <name>Ganjex</name>
     <description>Ganjex container core library</description>
-
-    <organization>
-        <name>Behsa Co.</name>
-        <url>http://www.behsacorp.com</url>
-    </organization>
 
     <licenses>
         <license>
@@ -50,9 +45,7 @@
         <developer>
             <id>hekmatof</id>
             <name>Esa Hekmatizadeh</name>
-            <email>i.hekmatizadeh at behsacorp.com</email>
-            <organization>Behsa Co.</organization>
-            <organizationUrl>http://www.behsacorp.com</organizationUrl>
+            <email>esa.hekmat at gmail.com</email>
             <roles>
                 <role>Project lead</role>
             </roles>
@@ -60,9 +53,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/behsa-oss/ganjex.git</connection>
-        <developerConnection>scm:git:ssh://github.com:behsa-oss/ganjex.git</developerConnection>
-        <url>http://github.com/behsa-oss/ganjex/tree/master</url>
+        <connection>scm:git:git://github.com/piran-framework/ganjex.git</connection>
+        <developerConnection>scm:git:ssh://github.com:piran-framework/ganjex.git</developerConnection>
+        <url>http://github.com/piran-framework/ganjex/tree/master</url>
     </scm>
 
     <distributionManagement>

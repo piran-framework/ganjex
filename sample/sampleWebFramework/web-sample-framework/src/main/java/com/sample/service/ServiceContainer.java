@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Behsa Corporation.
+ * Copyright (c) 2018 Isa Hekmatizadeh.
  *
  *   This file is part of Ganjex.
  *
@@ -19,10 +19,10 @@
 
 package com.sample.service;
 
-import com.behsacorp.ganjex.GanjexHook;
-import com.behsacorp.ganjex.api.ServiceContext;
-import com.behsacorp.ganjex.api.ShutdownHook;
-import com.behsacorp.ganjex.api.StartupHook;
+import com.piran.ganjex.GanjexHook;
+import com.piran.ganjex.api.ServiceContext;
+import com.piran.ganjex.api.ShutdownHook;
+import com.piran.ganjex.api.StartupHook;
 import com.sample.api.Action;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;

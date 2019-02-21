@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2018 Behsa Corporation.
+  ~ Copyright (c) 2018 Isa Hekmatizadeh.
   ~
   ~   This file is part of Ganjex.
   ~
@@ -22,22 +22,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.behsacorp</groupId>
+    <groupId>com.piran-framework</groupId>
     <artifactId>ganjex-parent</artifactId>
     <version>0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Ganjex Parent</name>
     <description>Ganjex parent module</description>
-    <url>http://github.com/behsa-oss/ganjex/</url>
+    <url>http://github.com/piran-framework/ganjex/</url>
     <scm>
-        <connection>scm:git:git://github.com/behsa-oss/ganjex.git</connection>
-        <developerConnection>scm:git:ssh://github.com:behsa-oss/ganjex.git</developerConnection>
-        <url>http://github.com/behsa-oss/ganjex/tree/master</url>
+        <connection>scm:git:git://github.com/piran-framework/ganjex.git</connection>
+        <developerConnection>scm:git:ssh://github.com:piran-framework/ganjex.git</developerConnection>
+        <url>http://github.com/piran-framework/ganjex/tree/master</url>
     </scm>
-    <organization>
-        <name>Behsa Co.</name>
-        <url>http://www.behsacorp.com</url>
-    </organization>
+
     <licenses>
         <license>
             <name>GNU Lesser General Public License</name>
@@ -49,9 +46,7 @@
         <developer>
             <id>hekmatof</id>
             <name>Esa Hekmatizadeh</name>
-            <email>i.hekmatizadeh at behsacorp.com</email>
-            <organization>Behsa Co.</organization>
-            <organizationUrl>http://www.behsacorp.com</organizationUrl>
+            <email>esa.hekmat at gmail.com</email>
             <roles>
                 <role>Project lead</role>
             </roles>
@@ -94,7 +89,7 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>com.behsacorp</groupId>
+                <groupId>com.piran-framework</groupId>
                 <artifactId>ganjex</artifactId>
                 <version>0.4-SNAPSHOT</version>
             </dependency>

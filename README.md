@@ -1,8 +1,8 @@
 ## Ganjex
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.behsacorp/ganjex/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.behsacorp/ganjex)
-[![Travis IC](https://travis-ci.org/behsa-oss/ganjex.svg?branch=master)](https://travis-ci.org/behsa-oss/ganjex)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5bb12607be964e478f507fd04de0fc21)](https://www.codacy.com/app/esahekmat/ganjex?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=behsa-oss/ganjex&amp;utm_campaign=Badge_Grade)
-[![Javadocs](http://javadoc.io/badge/com.behsacorp/ganjex.svg)](http://javadoc.io/doc/com.behsacorp/ganjex)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.piran-framework/ganjex/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.piran-framework/ganjex)
+[![Travis IC](https://travis-ci.org/piran-framework/ganjex.svg?branch=master)](https://travis-ci.org/piran-framework/ganjex)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5bb12607be964e478f507fd04de0fc21)](https://www.codacy.com/app/esahekmat/ganjex?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=piran-framework/ganjex&amp;utm_campaign=Badge_Grade)
+[![Javadocs](http://javadoc.io/badge/com.piran-framework/ganjex.svg)](http://javadoc.io/doc/com.piran-framework/ganjex)
 
 There are  situations when you want to serve lots of dynamic services by just one JVM(runtime), with the 
 help of Ganjex you can define your own framework.When you are developing micro-services, usually 
@@ -94,7 +94,7 @@ consequent changes.
 To use ganjex library in your project add this dependency into your project pom:
 ```
 <dependency>
-    <groupId>com.behsacorp</groupId>
+    <groupId>com.piran-framework</groupId>
     <artifactId>ganjex</artifactId>
     <scope>0.3-RELEASE</scope>
 </dependency>
@@ -123,13 +123,8 @@ There is a sample dynamic web framework developed using Spring and Ganjex, Full 
 ## Minimum Requirement
 You need at least java 8 to use Ganjex container.
 
-## Behsa OSS
-This Project is a part of Behsa-OSS, Behsa Company is a partner of MCI(Largest mobile operator in
-Middle East) and decided to  make some of their projects as open source with the brand of 
-Behsa-OSS(Behsa Open-Source Software)
-
 ## License
-Copyright (c) 2018 Behsa Corporation.
+Copyright (c) 2018 Isa Hekmatizadeh.
 
 Ganjex is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser 
 General Public License as published by the Free Software Foundation, either version 3 of the 

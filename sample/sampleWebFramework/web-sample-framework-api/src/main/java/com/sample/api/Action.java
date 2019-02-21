@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Behsa Corporation.
+ * Copyright (c) 2018 Isa Hekmatizadeh.
  *
  *   This file is part of Ganjex.
  *

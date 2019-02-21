@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Behsa Corporation.
+ * Copyright (c) 2018 Isa Hekmatizadeh.
  *
  *   This file is part of Ganjex.
  *
@@ -19,7 +19,7 @@
 
 package com.sample;
 
-import com.behsacorp.ganjex.EnableGanjexContainer;
+import com.piran.ganjex.EnableGanjexContainer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

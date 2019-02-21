@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2018 Behsa Corporation.
+  ~ Copyright (c) 2018 Isa Hekmatizadeh.
   ~
   ~   This file is part of Ganjex.
   ~
@@ -38,7 +38,7 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.behsacorp</groupId>
+            <groupId>com.piran-framework</groupId>
             <artifactId>ganjex-spring-boot-starter</artifactId>
             <version>0.4-SNAPSHOT</version>
         </dependency>

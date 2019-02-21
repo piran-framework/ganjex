@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2018 Behsa Corporation.
+  ~ Copyright (c) 2018 Isa Hekmatizadeh.
   ~
   ~   This file is part of Ganjex.
   ~
@@ -23,16 +23,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>ganjex-parent</artifactId>
-        <groupId>com.behsacorp</groupId>
+        <groupId>com.piran-framework</groupId>
         <version>0.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ganjex-spring-boot-starter</artifactId>
     <description>Ganjex Spring Boot Starter</description>
-    <organization>
-        <name>Behsa Co.</name>
-        <url>http://www.behsacorp.com</url>
-    </organization>
+
     <licenses>
         <license>
             <name>GNU Lesser General Public License</name>
@@ -44,9 +41,7 @@
         <developer>
             <id>hekmatof</id>
             <name>Esa Hekmatizadeh</name>
-            <email>i.hekmatizadeh at behsacorp.com</email>
-            <organization>Behsa Co.</organization>
-            <organizationUrl>http://www.behsacorp.com</organizationUrl>
+            <email>esa.hekmat at gmail.com</email>
             <roles>
                 <role>Project lead</role>
             </roles>
@@ -54,7 +49,7 @@
     </developers>
     <dependencies>
         <dependency>
-            <groupId>com.behsacorp</groupId>
+            <groupId>com.piran-framework</groupId>
             <artifactId>ganjex-spring-boot-autoconfigure</artifactId>
             <version>0.4-SNAPSHOT</version>
         </dependency>

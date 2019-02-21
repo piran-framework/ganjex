@@ -57,7 +57,7 @@ use Ganjex spring-boot starter to add ganjex, also we need `web-sample-framework
 these dependencies:
 ```
 <dependency>
-    <groupId>com.behsacorp</groupId>
+    <groupId>com.piran-framework</groupId>
     <artifactId>ganjex-spring-boot-starter</artifactId>
     <version>0.3-RELEASE</version>
 </dependency>

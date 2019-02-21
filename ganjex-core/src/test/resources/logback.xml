@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2018 Behsa Corporation.
+  ~ Copyright (c) 2018 Isa Hekmatizadeh.
   ~
   ~   This file is part of Ganjex.
   ~
@@ -25,7 +25,7 @@
 				</encoder>
 		</appender>
 
-		<logger name="com.behsacorp" level="debug"/>
+		<logger name="com.piran" level="debug"/>
 		<root level="info">
 				<appender-ref ref="STDOUT"/>
 		</root>
