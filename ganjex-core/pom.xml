@@ -25,7 +25,7 @@
     <parent>
         <groupId>com.piran-framework</groupId>
         <artifactId>ganjex-parent</artifactId>
-        <version>0.4-SNAPSHOT</version>
+        <version>0.4-RELEASE</version>
         <relativePath>../</relativePath>
     </parent>
 

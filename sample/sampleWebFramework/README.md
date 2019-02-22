@@ -59,7 +59,7 @@ these dependencies:
 <dependency>
     <groupId>com.piran-framework</groupId>
     <artifactId>ganjex-spring-boot-starter</artifactId>
-    <version>0.3-RELEASE</version>
+    <version>0.4-RELEASE</version>
 </dependency>
 <dependency>
     <groupId>org.springframework.boot</groupId>

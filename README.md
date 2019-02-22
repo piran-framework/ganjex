@@ -96,7 +96,7 @@ To use ganjex library in your project add this dependency into your project pom:
 <dependency>
     <groupId>com.piran-framework</groupId>
     <artifactId>ganjex</artifactId>
-    <scope>0.3-RELEASE</scope>
+    <scope>0.4-RELEASE</scope>
 </dependency>
 ```
 

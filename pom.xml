@@ -24,7 +24,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.piran-framework</groupId>
     <artifactId>ganjex-parent</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.4-RELEASE</version>
     <packaging>pom</packaging>
     <name>Ganjex Parent</name>
     <description>Ganjex parent module</description>
@@ -91,7 +91,7 @@
             <dependency>
                 <groupId>com.piran-framework</groupId>
                 <artifactId>ganjex</artifactId>
-                <version>0.4-SNAPSHOT</version>
+                <version>0.4-RELEASE</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
