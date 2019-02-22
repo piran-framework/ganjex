@@ -19,10 +19,10 @@
 
 package com.sample.service;
 
-import com.piran.ganjex.GanjexHook;
-import com.piran.ganjex.api.ServiceContext;
-import com.piran.ganjex.api.ShutdownHook;
-import com.piran.ganjex.api.StartupHook;
+import com.piranframework.ganjex.GanjexHook;
+import com.piranframework.ganjex.api.ServiceContext;
+import com.piranframework.ganjex.api.ShutdownHook;
+import com.piranframework.ganjex.api.StartupHook;
 import com.sample.api.Action;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;

@@ -25,7 +25,7 @@
 				</encoder>
 		</appender>
 
-		<logger name="com.piran" level="debug"/>
+		<logger name="com.piranframework" level="debug"/>
 		<root level="info">
 				<appender-ref ref="STDOUT"/>
 		</root>
