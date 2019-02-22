@@ -63,6 +63,7 @@ public final class JarWatcher {
    *
    * @param watchDir the directory to watch
    * @param listener the listener to notify when changed detected
+   * @param watcherDelay the delay between checks of file system
    */
   public JarWatcher(File watchDir, FileChangeListener listener, long watcherDelay) {
     this.watchDir = watchDir;
