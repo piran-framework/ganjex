@@ -20,6 +20,9 @@
 package com.piranframework.ganjex.api;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -40,6 +43,9 @@ import java.util.Properties;
  * @since 1.0
  */
 public final class ServiceContext {
+
+  private static final Logger log = LoggerFactory.getLogger(ServiceContext.class);
+
   private final String fileName;
   private final String name;
   private final int version;
@@ -55,8 +61,12 @@ public final class ServiceContext {
     manifest.load(urlConnection.getInputStream());
     this.fileName = fileName;
     this.name = manifest.getProperty("name");
-    //TODO:handle exception
-    this.version = Integer.parseInt(manifest.getProperty("version"));
+    try {
+      this.version = Integer.parseInt(manifest.getProperty("version"));
+    } catch (Exception e) {
+      log.error("error in parsing version as int check your version in manifest.properties");
+      throw e;
+    }
     this.classLoader = classLoader;
   }
 
