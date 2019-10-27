@@ -8,7 +8,7 @@ import twitter4j.conf.ConfigurationBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JAHashtagAnalyzer implements Analyzer {
+public class JAHashtagAnalyzer extends Analyzer {
     @AnalyzerMethod
     public List<String> analyze() throws TwitterException {
         Twitter twitter = getTwitter();
@@ -25,16 +25,5 @@ public class JAHashtagAnalyzer implements Analyzer {
             }
         }
         return analyzedTweets;
-    }
-
-    private Twitter getTwitter() {
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true)
-                .setOAuthConsumerKey("XXXXXXXXXXXXX")
-                .setOAuthConsumerSecret("XXXXXXXXXXXXX")
-                .setOAuthAccessToken("XXXXXXXXXXXXX")
-                .setOAuthAccessTokenSecret("XXXXXXXXXXXXX");
-        TwitterFactory tf = new TwitterFactory(cb.build());
-        return tf.getInstance();
     }
 }
